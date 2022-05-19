@@ -41,7 +41,7 @@
 	print "<p>This PHP Development and Test sites is being hosted on server '$Server' via alias $ProtPart[0]://$strURL/</p>\n";
 	print "$Server is running $OSType with $ApacheVersion.<br>\nThe document directory root is $DocRoot";//.\n";
 	print "<p>Other Development and Test sites are:<br>\n";
-	$Query = "SELECT vcURL,vcTechnology,vcOS,vcServerName FROM tblservers where vcServerName <> '$Server' or vcTechnology like '%asp%';";
+	$Query = "SELECT * FROM tblDemoTEST;";
   if (!$Result = $dbh->query ($Query))
   {
 		$strDBErr = "Failed to fetch data for main page  Error (" . $dbh->errno . ') ' . $dbh->error;
@@ -52,42 +52,11 @@
   }
 	while ($Row = $Result->fetch_assoc())
 	{
-		$URL = $Row['vcURL'];
-		$Tech = $Row['vcTechnology'];
-		$OSVer = $Row['vcOS'];
-		$ServerName = $Row['vcServerName'];
-		print "$ServerName running $OSVer and $Tech which can be reached at <a href=\"$URL\" target=_blank>$URL</a><br>\n";
+		$ID = $Row['iIDnum'];
+		$descr = $Row['vcDescr'];
+		print "Row $ID has description of '$descr'\n";
 	}
 	print "</p>";
-  print "<p>Production sites are hosted by Host Gator ";
-
-	$strCat = "";
-	$Query = "SELECT vcCategory,vcLink,vcName,vcComment FROM vwlinks order by iSortNum,vcName;";
-  if (!$Result = $dbh->query ($Query))
-  {
-		$strDBErr = "Failed to fetch data for main page  Error (" . $dbh->errno . ') ' . $dbh->error;
-		error_log ($strDBErr);
-		error_log ($strQuery);
-		print "<p>$strDBErr</p>";
-		exit(2);
-  }
-	while ($Row = $Result->fetch_assoc())	{
-		$strCategory    = $Row['vcCategory'];
-		$strLink    = $Row['vcLink'];
-		$strName   = $Row['vcName'];
-		$strComment = $Row['vcComment'];
-		if ($strCat != $strCategory)
-		{
-			if ($strCat != "")
-			{
-				print "<br>\n";
-			}
-			print "<h2>$strCategory</h2>\n<ul>\n";
-			$strCat = $strCategory;
-		}
-		print "<a href=\"$strLink\" target=\"_blank\">[$strName]</a>  $strComment<br> \n";
-	}
-	print "<p></p>";
 	print "</center>\n";
 	print "</body>\n";
 	print "</html>\n";
