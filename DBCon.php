@@ -2,7 +2,7 @@
 $UID = getenv("MYSQL_USER") ;
 $DBServerName = getenv("MYSQL_HOST") ;
 $PWD = getenv("MYSQL_PASSWORD") ;
-$DefaultDB = getenv("MYSQL_DB") ;
+$DefaultDB = "VMdb" ;
 
 $strRemoteIP = $_SERVER["REMOTE_ADDR"];
 $dbh= new mysqli ($DBServerName, $UID, $PWD, $DefaultDB);

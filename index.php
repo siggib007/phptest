@@ -27,21 +27,11 @@
 	{
 		$ApacheVersion = "$ApacheVersion  and PHP Version $phpVersion";
 	}
-	$Query = "SELECT vcOS FROM tblservers where vcServerName = '$Server' and vcTechnology like '%php%' limit 1";
-  if (!$Result = $dbh->query ($Query))
-  {
-		$strDBErr = "Failed to fetch data for main page  Error (" . $dbh->errno . ') ' . $dbh->error;
-		error_log ($strDBErr);
-		error_log ($strQuery);
-		print "<p>$strDBErr</p>";
-		exit(2);
-  }
- 	$Row = $Result->fetch_assoc();
-	$OSType = $Row['vcOS'];
 	print "<p>This PHP Development and Test sites is being hosted on server '$Server' via alias $ProtPart[0]://$strURL/</p>\n";
 	print "$Server is running $OSType with $ApacheVersion.<br>\nThe document directory root is $DocRoot";//.\n";
-	print "<p>Other Development and Test sites are:<br>\n";
-	$Query = "SELECT * FROM tblDemoTEST;";
+	print "</p>";
+	print "<h2>module table</h2>\n";
+	$Query = "SELECT * FROM tblModules;";
   if (!$Result = $dbh->query ($Query))
   {
 		$strDBErr = "Failed to fetch data for main page  Error (" . $dbh->errno . ') ' . $dbh->error;
@@ -52,11 +42,11 @@
   }
 	while ($Row = $Result->fetch_assoc())
 	{
-		$ID = $Row['iIDnum'];
-		$descr = $Row['vcDescr'];
-		print "Row $ID has description of '$descr'\n";
+		$ID = $Row['iModID'];
+		$descr = $Row['vcModuleName'];
+		print "Module $ID is '$descr'<br>\n";
 	}
-	print "</p>";
+
 	print "</center>\n";
 	print "</body>\n";
 	print "</html>\n";
