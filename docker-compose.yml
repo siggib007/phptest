@@ -2,8 +2,7 @@ version: "3.8"
 
 services:
   php:
-    image: php:7.2-apache
-    command: docker-php-ext-install pdo pdo_mysql mysqli
+    image: php:mysqli
     ports:
       - 80:80
     volumes:
@@ -24,4 +23,4 @@ services:
       - MYSQL_DATABASE
 
 volumes:
-  devphp-mysql-data:
+  devphp-mysql-data:  
