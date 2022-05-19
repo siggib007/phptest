@@ -1,5 +1,5 @@
 # phptest
-PHP Database test
+## PHP Database test
 Wanted something quick and simple to verify that all the components where in place to make a PHP site driven by mySQL/MariaDB database so I put together this test site. The code grabs some env variables and displayes them as well as displays a table from a database. Run the following query in your database to generate the test table to be shown
 ```
 -- Dumping database structure for VMdb
