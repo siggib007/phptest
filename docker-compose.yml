@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   php:
-    image: php:mysqli
+    image: siggib007/phpmysqli
     ports:
       - 80:80
     volumes:
