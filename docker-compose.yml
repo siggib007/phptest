@@ -17,10 +17,10 @@ services:
     ports:
       - 33065:3306
     volumes:
-      - devphp-mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
       - ./:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_ROOT_PASSWORD
 
 volumes:
-  devphp-mysql-data:
+  mysql-data:
