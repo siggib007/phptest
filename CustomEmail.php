@@ -16,7 +16,7 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 //require("header.php");
-require("functions.php")
+require("functions.php");
 print "<center>\n";
 print "<h1>This is only a test</h2>\n";
 print "</center>";
