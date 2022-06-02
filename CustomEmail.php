@@ -15,7 +15,8 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require("header.php");
+//require("header.php");
+require("functions.php")
 print "<center>\n";
 print "<h1>This is only a test</h2>\n";
 print "</center>";
@@ -39,5 +40,5 @@ print "Successfully sent $count recepients<br>\n";
 // print "Successfully sent $count recepients<br>\n";
 
 print "<br>I'm all done<br>\n";
-require("footer.php");
+//require("footer.php");
 ?>
