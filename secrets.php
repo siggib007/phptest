@@ -5,4 +5,6 @@
   $MailUser = '';
   $MailPWD = '';
   $MailHost = '';
+  $AccessID = "p-cpl49nph43yj";
+  $AccessKey = "UeTkFQlOAdK5hDeFlTonD2D5FB1mbL/Khi/TTJcIQxg=";
 ?>

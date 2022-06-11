@@ -1,26 +1,21 @@
 <?php
+  require("secrets.php");
+  $url = "https://rest.akeyless-security.com/auth?access-id=$AccessID&access-type=api_key&access-key=$AccessKey";
+  $curl = curl_init();
+  $curlOpt = array(
+    CURLOPT_URL => $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_HTTPHEADER => array('accept: application/json'),);
+  curl_setopt_array($curl, $curlOpt);
 
-  $AccessID = getenv("KEYLESSID");
-  $AccessKey = getenv("KEYLESSKEY");
-  $client = new http\Client;
-  $request = new http\Client\Request;
-  $request->setRequestUrl("https://rest.akeyless-security.com/auth?access-id=$AccessID&access-type=api_key&access-key=$AccessKey");
-  $request->setRequestMethod('POST');
-  $request->setOptions(array());
-  $request->setHeaders(array(
-    'accept' => 'application/json'
-  ));
-  $client->enqueue($request)->send();
-  $response = $client->getResponse();
-  $token = $response["token"]
+  $response = curl_exec($curl);
 
-  $request->setRequestUrl("https://rest.akeyless-security.com/get-secret-value?name=MySecret1&token=$token");
-  $request->setRequestMethod('POST');
-  $request->setOptions(array());
-  $request->setHeaders(array(
-    'accept' => 'application/json'
-  ));
-  $client->enqueue($request)->send();
-  $response = $client->getResponse();
-  echo $response->getBody();
+  curl_close($curl);
+  echo $response;
 ?>
