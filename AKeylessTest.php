@@ -1,6 +1,6 @@
 <?php
   print "<h1>Fetching secret from AKEYLESS secret management system at akeyless.io</h1>";
-  $SecretName = "/Test/MyPathTest";
+  $SecretName = "/TSC/AnotherTest2";
   print "<p>Fetching secret named $SecretName</p>";
   require("secrets.php");
   $url = "https://rest.akeyless-security.com/auth?access-id=$AccessID&access-type=api_key&access-key=$AccessKey";
