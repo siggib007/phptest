@@ -26,7 +26,7 @@
     $arrValues = array();
     foreach ($arrNames as $SecretName) 
     {
-      print "<p>Fetching secret named $SecretName</p>\n";
+      //print "<p>Fetching secret named $SecretName</p>\n";
       $url = "https://rest.akeyless-security.com/get-secret-value?name=$SecretName&token=$token";
       $curl = curl_init();
       $curlOpt = array(
@@ -44,7 +44,7 @@
         curl_close($curl);
         
         $arrResponse = json_decode($response, TRUE);
-        $arrValues[$SecretName] = $arrResponse["response"];
+        $arrValues[$SecretName] = $arrResponse["response"][0];
       }
       return $arrValues;
   }
@@ -52,7 +52,6 @@
   $arrname = array();
 
   $arrname[] = "MySecret1";
-  $arrname[] = "MySecret2";
   $arrname[] = "MyFirstSecret";
   $arrname[] = "/TSC/AnotherTest2";
   $arrname[] = "/Test/MyPathTest";
@@ -62,6 +61,6 @@
   print "<p>Here are the secret names and corrensponding values</p>\n";
   foreach ($arrSecretValues as $key => $value) 
   {
-    print "$key : $value <br>\n"
+    print "$key: $value <br>\n";
   }
 ?>
