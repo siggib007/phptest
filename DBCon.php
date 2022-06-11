@@ -1,7 +1,7 @@
 <?php
   require("secrets.php")
   $DefaultDB = "VMdb" ;
-  $MailHostPort = 587;
+  $MailHostPort = 465;
 
   $strRemoteIP = $_SERVER["REMOTE_ADDR"];
   $dbh= new mysqli ($DBServerName, $UID, $PWD, $DefaultDB);
