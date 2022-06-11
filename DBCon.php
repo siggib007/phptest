@@ -1,5 +1,8 @@
 <?php
   require("secrets.php");
+  $UID = getenv("MYSQL_USER");
+  $DBServerName = getenv("MYSQL_HOST");
+  $PWD = getenv("MYSQL_PASSWORD");  
   $DefaultDB = "VMdb" ;
   $MailHostPort = 465;
 
