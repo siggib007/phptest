@@ -12,6 +12,8 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_DB
+      - KEYLESSID
+      - KEYLESSKEY
   mysql:
     image: mysql:5.7
     ports:

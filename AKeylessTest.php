@@ -1,8 +1,9 @@
 <?php
   print "<h1>Fetching secret from AKEYLESS secret management system at akeyless.io</h1>";
-  $SecretName = "/TSC/AnotherTest2";
+  $SecretName = "MyFirstSecret";
   print "<p>Fetching secret named $SecretName</p>";
-  require("secrets.php");
+  $AccessID = getenv("KEYLESSID");
+  $AccessKey = getenv("KEYLESSKEY");
   $url = "https://rest.akeyless-security.com/auth?access-id=$AccessID&access-type=api_key&access-key=$AccessKey";
   $curl = curl_init();
   $curlOpt = array(
