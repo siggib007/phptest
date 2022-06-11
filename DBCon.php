@@ -1,5 +1,5 @@
 <?php
-  require("secrets.php")
+  require("secrets.php");
   $DefaultDB = "VMdb" ;
   $MailHostPort = 465;
 

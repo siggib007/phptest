@@ -47,6 +47,28 @@
 		print "Module $ID is '$descr'<br>\n";
 	}
 
+	$arrFiles = array();
+	$handle = opendir('.');
+ 
+	if ($handle) {
+  	while (($entry = readdir($handle)) !== FALSE) {
+      $arrFiles[] = $entry;
+    }
+	}
+ 
+	closedir($handle);
+	//print "<p>".var_dump($arrFiles)."</P>";
+
+	$hidefiles = array("DBCon.php","functions.php","index.php","secrets.php");
+
+	print "<h1>Here are the files that are available to test with</h1>";
+	foreach($arrFiles as $file)
+	{
+		if (substr($file,-3)=="php" and ! in_array($file,$hidefiles))
+		{
+			print "<p><a href='$file' target='_blank'>$file</a></P>";
+		}
+	}
 	print "</center>\n";
 	print "</body>\n";
 	print "</html>\n";
