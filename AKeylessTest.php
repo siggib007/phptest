@@ -39,14 +39,14 @@
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_HTTPHEADER => array('accept: application/json'),);
-        curl_setopt_array($curl, $curlOpt);
-        $response = curl_exec($curl);
-        curl_close($curl);
-        
-        $arrResponse = json_decode($response, TRUE);
-        $arrValues[$SecretName] = $arrResponse["response"][0];
-      }
-      return $arrValues;
+      curl_setopt_array($curl, $curlOpt);
+      $response = curl_exec($curl);
+      curl_close($curl);
+      
+      $arrResponse = json_decode($response, TRUE);
+      $arrValues[$SecretName] = $arrResponse["response"][0];
+    }
+    return $arrValues;
   }
 
   $arrname = array();

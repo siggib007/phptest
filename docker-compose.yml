@@ -14,6 +14,7 @@ services:
       - MYSQL_DB
       - KEYLESSID
       - KEYLESSKEY
+      - KEYLESSUID
   mysql:
     image: mysql:5.7
     ports:
