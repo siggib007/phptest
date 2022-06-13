@@ -1,19 +1,18 @@
 <?php
-  require_once("secrets.php");
-  
   print "<h1>Fetching secret from AKEYLESS secret management system at akeyless.io</h1>\n";
   
   function FetchKeylessStatic ($arrNames)
   {
     $AccessID = getenv("KEYLESSID");
     $AccessKey = getenv("KEYLESSKEY");
-    $AccessKey = $GLOBALS ["AccessKey"];
     $APIEndpoint = "https://api.akeyless.io";
+
     $PostData = array();
     $PostData['access-type'] = 'access_key';
     $PostData['access-id'] = "$AccessID";
     $PostData['access-key'] = "$AccessKey";
     $jsonPostData = json_encode($PostData);
+    
     $Service = "/auth";
     $url = $APIEndpoint.$Service;
     $curl = curl_init();
@@ -27,14 +26,13 @@
     $arrResponse = json_decode($response, TRUE);
     $token = $arrResponse["token"];
     
-    $arrValues = array();
-    $Service = "/get-secret-value";
-    $url = $APIEndpoint.$Service;
     $PostData = array();
     $PostData["token"] = $token;
     $PostData["names"] = $arrNames;
     $jsonPostData = json_encode($PostData);
 
+    $Service = "/get-secret-value";
+    $url = $APIEndpoint.$Service;
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonPostData);
