@@ -1,15 +1,18 @@
 <?php
+  require_once("secrets.php");
+  
   print "<h1>Fetching secret from AKEYLESS secret management system at akeyless.io</h1>\n";
   
   function FetchKeylessStatic ($arrNames)
   {
     $AccessID = getenv("KEYLESSID");
     $AccessKey = getenv("KEYLESSKEY");
+    $AccessKey = $GLOBALS ["AccessKey"];
     $APIEndpoint = "https://api.akeyless.io";
     $PostData = array();
-    $PostData["access-type"] = "access_key";
-    $PostData["access-id"] = $AccessID;
-    $PostData["access-key"] = $AccessKey;
+    $PostData['access-type'] = 'access_key';
+    $PostData['access-id'] = "$AccessID";
+    $PostData['access-key'] = "$AccessKey";
     $jsonPostData = json_encode($PostData);
     $Service = "/auth";
     $url = $APIEndpoint.$Service;
@@ -20,12 +23,14 @@
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_MAXREDIRS => 10,
-      CURLOPT_TIMEOUT => 0,
+      CURLOPT_TIMEOUT => 30,
       CURLOPT_FOLLOWLOCATION => true,
       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
       CURLOPT_CUSTOMREQUEST => 'POST',
-      CURLOPT_HTTPHEADER => array('accept: application/json'),);
-    curl_setopt_array($curl, $curlOpt);
+      CURLOPT_HTTPHEADER => array('accept: application/json','Content-Type: application/json'),);
+      curl_setopt_array($curl, $curlOpt);
+    //curl_setopt($curl,CURLOPT_URL,$url);
+    //curl_setopt($curl, CURLOPT_POSTFIELDS,$url);
     $response = curl_exec($curl);
     curl_close($curl);
     $arrResponse = json_decode($response, TRUE);
@@ -46,15 +51,14 @@
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_MAXREDIRS => 10,
-      CURLOPT_TIMEOUT => 0,
+      CURLOPT_TIMEOUT => 30,
       CURLOPT_FOLLOWLOCATION => true,
       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
       CURLOPT_CUSTOMREQUEST => 'POST',
-      CURLOPT_HTTPHEADER => array('accept: application/json'),);
+      CURLOPT_HTTPHEADER => array('accept: application/json','Content-Type: application/json'),);
     curl_setopt_array($curl, $curlOpt);
     $response = curl_exec($curl);
     curl_close($curl);
-    
     return json_decode($response, TRUE);
   }
 
