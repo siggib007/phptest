@@ -5,10 +5,18 @@
   {
     $AccessID = getenv("KEYLESSID");
     $AccessKey = getenv("KEYLESSKEY");
-    $url = "https://rest.akeyless-security.com/auth?access-id=$AccessID&access-type=api_key&access-key=$AccessKey";
+    $APIEndpoint = "https://api.akeyless.io";
+    $PostData = array();
+    $PostData["access-type"] = "access_key";
+    $PostData["access-id"] = $AccessID;
+    $PostData["access-key"] = $AccessKey;
+    $jsonPostData = json_encode($PostData);
+    $Service = "/auth";
+    $url = $APIEndpoint.$Service;
     $curl = curl_init();
     $curlOpt = array(
       CURLOPT_URL => $url,
+      CURLOPT_POSTFIELDS => $jsonPostData,
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_MAXREDIRS => 10,
@@ -24,29 +32,30 @@
     $token = $arrResponse["token"];
     
     $arrValues = array();
-    foreach ($arrNames as $SecretName) 
-    {
-      //print "<p>Fetching secret named $SecretName</p>\n";
-      $url = "https://rest.akeyless-security.com/get-secret-value?name=$SecretName&token=$token";
-      $curl = curl_init();
-      $curlOpt = array(
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_HTTPHEADER => array('accept: application/json'),);
-      curl_setopt_array($curl, $curlOpt);
-      $response = curl_exec($curl);
-      curl_close($curl);
-      
-      $arrResponse = json_decode($response, TRUE);
-      $arrValues[$SecretName] = $arrResponse["response"][0];
-    }
-    return $arrValues;
+    $Service = "/get-secret-value";
+    $url = $APIEndpoint.$Service;
+    $PostData = array();
+    $PostData["token"] = $token;
+    $PostData["names"] = $arrNames;
+    $jsonPostData = json_encode($PostData);
+
+    $curl = curl_init();
+    $curlOpt = array(
+      CURLOPT_URL => $url,
+      CURLOPT_POSTFIELDS => $jsonPostData,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 0,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'POST',
+      CURLOPT_HTTPHEADER => array('accept: application/json'),);
+    curl_setopt_array($curl, $curlOpt);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    
+    return json_decode($response, TRUE);
   }
 
   $arrname = array();
