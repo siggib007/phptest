@@ -15,6 +15,12 @@ services:
       - KEYLESSID
       - KEYLESSKEY
       - KEYLESSUID
+      - EMAILPORT
+      - EMAILPWD
+      - EMAILSERVER
+      - EMAILUSER
+      - USESSL
+      - USESTARTTLS
   mysql:
     image: mysql:5.7
     ports:
