@@ -16,5 +16,13 @@
       error_log( "Failed to connect to MySQL. Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);
       exit;
   }
+  if (isset($_POST['btnSubmit']))
+  {
+    $btnSubmit = $_POST['btnSubmit'];
+  }
+  else
+  {
+    $btnSubmit = "";
+  }
 ?>
 
