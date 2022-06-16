@@ -1,6 +1,6 @@
 <?php
-//use PHPMailer\PHPMailer\PHPMailer;
-//use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 $MailHost = getenv("EMAILSERVER");
 $MailHostPort = getenv("EMAILPORT");
@@ -103,6 +103,7 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
       return "Message has been sent";
   }
 }
+print "<!doctype html>\n";
 print "<html>\n<head>\n<style>\n";
 print "th {background-color: gray;color: white;}\n";
 print "tr:nth-child(odd) {background-color: beige;}\n";
@@ -126,10 +127,10 @@ $arrname[] = "X-Test3:This is my third header";
 $arrname[] = "X-Test4:This is my fourth header";
 
 $strSubject = "Complex HTML test with picture and txt attachment";
-$toEmail = "Sigg Bjarnason|siggi@bjarnason.us";
-$FromEmail = "Supergeek Admin|admin@supergeek.us";
+$toEmail    = "My Tester|tester@example.com";
+$FromEmail  = "Supergeek Admin|admin@supergeek.us";
 
-$strHTMLMsg  = "";
+$strHTMLMsg  = "<!doctype html>\n";
 $strHTMLMsg .= "<html>\n<head>\n<style>\n";
 $strHTMLMsg .= "th {background-color: gray;color: white;}\n";
 $strHTMLMsg .= "tr:nth-child(odd) {background-color: beige;}\n";
