@@ -21,7 +21,7 @@ function StripHTML ($content)
   return trim($content);
 }
 
-function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach, $strAddHeader, $strFile2Attach = "")
+function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName = "", $strAttach = "", $strAddHeader = "", $strFile2Attach = "")
 {
 
   require_once 'PHPMailer/Exception.php';
@@ -84,7 +84,10 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   }
   else 
   {
-    $mail->addCustomHeader($strAddHeader);
+    if ($strAddHeader != "")
+    {
+      $mail->addCustomHeader($strAddHeader);
+    }
   }
 
   // Attach file attachment
