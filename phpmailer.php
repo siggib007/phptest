@@ -106,6 +106,7 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
       return "Message has been sent";
   }
 }
+
 print "<!doctype html>\n";
 print "<html>\n<head>\n<style>\n";
 print "th {background-color: gray;color: white;}\n";
