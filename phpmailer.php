@@ -1,6 +1,6 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+//use PHPMailer\PHPMailer\PHPMailer;
+//use PHPMailer\PHPMailer\Exception;
 
 $MailHost = getenv("EMAILSERVER");
 $MailHostPort = getenv("EMAILPORT");
@@ -27,6 +27,8 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   require_once 'PHPMailer/Exception.php';
   require_once 'PHPMailer/PHPMailer.php';
   require_once 'PHPMailer/SMTP.php';
+
+  $strHTMLMsg = preg_replace("/(<script>.*?<\/script>)/is","",$strHTMLMsg);
 
   $ToParts   = explode("|",$toEmail);
   $FromParts = explode("|",$FromEmail);
@@ -101,14 +103,22 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
       return "Message has been sent";
   }
 }
+print "<html>\n<head>\n<style>\n";
+print "th {background-color: gray;color: white;}\n";
+print "tr:nth-child(odd) {background-color: beige;}\n";
+print "table, th, td {\n";
+print "  border: 1px solid black;\n";
+print "  border-collapse: collapse;\n";
+print "}\n";
+print "</style>\n</head>\n<body>\n";
+//print "<script>alert('this is a test!!')</script>\n";
 print "<center>\n";
-print "<h1>This is only a test</h2>\n";
+print "<h1>This is only a test</h1>\n";
 print "</center>";
 print "Testing new email function using phpmailer<br>\nSending email through $MailHost. Use full SSL/TLS: $UseSSL. Use StartTLS: $UseStartTLS<br>\n";
 print "<p>It is now " . date(DATE_RFC1123) . "</p>\n";
 $strFileName = "Testing.txt";
 $strAttach = "Wanted something quick and simple to verify that all the components where in place to make a PHP site driven by mySQL/MariaDB database so I put together this test site. The code grabs some env variables and displayes them as well as displays a table from a database. Run the following query in your database to generate the test table to be shown";
-$strAddHeader = "X-Testing:This is double test header;X-test2:this is the second";
 $arrname = array();
 $arrname[] = "X-Testing:This is my test header";
 $arrname[] = "X-Test2:This is my second header";
@@ -128,6 +138,7 @@ $strHTMLMsg .= "  border: 1px solid black;\n";
 $strHTMLMsg .= "  border-collapse: collapse;\n";
 $strHTMLMsg .= "}\n";
 $strHTMLMsg .= "</style>\n</head>\n<body>\n";
+$strHTMLMsg .= "<script>alert('this is a test!!')</script>\n";
 $strHTMLMsg .= "<h1>Welcome!!!!</h1>\n";
 $strHTMLMsg .= "This is a <i>supergeek test</i> where we are testing for custom headers<br>\n";
 $strHTMLMsg .= "I hope it works out great<br>\n";
@@ -139,4 +150,5 @@ $strHTMLMsg .= "</body>\n</html>\n";
 $resp = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach, $arrname, '/var/log/alternatives.log');
 print "<p>$resp</p>\n";
 print "<p>I'm all done at " . date(DATE_RFC1123) . "</p>\n";
+print "</body>\n</html>\n";
 ?>
