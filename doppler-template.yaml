@@ -14,3 +14,9 @@ projects:
         MYSQL_DB: "${MYSQL_DATABASE}"
         MYSQL_DATABASE: "test"
         MYSQL_ROOT_PASSWORD: "ChangeRootPwd"
+        EMAILPORT: ${shared.dev.EMAILPORT}
+        EMAILPWD: ${shared.dev.EMAILPWD}
+        EMAILSERVER: ${shared.dev.EMAILSERVER}
+        EMAILUSER: ${shared.dev.EMAILUSER}
+        USESSL: True
+        USESTARTTLS: False
