@@ -21,19 +21,21 @@ function StripHTML ($content)
   return trim($content);
 }
 
-function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader)
+function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach, $strAddHeader, $strFile2Attach = "")
 {
 
-  require 'PHPMailer/Exception.php';
-  require 'PHPMailer/PHPMailer.php';
-  require 'PHPMailer/SMTP.php';
+  require_once 'PHPMailer/Exception.php';
+  require_once 'PHPMailer/PHPMailer.php';
+  require_once 'PHPMailer/SMTP.php';
 
   $ToParts   = explode("|",$toEmail);
   $FromParts = explode("|",$FromEmail);
   $strTxtMsg = StripHTML($strHTMLMsg);
-  // create a new object
+
+  // create a new PHPMailer object
   $mail = new PHPMailer();
-  // configure an SMTP
+
+  // configure an SMTP Settings
   $mail->isSMTP();
   $mail->Host = $GLOBALS['MailHost'];
   $mail->Port = $GLOBALS['MailHostPort'];
@@ -59,18 +61,21 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
     }
   }
   
+  // Construct email message
   $mail->setFrom($FromParts[1], $FromParts[0]);
   $mail->addAddress($ToParts[1], $ToParts[0]);
   $mail->Subject = $strSubject;
-  // Set HTML
   $mail->isHTML(TRUE);
   $mail->Body = $strHTMLMsg;
   $mail->AltBody = $strTxtMsg;
-  // add attachment
+
+  // add string attachment
   if ($strAttach != "" and $strFileName != "")
   {
     $mail->addStringAttachment($strAttach, $strFileName); 
   }
+
+  // Process any custom headers
   if (is_array($strAddHeader))
   {
     foreach ($strAddHeader as $header)
@@ -82,8 +87,12 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   {
     $mail->addCustomHeader($strAddHeader);
   }
-  // $mail->addAttachment('index.html', 'index.html');
-  // $mail->addCustomHeader("X-MyTEst:JustBS");
+
+  // Attach file attachment
+  if ($strFile2Attach != "")
+  {
+    $mail->addAttachment($strFile2Attach);
+  }
   
   // send the message
  
@@ -98,10 +107,10 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
 print "<center>\n";
 print "<h1>This is only a test</h2>\n";
 print "</center>";
-print "Testing new email function using phpmailer<br>\nFirst from Geek<br>\n";
+print "Testing new email function using phpmailer<br>\nSending email through $MailHost. Use full SSL/TLS: $UseSSL. Use StartTLS: $UseStartTLS<br>\n";
 $strFileName = "Testing.txt";
 $strAttach = "Wanted something quick and simple to verify that all the components where in place to make a PHP site driven by mySQL/MariaDB database so I put together this test site. The code grabs some env variables and displayes them as well as displays a table from a database. Run the following query in your database to generate the test table to be shown";
-$strAddHeader = "X-Testing:This is single test header";
+$strAddHeader = "X-Testing:This is double test header;X-test2:this is the second";
 $arrname = array();
 $arrname[] = "X-Testing:This is my test header";
 $arrname[] = "X-Test2:This is my second header";
@@ -124,11 +133,12 @@ $strHTMLMsg .= "</style>\n</head>\n<body>\n";
 $strHTMLMsg .= "<h1>Welcome!!!!</h1>\n";
 $strHTMLMsg .= "This is a <i>supergeek test</i> where we are testing for custom headers<br>\n";
 $strHTMLMsg .= "I hope it works out great<br>\n";
-$strHTMLMsg .= "<p>Here is a cute picture for you</p>\n";
+$strHTMLMsg .= "<p>Here is a cute picture for you, which can only see if you are HTML capable";
+$strHTMLMsg .= " and have remote pictures turned on as it is a remote inline HTML picture</p>\n";
 $strHTMLMsg .= "<img src='https://img.xcitefun.net/users/2015/01/371695,xcitefun-cute-animals-pictures-41.jpg' width=100% >\n";
 $strHTMLMsg .= "</body>\n</html>\n";
 
-$resp = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$arrname);
+$resp = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach, $arrname, '/var/log/alternatives.log');
 print "<p>$resp</p>\n";
 print "<p>I'm all done at " . date(DATE_RFC1123) . "</p>\n";
 ?>
