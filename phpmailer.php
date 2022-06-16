@@ -45,19 +45,16 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   if (strtolower($GLOBALS['UseSSL'])=="true")
   {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-    print "<p>Configured for fully encrypted connection</p>\n";
   }
   else
   {
     if (strtolower($GLOBALS['UseStartTLS'])=="true")
     {
       $mail->SMTPSecure = 'tls';
-      print "<p>Configured for StartTLS</p>\n";
     }
     else
     {
       $mail->SMTPSecure = "";
-      print "<p>Configured for no security</p>\n";
     }
   }
   
@@ -108,6 +105,7 @@ print "<center>\n";
 print "<h1>This is only a test</h2>\n";
 print "</center>";
 print "Testing new email function using phpmailer<br>\nSending email through $MailHost. Use full SSL/TLS: $UseSSL. Use StartTLS: $UseStartTLS<br>\n";
+print "<p>It is now " . date(DATE_RFC1123) . "</p>\n";
 $strFileName = "Testing.txt";
 $strAttach = "Wanted something quick and simple to verify that all the components where in place to make a PHP site driven by mySQL/MariaDB database so I put together this test site. The code grabs some env variables and displayes them as well as displays a table from a database. Run the following query in your database to generate the test table to be shown";
 $strAddHeader = "X-Testing:This is double test header;X-test2:this is the second";
