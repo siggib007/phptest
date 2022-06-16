@@ -15,6 +15,9 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 function ShowErrHead()
 {
     $ROOTPATH = $GLOBALS['ROOTPATH'];
@@ -374,44 +377,102 @@ function format_phone_us($phone)
     }
 }
 
-function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader)
+function StripHTML ($content)
 {
-    require_once 'swift/swift_required.php';
-    $MailHost = $GLOBALS['MailHost'];
-    $MailHostPort = $GLOBALS['MailHostPort'];
-    $MailUser = $GLOBALS['MailUser'];
-    $MailPWD = $GLOBALS['MailPWD'];
+  $unwanted = ['style','script'];
+  foreach ( $unwanted as $tag ) 
+  {
+    $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
+  }
+  unset( $tag );
+  $content = strip_tags($content);
+  return trim($content);
+}
 
-    $ToParts   = explode("|",$toEmail);
-    $FromParts = explode("|",$FromEmail);
-    $strTxtMsg = strip_tags($strHTMLMsg);
-    $transport = Swift_SmtpTransport::newInstance($MailHost, $MailHostPort )
-                 ->setUsername($MailUser)
-                 ->setPassword($MailPWD)
-                 ;
-    $message = Swift_Message::newInstance();
-    $message->setTo(array($ToParts[1]=>$ToParts[0]));
-    $message->setSubject($strSubject);
-    $message->setBody($strHTMLMsg,"text/html");
-    $message->addPart($strTxtMsg,"text/plain");
-    $message->setFrom(array($FromParts[1]=>$FromParts[0]));
-    if ($strFileName !="")
+function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName = "", $strAttach = "", $strAddHeader = "", $strFile2Attach = "")
+{
+
+  require_once 'PHPMailer/Exception.php';
+  require_once 'PHPMailer/PHPMailer.php';
+  require_once 'PHPMailer/SMTP.php';
+
+  $strHTMLMsg = preg_replace("/(<script>.*?<\/script>)/is","",$strHTMLMsg);
+
+  $ToParts   = explode("|",$toEmail);
+  $FromParts = explode("|",$FromEmail);
+  $strTxtMsg = StripHTML($strHTMLMsg);
+
+  // create a new PHPMailer object
+  $mail = new PHPMailer();
+
+  // configure an SMTP Settings
+  $mail->isSMTP();
+  $mail->Host = $GLOBALS['MailHost'];
+  $mail->Port = $GLOBALS['MailHostPort'];
+  $mail->SMTPAuth = true;
+  $mail->Username = $GLOBALS['MailUser'];
+  $mail->Password = $GLOBALS['MailPWD'];
+  if (strtolower($GLOBALS['UseSSL'])=="true")
+  {
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+  }
+  else
+  {
+    if (strtolower($GLOBALS['UseStartTLS'])=="true")
     {
-        $attachment = Swift_Attachment::newInstance()
-                ->setFilename("$strFileName")
-                ->setContentType("application/ics")
-                ->setBody($strAttach)
-                ;
-        $message->attach($attachment);
+      $mail->SMTPSecure = 'tls';
     }
+    else
+    {
+      $mail->SMTPSecure = "";
+    }
+  }
+  
+  // Construct email message
+  $mail->setFrom($FromParts[1], $FromParts[0]);
+  $mail->addAddress($ToParts[1], $ToParts[0]);
+  $mail->Subject = $strSubject;
+  $mail->isHTML(TRUE);
+  $mail->Body = $strHTMLMsg;
+  $mail->AltBody = $strTxtMsg;
+
+  // add string attachment
+  if ($strAttach != "" and $strFileName != "")
+  {
+    $mail->addStringAttachment($strAttach, $strFileName); 
+  }
+
+  // Process any custom headers
+  if (is_array($strAddHeader))
+  {
+    foreach ($strAddHeader as $header)
+    {
+      $mail->addCustomHeader($header);
+    }
+  }
+  else 
+  {
     if ($strAddHeader != "")
     {
-        $headerparts = explode(":", $strAddHeader);
-        $headers = $message->getHeaders();
-        $headers->addTextHeader($headerparts[0],$headerparts[1]);
+      $mail->addCustomHeader($strAddHeader);
     }
-    $mailer = Swift_Mailer::newInstance($transport);
-    return $mailer->send($message);
+  }
+
+  // Attach file attachment
+  if ($strFile2Attach != "")
+  {
+    $mail->addAttachment($strFile2Attach);
+  }
+  
+  // send the message
+ 
+  if(!$mail->send())
+  {
+      return "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
+  } else 
+  {
+      return "Message has been sent";
+  }
 }
 
 ?>

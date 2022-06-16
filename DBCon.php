@@ -3,8 +3,12 @@
   $DBServerName = getenv("MYSQL_HOST");
   $PWD = getenv("MYSQL_PASSWORD");  
   $DefaultDB = "VMdb" ;
-  $MailHostPort = 465;
-
+  $MailHost = getenv("EMAILSERVER");
+  $MailHostPort = getenv("EMAILPORT");
+  $MailUser = getenv("EMAILUSER");  
+  $MailPWD = getenv("EMAILPWD");
+  $UseSSL = getenv("USESSL");
+  $UseStartTLS = getenv("USESTARTTLS");
   $strRemoteIP = $_SERVER["REMOTE_ADDR"];
   $dbh= new mysqli ($DBServerName, $UID, $PWD, $DefaultDB);
   if ($dbh->connect_errno)

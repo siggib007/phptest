@@ -17,6 +17,7 @@
 
 //require("header.php");
 require("functions.php");
+require("DBCon.php");
 print "<center>\n";
 print "<h1>This is only a test</h2>\n";
 print "</center>";
@@ -28,16 +29,16 @@ $strSubject = "Geeky Sendmail function test with special headers";
 $strFileName = "";
 $strAttach = "";
 $strAddHeader = "X-Testing:This is my test header";
-$count = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader);
-print "Successfully sent $count recepients<br>\n";
+$response = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader);
+print "$response <br>\n";
 // print "then from studio b<br>\n";
 // $strHTMLMsg = "Studio B email testing";
 // $FromEmail = "Studio B Dance|info@studio-b-dance.com";
 // $toEmail = "Siggi Bjarnason|siggi@bjarnason.us";
 // $strSubject = "More Studio B Sendmail function test";
-// $count = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader);
+// $response = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader);
 
-// print "Successfully sent $count recepients<br>\n";
+// print "Successfully sent $response recepients<br>\n";
 
 print "<br>I'm all done<br>\n";
 //require("footer.php");
