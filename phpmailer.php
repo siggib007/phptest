@@ -9,6 +9,18 @@ $MailPWD = getenv("EMAILPWD");
 $UseSSL = getenv("USESSL");
 $UseStartTLS = getenv("USESTARTTLS");
 
+function StripHTML ($content)
+{
+  $unwanted = ['style','script'];
+  foreach ( $unwanted as $tag ) 
+  {
+    $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
+  }
+  unset( $tag );
+  $content = strip_tags($content);
+  return trim($content);
+}
+
 function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader)
 {
 
@@ -18,7 +30,7 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
 
   $ToParts   = explode("|",$toEmail);
   $FromParts = explode("|",$FromEmail);
-  $strTxtMsg = strip_tags($strHTMLMsg);
+  $strTxtMsg = StripHTML($strHTMLMsg);
   // create a new object
   $mail = new PHPMailer();
   // configure an SMTP
@@ -59,9 +71,16 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   {
     $mail->addStringAttachment($strAttach, $strFileName); 
   }
-  foreach ($strAddHeader as $header)
+  if (is_array($strAddHeader))
   {
-    $mail->addCustomHeader($header);
+    foreach ($strAddHeader as $header)
+    {
+      $mail->addCustomHeader($header);
+    }
+  }
+  else 
+  {
+    $mail->addCustomHeader($strAddHeader);
   }
   // $mail->addAttachment('index.html', 'index.html');
   // $mail->addCustomHeader("X-MyTEst:JustBS");
@@ -70,11 +89,10 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
  
   if(!$mail->send())
   {
-      print "<p>Message could not be sent. ";
-      print "Mailer Error: " . $mail->ErrorInfo . "</p>\n";
+      return "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
   } else 
   {
-      echo "<p>Message has been sent</p>\n";
+      return "Message has been sent";
   }
 }
 print "<center>\n";
@@ -90,8 +108,8 @@ $arrname[] = "X-Test2:This is my second header";
 $arrname[] = "X-Test3:This is my third header";
 $arrname[] = "X-Test4:This is my fourth header";
 
-$strSubject = "Complex HTML test with picture, table and MD attachment";
-$toEmail = "Joe User|joe.user@example.com";
+$strSubject = "Complex HTML test with picture and txt attachment";
+$toEmail = "Sigg Bjarnason|siggi@bjarnason.us";
 $FromEmail = "Supergeek Admin|admin@supergeek.us";
 
 $strHTMLMsg  = "";
@@ -110,7 +128,7 @@ $strHTMLMsg .= "<p>Here is a cute picture for you</p>\n";
 $strHTMLMsg .= "<img src='https://img.xcitefun.net/users/2015/01/371695,xcitefun-cute-animals-pictures-41.jpg' width=100% >\n";
 $strHTMLMsg .= "</body>\n</html>\n";
 
-$count = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$arrname);
-print "Successfully sent $count recepients<br>\n";
-print "<br>I'm all done<br>\n";
+$resp = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$arrname);
+print "<p>$resp</p>\n";
+print "<p>I'm all done at " . date(DATE_RFC1123) . "</p>\n";
 ?>
