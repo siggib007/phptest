@@ -10,9 +10,36 @@
 	$strFileName = "";
 	$strAttach = "";
 
-	print "<center>\n";
-	print "<h1>Custom Email Composer</h2>\n";
+	print "<style>\n";
+	print ".LargeAttnCenter
+{
+    font-size: 32px;
+    font-weight: bolder;
+    color: red;
+    text-align: center;
+}";
+	print ".Notice
+{
+    font-size: 18px;
+		font-weight: bolder;
+    text-align: center;
+}";
+	print ".Title
+{
+    font-size: 48px;
+		font-weight: bolder;
+    text-align: center;
+}";
+	print "</style>\n";
 
+	print "<p class='Title'>Custom Email Composer</p>\n";
+	print "<p class='LargeAttnCenter'>Do not expose this site to the internet</p>\n";
+	print "<p class='Notice'>Doing so might allow hackers to send spam from your configured email address via your email server, severly damaging your email reputation.<br>\n";
+	print "Only run this in a secure environment where you have absolute control over who has access.<br>\n";
+	print "For example run this on your laptop and set your winodws firewall to block all inbound connections.</p>\n";
+	
+	print "<center>\n";
+	print "<p>Fill out this form and hit send and your message will be sent through your configured email service<p/>\n";
 	if ($btnSubmit == 'Send')
 	{
 		$strFromName = CleanReg(substr(trim($_POST['txtFromName']),0,25));
@@ -58,12 +85,6 @@
 		print "</form>\n";
 	}
 	print "</center>";
-
-	// $strHTMLMsg = "This is a test of the swift mail system with speacial headers, remote image and all.<br><img src=\"http://www.studio-b-dance.com/img/StudioB320.jpg\" height=\"100\"/>";
-	// $FromEmail = "Geek Web Master|siggi@supergeek.us";
-	// $toEmail = "Siggi Bjarnason|siggi@bjarnason.us";
-	// $strSubject = "Geeky Sendmail function test with special headers";
-	// $strAddHeader = "X-Testing:This is my test header";
 
 	//require("footer.php");
 ?>
