@@ -143,7 +143,7 @@ function CleanReg ($InVar)
 {
     $InVar = strip_tags($InVar);
     $InVar = str_replace("\\","",$InVar);
-    $InVar = str_replace("'","\'",$InVar);
+    $InVar = str_replace("=","",$InVar);
     $InVar = str_replace('"',"",$InVar);
     return $InVar;
 }
@@ -379,13 +379,29 @@ function format_phone_us($phone)
 
 function StripHTML ($content)
 {
+  $myfile = fopen("htmlemailbody-pre.txt", "w") or die("Unable to open file!");
+  fwrite($myfile, $content);
+  fclose($myfile);
+
+  $content = str_replace("<th>","|",$content);
+  $content = str_replace("</th>","",$content);
+  $content = str_replace("<td>","|",$content);
+  $content = str_replace("</td>","",$content);
   $unwanted = ['style','script'];
   foreach ( $unwanted as $tag ) 
   {
     $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
   }
   unset( $tag );
+  while (strpos($content,"\n\n")!==false)
+  {
+    print "replacing double newline<br>\n";
+    $content = str_replace("\n\n","\n",$content);
+  }
   $content = strip_tags($content);
+  $myfile = fopen("htmlemailbody-post.txt", "w") or die("Unable to open file!");
+  fwrite($myfile, $content);
+  fclose($myfile);  
   return trim($content);
 }
 
@@ -397,6 +413,8 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   require_once 'PHPMailer/SMTP.php';
 
   $strHTMLMsg = preg_replace("/(<script>.*?<\/script>)/is","",$strHTMLMsg);
+  $strHTMLMsg = str_replace("\r","\n",$strHTMLMsg);
+  $strHTMLMsg = str_replace("\n\n","\n",$strHTMLMsg);
 
   $ToParts   = explode("|",$toEmail);
   $FromParts = explode("|",$FromEmail);

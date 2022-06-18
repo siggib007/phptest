@@ -9,6 +9,7 @@
   $MailPWD = getenv("EMAILPWD");
   $UseSSL = getenv("USESSL");
   $UseStartTLS = getenv("USESTARTTLS");
+  $xdebug = getenv("XDEBUG_CONFIG");
   $strRemoteIP = $_SERVER["REMOTE_ADDR"];
   $dbh= new mysqli ($DBServerName, $UID, $PWD, $DefaultDB);
   if ($dbh->connect_errno)

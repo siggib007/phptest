@@ -28,7 +28,8 @@
 		$ApacheVersion = "$ApacheVersion  and PHP Version $phpVersion";
 	}
 	print "<p>This PHP Development and Test sites is being hosted on server '$Server' via alias $ProtPart[0]://$strURL/</p>\n";
-	print "$Server is running $OSType with $ApacheVersion.<br>\nThe document directory root is $DocRoot";//.\n";
+	print "$Server is running $OSType with $ApacheVersion.<br>\nThe document directory root is $DocRoot.<br>\n";
+	print "we have xdebug config of '$xdebug'.<br>\n";
 	print "</p>";
 	print "<h2>module table</h2>\n";
 	$Query = "SELECT * FROM tblModules;";
