@@ -379,10 +379,6 @@ function format_phone_us($phone)
 
 function StripHTML ($content)
 {
-  $myfile = fopen("htmlemailbody-pre.txt", "w") or die("Unable to open file!");
-  fwrite($myfile, $content);
-  fclose($myfile);
-
   $content = str_replace("<th>","|",$content);
   $content = str_replace("</th>","",$content);
   $content = str_replace("<td>","|",$content);
@@ -393,15 +389,9 @@ function StripHTML ($content)
     $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
   }
   unset( $tag );
-  while (strpos($content,"\n\n")!==false)
-  {
-    print "replacing double newline<br>\n";
-    $content = str_replace("\n\n","\n",$content);
-  }
+  $content = str_replace("\r","",$content);
   $content = strip_tags($content);
-  $myfile = fopen("htmlemailbody-post.txt", "w") or die("Unable to open file!");
-  fwrite($myfile, $content);
-  fclose($myfile);  
+  $content = preg_replace("/([\r\n]{4,}|[\n]{2,}|[\r]{2,})/", "\n", $content);
   return trim($content);
 }
 
