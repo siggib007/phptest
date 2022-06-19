@@ -28,8 +28,5 @@ else
     $PageText = str_replace("\n\n","\n</p>\n<p class=MainText>\n",$PageText);
     print "<p class=MainText>\n$PageText</p>\n";
 }
-print "<p align=center>\n";
-print "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/gm6zKSHcPfw\" frameborder=\"0\" allowfullscreen></iframe>\n";
-print "</p>\n";
 require("footer.php");
 ?>

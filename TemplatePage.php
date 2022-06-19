@@ -19,17 +19,14 @@ if (substr($PageText,0,1)=="<")
 }
 else
 {
+    $PageText = str_replace("\r\n","\n",$PageText);
+    $PageText = str_replace("\r","\n",$PageText);
     if ($bCRLF == 1)
     {
         $PageText = str_replace("\n","<br>\n",$PageText);
     }
-    $PageText = str_replace("\r\n","\n",$PageText);
-    $PageText = str_replace("\r","\n",$PageText);
     $PageText = str_replace("\n\n","\n</p>\n<p class=MainText>\n",$PageText);
     print "<p class=MainText>\n$PageText</p>\n";
 }
-print "<p align=center>\n";
-print "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/gm6zKSHcPfw\" frameborder=\"0\" allowfullscreen></iframe>\n";
-print "</p>\n";
 require("footer.php");
 ?>

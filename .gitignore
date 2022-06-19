@@ -1,1 +1,10 @@
 secrets.php
+Secrets.php
+img/
+*.sql
+*.~1~
+*.txt
+*.jpg
+*.sql~
+.bzr/
+*.bak
