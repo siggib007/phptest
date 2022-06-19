@@ -7,7 +7,7 @@
 	print "<body>\n";
 	print "<center>\n";
 	print "<h1>PHP Development, Test and production sites</h1>\n";
-	require("DBCon.php");
+	require("DBCon-old.php");
 	$strURL = $_SERVER["SERVER_NAME"];
 	$DocRoot = $_SERVER["DOCUMENT_ROOT"];
 	$ServerFQDN = strtoupper(php_uname($mode = "n"));

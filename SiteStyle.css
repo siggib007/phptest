@@ -1,6 +1,6 @@
 #top, #bottom, #left, #right
 {
-    background: black;
+    background: gray;
     position: fixed;
 }
 
@@ -38,12 +38,12 @@
 
 .BlacktblHead
 {
-    background-color: black;
+    background-color: gray;
 }
 
 .SiteLabel
 {
-    background-color: black;
+    background-color: gray;
     color: red;
 }
 
@@ -79,7 +79,7 @@ ul.nav li
     padding: 5px 5px 1px 5px;
     margin-right: 5px;
     text-decoration: none;
-    background-color: black;
+    background-color: gray;
     color: white;
 }
 
@@ -93,7 +93,7 @@ td.login, a.login
 {
     text-decoration: none;
     color: white;
-    background-color: black;
+    background-color: gray;
     font-size: 16px;
     font-weight: bold;
     text-align: right;
@@ -103,7 +103,7 @@ td.Profile, a.Profile
 {
     text-decoration: none;
     color: white;
-    background-color: black;
+    background-color: gray;
     font-size: 14px;
     text-align: right;
 }
@@ -113,8 +113,6 @@ a.NLSignupHead
     text-decoration: none;
     font-size: 14px;
     font-weight: bold;
-/*    color:red;
-    background-color: black;*/
     text-align: center;
     color: black;
     background-color: red;
@@ -138,7 +136,7 @@ a.NLSignup
     font-weight: bold;
     text-align: center;
     color: red;
-    background-color: black;
+    background-color: gray;
     display: inline-block;
     padding: 8px 10px;
     text-shadow: none;
@@ -174,7 +172,7 @@ a.NavButton
     font-weight: bold;
     text-align: center;
     color: White;
-    background-color: Black;
+    background-color: gray;
     display: inline-block;
     padding: 8px 10px;
     text-shadow: none;
@@ -230,7 +228,7 @@ th.Calendar
     border-style: solid;
     border-color: white;
     font-size: 16px;
-    background-color: black;
+    background-color: gray;
     color: white;
     font-weight: bold;
 }
@@ -267,7 +265,7 @@ ul.PL
 
 p.AddrBlock
 {
-    background-color: black;
+    background-color: gray;
     color: white;
     font-weight: bold;
     text-align: center;
@@ -294,7 +292,7 @@ td.Welcome
 {
     text-decoration: none;
     color: whitesmoke;
-    background-color: black;
+    background-color: gray;
     font-size: 14px;
     font-weight: bold;
     font-style: italic;
@@ -328,14 +326,14 @@ ul.nav a
 {
     text-decoration: none;
     color: #FFFFFF;
-    background-color: #000000;
+    background-color: grey;
 }
 
 ul.nav a:visited
 {
     text-decoration: none;
     color: white;
-    background-color: black;
+    background-color: gray;
 }
 
 ul.nav a:hover {
@@ -383,7 +381,7 @@ ul.nav a:hover {
     padding-top: 20px;
     padding-bottom: 20px;
     text-align: left;
-    background: black;
+    background: gray;
     color: white;
     position: fixed;
     bottom: 0px;
@@ -407,7 +405,7 @@ ul.nav a:hover {
 }
 
 .Header {
-    background-color: black;
+    background-color: gray;
     font-size: 14px;
     margin-right: 10px;
     margin-left: 10px;
@@ -466,7 +464,7 @@ ul.nav a:hover {
 
 .SubHead {
     text-align: center;
-    background-color: black;
+    background-color: gray;
     /*height: 40px;*/
     position: relative;
     top: -20px;
@@ -474,7 +472,7 @@ ul.nav a:hover {
 
 .SubHead2 {
     text-align: center;
-    background-color: black;
+    background-color: gray;
     position: relative;
     top: -40px;
 }

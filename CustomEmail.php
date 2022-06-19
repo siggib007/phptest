@@ -22,7 +22,7 @@ print "<center>\n";
 print "<h1>This is only a test</h2>\n";
 print "</center>";
 print "Testing new email function using swiftmail<br>\nFirst from Geek<br>\n";
-$strHTMLMsg = "This is a test of the swift mail system with speacial headers, remote image and all.<br><img src=\"http://www.studio-b-dance.com/img/StudioB320.jpg\" height=\"100\"/>";
+$strHTMLMsg = "This is a test of the swift mail system with speacial headers, remote image and all.<br><img src=\"http://www.example.com/img/StudioB320.jpg\" height=\"100\"/>";
 $FromEmail = "Geek Web Master|web@supergeek.us";
 $toEmail = "Siggi Bjarnason|siggi@bjarnason.us";
 $strSubject = "Geeky Sendmail function test with special headers";
@@ -33,7 +33,7 @@ $response = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $str
 print "$response <br>\n";
 // print "then from studio b<br>\n";
 // $strHTMLMsg = "Studio B email testing";
-// $FromEmail = "Studio B Dance|info@studio-b-dance.com";
+// $FromEmail = "Studio B Dance|info@example.com";
 // $toEmail = "Siggi Bjarnason|siggi@bjarnason.us";
 // $strSubject = "More Studio B Sendmail function test";
 // $response = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader);

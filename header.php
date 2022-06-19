@@ -6,23 +6,6 @@ if (isset($_SERVER['HTTPS'])and $strSecOpt =="prevent")
     header("Location: $strUnSecure");
 }
 
-// if (isset($_SERVER['HTTPS'])and $strHost !="www.studio-b-dance.com" and $SiteType != "a")
-// {
-//     switch ($strHost) {
-//         case "seattlestudiobdance.com":
-//         case "www.seattlestudiobdance.com":
-//         case "studiobdanceseattle.com":
-//         case "www.studiobdanceseattle.com":
-//         case "studio-b-dance.com":
-//         case "beta.studio-b-dance.com":
-//             $strRedir = "https://www.studio-b-dance.com$strScriptName";
-//             break;
-//         default:
-//             $strRedir = "http://$strHost$strScriptName";
-//             break;
-//     }
-//     header("Location: $strRedir");
-// }
 $iMenuID=0;
 $iLastSlash = strrpos($strURI, "/");
 $strPagePath = substr($strURI, 0,$iLastSlash+1);
@@ -72,9 +55,9 @@ if (!isset($_SERVER['HTTPS'])and $strSecOpt =="force" and $Row['bSecure'] == 1)
 {
     switch ($strHost)
     {
-        case "seattlestudiobdance.com":
-        case "studiobdanceseattle.com":
-            $strSecure = "https://www.studio-b-dance.com$strScriptName";
+        case "Example1.com":
+        case "example2.com":
+            $strSecure = "https://www.example.com$strScriptName";
             break;
         default :
             $strSecure = "https://$strHost$strScriptName";
@@ -224,7 +207,6 @@ print "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"/favicon.ico\">\
 print "<link href=\"$CSSName\" rel=\"stylesheet\" type=\"text/css\">\n";
 print "</head>\n";
 print "<body>\n";
-include_once("analyticstracking.php"); // Include Google Anaytics in each page
 print "<!-- Form a border for the page -->\n";
 print "<div id=\"left\"></div>\n";
 print "<div id=\"right\"></div>\n";
@@ -251,11 +233,6 @@ else
     print "<td class=\"Profile\"><a class=\"Profile\" href=\"" . $ROOTPATH . "myprofile.php\">My Profile</a></td>\n";
     print "<td class=\"Profile\"><a class=\"Profile\" href=\"" . $ROOTPATH . "logout.php\">Logout</a></td>\n";
 }
-//print "</tr>\n<tr>\n<td class=\"Profile\" colspan=\"3\">\n";
-print "<a class=\"NLSignupHead\" href=\"http://visitor.r20.constantcontact.com/d.jsp?llr=9cbtlfmab&p=oi&m=1112576459866&sit=nssxjouhb&f=d96756c3-ff64-4fe7-854f-58e67d4fdc0a\" target=\"_blank\">\n";
-print "Sign Up For Our <BR> Dance Newsletter\n";
-print "</a>\n";
-//print "</td>\n</tr>\n";
 print "</tr>\n</table>\n";
 if($strSubOfLink=="")
 {

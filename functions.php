@@ -30,7 +30,18 @@ function ShowErrHead()
     print "<HTML>\n<HEAD>\n<title>\nTechnical Difficulties\n</title>\n";
     print "<link href=\"$CSSName\" rel=\"stylesheet\" type=\"text/css\">\n</HEAD>\n";
     print "<body>\n";
-    print "<center><img border=\"0\" src=\"$imgname\" align=\"center\" height=\"$ImgHeight\"></center>\n";
+    print "<div id=\"left\"></div>";
+    print "<div id=\"right\"></div>";
+    print "<div id=\"top\"></div>";
+    print "<div id=\"bottom\"></div>";
+    print "<div class=\"BlacktblHead\">";
+    print "<TABLE border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
+    print "<TR>\n";
+    print "<TD align=\"center\" vAlign=\"middle\">\n";
+    print "<img border=\"0\" src=\"$imgname\" align=\"center\" height=\"$ImgHeight\">\n";
+    print "</TD>\n";
+    print "</TR>\n";
+    print "</TABLE>\n</div>\n</div>\n";
     print "<p class=\"Header1\">Technical Difficulties</p>\n";
     print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
     exit;
@@ -61,7 +72,7 @@ function UpdateSQL ($strQuery,$type)
             print "\n<p class=\"error\">Database $type failed: </p>\n";
             error_log($strError);
             error_log("SQL: $strQuery");
-            if(mail("$SupportEmail","Automatic Error Report","$strError\n$strQuery",$FromEmail))
+            if(EmailText("$SupportEmail","Automatic Error Report","$strError\n$strQuery",$FromEmail))
             {
                 print "<p class=\"error\">We seem to be experiencing technical difficulties. We have been notified. " .
                 "Please try again later. Thank you.</p>";
@@ -97,7 +108,7 @@ function CallSP ($strQuery)
         print "\nDatabase update failed: \n";
         error_log($strError);
         error_log("SQL: $strQuery");
-        if(mail("$SupportEmail","Automatic Error Report","$strError\n$strQuery",$FromEmail))
+        if(EmailText("$SupportEmail","Automatic Error Report","$strError\n$strQuery",$FromEmail))
         {
                 print "We seem to be experiencing technical difficulties. We have been notified. " .
                 "Please try again later. Thank you.<br>";
@@ -164,7 +175,7 @@ function SpamDetect ($InVar)
             $strError = 'Database insert failed. Error ('. $dbh->errno . ') ' . $dbh->error . "\n";
             $strError .= "$strQuery\n";
             error_log($strError);
-            mail("$SupportEmail","Automatic Error Report",$strError,"From:$SupportEmail");
+            EmailText("$SupportEmail","Automatic Error Report",$strError,"From:$SupportEmail");
         }
         return TRUE;
     }
@@ -481,6 +492,39 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   {
       return "Message has been sent";
   }
+}
+
+function EmailText($to,$subject,$message,$from)
+{
+    $strFileName = "";
+    $strAttach = "";
+    $from = str_replace("<", "|", $from);
+    $from = str_replace(">", "", $from);
+    $from = str_replace("From:", "", $from);
+    if (stripos($from, "|")===FALSE)
+    {
+        $iPos = stripos($from, "@");
+        $name = substr($from, 0,$iPos);
+        $from = "$name|$from";
+    }
+    $to = str_replace("<", "|", $to);
+    $to = str_replace(">", "", $to);
+    if (stripos($to, "|")===FALSE)
+    {
+        $iPos = stripos($to, "@");
+        $name = substr($to, 0,$iPos);
+        $to = "$name|$to";
+    }
+    $message = str_replace("\n", "<br>\n", $message);
+    $response = SendHTMLAttach ($message, $from, $to, $subject, $strFileName, $strAttach);
+    if ($response == "Message has been sent")
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 ?>

@@ -11,67 +11,6 @@
                          "vcLocate='$strLocate', vcGender='$strGender ' where iUserID='$strUserID'";
         UpdateSQL ($strQuery,"update");
 
-        $strQuery = "SELECT iInterestId FROM tblInterestMap where iUserID = $strUserID;";
-        if (!$Result = $dbh->query ($strQuery))
-        {
-            error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-            error_log ($strQuery);
-            print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-            exit(2);
-        }
-        while ($Row = $Result->fetch_assoc())
-        {
-            $bFound = FALSE;
-            $iInterestID = $Row['iInterestId'];
-            foreach ($iInterests as $value)
-            {
-                if ($value == $iInterestID)
-                {
-                    $bFound = TRUE;
-                    break;
-                }
-            }
-            if (!$bFound)
-            {
-                $strQuery = "delete from tblInterestMap where iUserID = $strUserID and iInterestID = $iInterestID ;";
-                $bOK = CallSPNoOut($strQuery);
-            }
-        }
-        foreach ($iInterests as $value)
-        {
-            $strQuery = "SELECT COUNT(*) b FROM tblInterestMap WHERE iInterestID = $value AND iUserID = $strUserID LIMIT 1;";
-            if (!$Result2 = $dbh->query ($strQuery))
-            {
-                error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-                error_log ($strQuery);
-                print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-                exit(2);
-            }
-            $Row2 = $Result2->fetch_assoc();
-            $iRowCount = $Row2['b'];
-            if ($value>0)
-            {
-                if ($iRowCount == 0)
-                {
-                    $strQuery = "insert into tblInterestMap (iInterestID,iUserID) " .
-                         "values ($value,$strUserID);";
-                    $bOK = CallSPNoOut($strQuery);
-                }
-            }
-            else
-            {
-                if ($iRowCount == 0)
-                {
-                    $strQuery = "insert into tblInterestMap (iInterestID,iUserID,vcComment) " .
-                             "values ($value,$strUserID,'$strOther');";
-                }
-                else
-                {
-                    $strQuery = "update tblInterestMap set vcComment = '$strOther' where iUserID = $strUserID and  iInterestID = -1 ;";
-                }
-                $bOK = CallSPNoOut($strQuery);
-            }
-        }
 	if ($strEmail <> $strOEmail)
         {
             $EmailCount = 0;

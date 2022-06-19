@@ -12,25 +12,6 @@
     $strEmail = substr(trim($_POST['txtEmail']),0,49);
     $strOEmail = substr(trim($_POST['txtOEmail']),0,49);
     $strCell = substr(trim($_POST['txtCell']),0,19);
-    $strBdate = substr(trim($_POST['txtBDate']),0,99);
-    $strWedAnn = substr(trim($_POST['txtWedAnn']),0,99);
-    $strHealth = substr(trim($_POST['txtHealth']),0,499);
-    $strLocate = substr(trim($_POST['txtLocate']),0,499);
-    $strOther = substr(trim($_POST['txtOther']),0,499);
-    $strGender = substr(trim($_POST['gender']),0,14);
-    if (isset($_POST['chkInterst']))
-    {
-        $iInterests = $_POST['chkInterst'];
-    }
-    else
-    {
-        $iInterests=array();
-    }
-    if (!$strGender)
-    {
-        print "<p class=\"Error\">Gender is required, hopefully that isn't a point of confusion for you :-P</p>";
-        $bSpam = TRUE;
-    }
     if (SpamDetect($strName))
     {
         print "<p class=\"Error\">URL detected in Name field</p>";
@@ -71,26 +52,6 @@
         print "<p class=\"Error\">URL detected in Cell phone field</p>";
         $bSpam = TRUE;
     }
-    if (SpamDetect($strBdate))
-    {
-        print "<p class=\"Error\">URL detected in Birthday field</p>";
-        $bSpam = TRUE;
-    }
-    if (SpamDetect($strWedAnn))
-    {
-        print "<p class=\"Error\">URL detected in Anniversiary field</p>";
-        $bSpam = TRUE;
-    }
-    if (SpamDetect($strHealth))
-    {
-        print "<p class=\"Error\">URL detected in Health concern field</p>";
-        $bSpam = TRUE;
-    }
-    if (SpamDetect($strOther))
-    {
-        print "<p class=\"Error\">URL detected in Other Interest field</p>";
-        $bSpam = TRUE;
-    }
     $strName = CleanReg($strName);
     $strAddr1 = CleanReg($strAddr1);
     $strAddr2 = CleanReg($strAddr2);
@@ -100,11 +61,6 @@
     $strEmail = CleanReg($strEmail);
     $strOEmail = CleanReg($strOEmail);
     $strCell = CleanReg($strCell);
-    $strBdate = CleanReg($strBdate);
-    $strWedAnn = CleanReg($strWedAnn);
-    $strHealth = CleanReg($strHealth);
-    $strLocate = CleanReg($strLocate);
-    $strOther = CleanReg($strOther);
     if($bSpam)
     {
         print "<p class=\"Error\">Your update has been flagged as spam as invalid or missing required data was detected in one or more input fields. ";

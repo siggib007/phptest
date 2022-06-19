@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('UTC');
 $DBServerName = getenv("MYSQL_HOST");
-$DefaultDB = "VMdb" ;
+$DefaultDB = "PHPDemo" ;
 $UID = getenv("MYSQL_USER");
 $PWD = getenv("MYSQL_PASSWORD");  
 $MailUser = getenv("EMAILUSER");  
@@ -12,11 +12,11 @@ $UseSSL = getenv("USESSL");
 $UseStartTLS = getenv("USESTARTTLS");
 $strRemoteIP = $_SERVER["REMOTE_ADDR"];
 $Priv = 0; //Default Privledge level is public or 0
-$HeadImg ="img/StudioB320.jpg";
-$CSSName = "sb.css";
+$HeadImg ="img/PHPDemoBanner.png";
+$CSSName = "SiteStyle.css";
 $ErrMsg = "We seem to be experiencing some technical difficulties, " .
           "hopefully we'll have it resolved shortly.<br>" .
-          "If you have any questions please contact us at support@studio-b-dance.com.";
+          "If you have any questions please contact us at support@example.com.";
 $strHost = $_SERVER["SERVER_NAME"];
 $strScriptName = $_SERVER["SCRIPT_NAME"];
 $gFileName = __FILE__;

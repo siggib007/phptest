@@ -26,7 +26,6 @@
         {
             if($BeenSubmitted == "True")
             {
-                $strQuery = "Delete from tblInterestMap where iUserID='$iRegNum'";
                 if(UpdateSQL($strQuery, "delete"))
                 {
                     $strQuery = "Delete from tblUsers where iUserID='$iRegNum';";

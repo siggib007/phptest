@@ -80,121 +80,12 @@
     print "</td>\n";
     print "</tr>\n";
     print "<tr>\n";
-    print "<td align=\"right\" class=\"lbl\">Home Phone Number: </td>\n";
-    print "<td><input type=\"text\" name=\"txtPhone\" size=\"15\" value=\"$strPhone\"> </td>\n";
-    print "</tr>\n";
-    print "<tr>\n";
     print "<td align=\"right\" class=\"lbl\">Cell Phone Number: </td>\n";
     print "<td><input type=\"text\" name=\"txtCell\" size=\"15\" value=\"$strCell\"> </td>\n";
     print "</tr>\n";
     print "<tr>\n<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">Email address: </td>\n";
     print "<td><input type=\"text\" name=\"txtEmail\" size=\"50\" value=\"$strEmail\">\n<span class=\"Attn\">Required</span>\n";
     print "<input type=\"hidden\" name=\"txtOEmail\" size=\"50\" value=\"$strEmail\"> </td>\n</tr>\n";
-    print "<tr>\n";
-    print "<td align=\"right\" class=\"lbl\">Birthdate: </td>\n";
-    print "<td><input type=\"text\" name=\"txtBDate\" size=\"25\" value=\"$strBdate\"> </td>\n";
-    print "</tr>\n";
-    print "<tr>\n";
-    print "<td align=\"right\" class=\"lbl\">Wedding Anniversary: </td>\n";
-    print "<td><input type=\"text\" name=\"txtWedAnn\" size=\"25\" value=\"$strWedAnn\"> </td>\n";
-    print "</tr>\n";
-    print "<tr>\n";
-    print "<td align=\"right\" class=\"lbl\">Gender: </td>\n";
-    print "<td>\n";
-    switch (trim($strGender))
-    {
-        case "male" :
-            print "<input type=\"radio\" name=\"gender\" value=\"male\" checked> Male";
-            print "<input type=\"radio\" name=\"gender\" value=\"female\"> Female";
-            break;
-        case "female" :
-            print "<input type=\"radio\" name=\"gender\" value=\"male\"> Male";
-            print "<input type=\"radio\" name=\"gender\" value=\"female\" checked> Female";
-            break;
-        default :
-            print "<input type=\"radio\" name=\"gender\" value=\"male\"> Male";
-            print "<input type=\"radio\" name=\"gender\" value=\"female\"> Female";
-    }
 
-    print "&nbsp&nbsp&nbsp<span class=\"Attn\">Required</span>\n</td>\n";
-    print "<tr>\n";
-    print "<td align=\"right\" class=\"lbl\">Any Health Issues that could affect dancing?: </td>\n";
-    print "<td><input type=\"text\" name=\"txtHealth\" size=\"50\" value=\"$strHealth\"> </td>\n";
-    print "</tr>\n";
-    print "<tr>\n";
-    print "<td align=\"right\" class=\"lbl\">How did you find out about Studio&nbsp;B&nbsp;Dance?: </td>\n";
-    print "<td><input type=\"text\" name=\"txtLocate\" size=\"50\" value=\"$strLocate\"> </td>\n";
-    print "</tr>\n";
     print "<tr><td>&nbsp</td></tr>";
-   if ($strUserID)
-    {
-        $strQuery="CALL spUserMap($strUserID)";
-    }
-    else
-    {
-        $strQuery = "SELECT iInterestId, vcInterest, '' bChecked FROM tblInterests order by iSortNum;";
-    }
-
-    if (!$Result = $dbh->query ($strQuery,MYSQLI_USE_RESULT))
-    {
-        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-        exit(2);
-    }
-    print "<tr>\n";
-    print "<td align=\"right\" class=\"lbl\">Dance Styles of Interest (check all that apply): </td>\n";
-    print "</tr>\n";
-    $i = 1;
-    print "<tr>\n<td colspan=\"2\">\n<table align=\"center\">\n<tr>\n";
-    while ($Row = $Result->fetch_assoc())
-    {
-        $vcInterest = $Row['vcInterest'];
-        $iInterestID = $Row['iInterestId'];
-        $bChecked = $Row['bChecked'];
-        print "<td><input type=\"checkbox\" name=\"chkInterst[]\" value=\"$iInterestID\" $bChecked>$vcInterest</td>\n";
-        if ($i<$iNumCol)
-        {
-            $i=$i+1;
-        }
-        else
-        {
-            $i=1;
-            print "</tr>\n<tr>\n";
-        }
-    }
-    while ($dbh->next_result())
-    {
-        if ($Result=$dbh->store_result())
-        {
-            $Result->free();
-        }
-    }
-    $OtherColSpan = $iNumCol - $i + 1;
-    print "<td colspan=\"$OtherColSpan\">";
-    if ($strUserID)
-    {
-        $strQuery = "SELECT vcComment FROM tblInterestMap WHERE iUserID = $strUserID AND iInterestID = -1  limit 1;";
-        if (!$Result2 = $dbh->query ($strQuery))
-        {
-            error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-            error_log ($strQuery);
-            print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-            exit(2);
-        }
-        $Row2 = $Result2->fetch_assoc();
-        $strOther = $Row2['vcComment'];
-        if ($strOther)
-        {
-            $bChecked="checked";
-        }
-    }
-    else
-    {
-        $strOther = "";
-        $bChecked="";
-    }
-    print "<input type=\"checkbox\" name=\"chkInterst[]\" value=\"-1\" $bChecked>Other\n" .
-          "<input type=\"text\" name=\"txtOther\" size=\"30\" value=\"$strOther\"></td>\n";
-    print "</tr>\n</table>\n";
 ?>
