@@ -1,4 +1,14 @@
 <?php
+require_once("functions.php");
+
+$ROOTPATH = "/";
+$HeadImg ="img/PHPDemoBanner.png";
+$CSSName = "SiteStyle.css";
+$ErrMsg = "We seem to be experiencing some technical difficulties, " .
+          "hopefully we'll have it resolved shortly.<br>" .
+          "If you have any questions please contact us at support@example.com.";
+
+
 // Decide How you want to keep and access environment variables and secrets
 
 // uncomment this line if you want to store it all in a special secrets file
@@ -6,7 +16,7 @@
 require("secrets.php");
 
 // If you rather store everything in evironment variables uncomment this block
-$DBServerName = getenv("MYSQL_HOST");
+/* $DBServerName = getenv("MYSQL_HOST");
 $UID = getenv("MYSQL_USER");
 $PWD = getenv("MYSQL_PASSWORD");  
 $MailUser = getenv("EMAILUSER");  
@@ -14,23 +24,49 @@ $MailPWD = getenv("EMAILPWD");
 $MailHost = getenv("EMAILSERVER");
 $MailHostPort = getenv("EMAILPORT");
 $UseSSL = getenv("USESSL");
-$UseStartTLS = getenv("USESTARTTLS");
+$UseStartTLS = getenv("USESTARTTLS"); */
 
 
 // The recommended approach is to store everything in Doppler
 // See https://infosechelp.net/secrets-management/ for how to get started with Doppler
 // If you don't want to use Doppler comment this block out and uncomment one of the above ones.
-
+$arrSecretValues = FetchDopplerStatic("phpdev","dev");
+if (array_key_exists("secrets",$arrSecretValues))
+{
+  $DBServerName = $arrSecretValues["secrets"]["MYSQL_HOST"]["computed"];
+  $UID = $arrSecretValues["secrets"]["MYSQL_USER"]["computed"];
+  $PWD = $arrSecretValues["secrets"]["MYSQL_PASSWORD"]["computed"];
+  $MailUser = $arrSecretValues["secrets"]["EMAILUSER"]["computed"]; 
+  $MailPWD = $arrSecretValues["secrets"]["EMAILPWD"]["computed"];
+  $MailHost = $arrSecretValues["secrets"]["EMAILSERVER"]["computed"];
+  $MailHostPort = $arrSecretValues["secrets"]["EMAILPORT"]["computed"];
+  $UseSSL = $arrSecretValues["secrets"]["USESSL"]["computed"];
+  $UseStartTLS = $arrSecretValues["secrets"]["USESTARTTLS"]["computed"];
+}
+else
+{
+  if (array_key_exists("messages",$arrSecretValues))
+  {
+    $strMsg = "There was an issue fetching the secrets: ";
+    foreach ($arrSecretValues["messages"] as $msg)
+    {
+      $strMsg .= "$msg. ";
+    }
+    error_log($strMsg);
+    ShowErrHead();
+  }
+  else
+  {
+    Log_Array($arrSecretValues,"Unexpected reponse from FetchDopplerStatic");
+    ShowErrHead();
+  }
+}
+# end Fetching Doppler secrets
 
 date_default_timezone_set('UTC');
 $DefaultDB = "PHPDemo" ;
 $strRemoteIP = $_SERVER["REMOTE_ADDR"];
 $Priv = 0; // Default Privledge level is public or 0
-$HeadImg ="img/PHPDemoBanner.png";
-$CSSName = "SiteStyle.css";
-$ErrMsg = "We seem to be experiencing some technical difficulties, " .
-          "hopefully we'll have it resolved shortly.<br>" .
-          "If you have any questions please contact us at support@example.com.";
 $strHost = $_SERVER["SERVER_NAME"];
 $strScriptName = $_SERVER["SCRIPT_NAME"];
 $gFileName = __FILE__;
@@ -41,8 +77,6 @@ $DBError = "false";
 $strHostNameParts = explode('.',$strHost);
 $HostnamePartCount = count($strHostNameParts);
 
-
-error_log("Some debug logs: mysql host: $DBServerName UID: $UID  ");
 if ($HostnamePartCount == 1)
 {
 	$SiteType = "a";
@@ -72,11 +106,19 @@ else
 //}
 //$strURL = "http://" . $strHost . $ROOTPATH;
 $strURL = "Localhost/";
-$ROOTPATH = "/";
 
-require_once("functions.php");
 
-$dbh= new mysqli ($DBServerName, $UID, $PWD, $DefaultDB);
+try 
+{
+  $dbh= new mysqli ($DBServerName, $UID, $PWD, $DefaultDB);
+}
+catch (Exception $e)
+{
+  error_log("Error while attempting to create a new mysqli client:" . $e->getMessage());
+  error_log($e->getFile() . " line " . $e->getLine());
+  Log_BackTrace($e->getTrace(), "Here is the backtrace");
+  ShowErrHead();
+}
 if ($dbh->connect_errno)
 {
     error_log( "Failed to connect to MySQL. Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);

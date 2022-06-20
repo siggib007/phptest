@@ -23,6 +23,7 @@ services:
       - USESSL
       - USESTARTTLS
       - XDEBUG_CONFIG
+      - DopplerKEY
   mysql:
     image: mysql:5.7
     ports:

@@ -5,7 +5,10 @@
   {
     # $strProject is a simple string with the name of the Doppler Project holding your secret
     # $strConfig is a simple string with the name of the configuration to use
-    # Returns an associated array with the secret name as key and the secret as the value
+    # Returns an associated array with top level key of success, indicating if the fetch was successful or not
+    # If success = true, all secrets will be under a top level key of secrets
+    # with the secret name as key and the secret as the value
+    # If success = false, there will a array of messages under top level key of messages with error messages
     # Requires DopplerKEY as environment variables
     $AccessKey = getenv("DopplerKEY");
     $APIEndpoint = "https://api.doppler.com";
