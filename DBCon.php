@@ -76,6 +76,7 @@ $strSiteLabel = "";
 $DBError = "false";
 $strHostNameParts = explode('.',$strHost);
 $HostnamePartCount = count($strHostNameParts);
+$OSEnv = "not used";
 
 if ($HostnamePartCount == 1)
 {

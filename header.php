@@ -86,8 +86,16 @@ if ($iMenuID)
         error_log ($strQuery);
         ShowErrHead();
     }
-    $Row = $Result->fetch_assoc();
-    $iSubOfID = $Row['iSubOfMenu'];
+    $rowcount=mysqli_num_rows($Result);
+    if ($rowcount > 0)
+    {
+      $Row = $Result->fetch_assoc();
+      $iSubOfID = $Row['iSubOfMenu'];
+    }
+    else
+    {
+      $iSubOfID = 0;
+    }
 }
 
 if ($iSubOfID > 0)
