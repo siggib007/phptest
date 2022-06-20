@@ -1,7 +1,12 @@
 <?php
-date_default_timezone_set('UTC');
+// Decide How you want to keep and access environment variables and secrets
+
+// uncomment this line if you want to store it all in a special secrets file
+// make sure you gitignore this file
+require("secrets.php");
+
+// If you rather store everything in evironment variables uncomment this block
 $DBServerName = getenv("MYSQL_HOST");
-$DefaultDB = "PHPDemo" ;
 $UID = getenv("MYSQL_USER");
 $PWD = getenv("MYSQL_PASSWORD");  
 $MailUser = getenv("EMAILUSER");  
@@ -10,8 +15,17 @@ $MailHost = getenv("EMAILSERVER");
 $MailHostPort = getenv("EMAILPORT");
 $UseSSL = getenv("USESSL");
 $UseStartTLS = getenv("USESTARTTLS");
+
+
+// The recommended approach is to store everything in Doppler
+// See https://infosechelp.net/secrets-management/ for how to get started with Doppler
+// If you don't want to use Doppler comment this block out and uncomment one of the above ones.
+
+
+date_default_timezone_set('UTC');
+$DefaultDB = "PHPDemo" ;
 $strRemoteIP = $_SERVER["REMOTE_ADDR"];
-$Priv = 0; //Default Privledge level is public or 0
+$Priv = 0; // Default Privledge level is public or 0
 $HeadImg ="img/PHPDemoBanner.png";
 $CSSName = "SiteStyle.css";
 $ErrMsg = "We seem to be experiencing some technical difficulties, " .
@@ -27,6 +41,8 @@ $DBError = "false";
 $strHostNameParts = explode('.',$strHost);
 $HostnamePartCount = count($strHostNameParts);
 
+
+error_log("Some debug logs: mysql host: $DBServerName UID: $UID  ");
 if ($HostnamePartCount == 1)
 {
 	$SiteType = "a";
@@ -56,6 +72,7 @@ else
 //}
 //$strURL = "http://" . $strHost . $ROOTPATH;
 $strURL = "Localhost/";
+$ROOTPATH = "/";
 
 require_once("functions.php");
 
