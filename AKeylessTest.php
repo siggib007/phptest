@@ -3,6 +3,9 @@
   
   function FetchKeylessStatic ($arrNames)
   {
+    # $arrNames is an array of the secret names to be fetched
+    # Returns an associated array with the secret name as key and the secret as the value
+    # Requires AccessID and Accesskey as environment variables
     $AccessID = getenv("KEYLESSID");
     $AccessKey = getenv("KEYLESSKEY");
     $APIEndpoint = "https://api.akeyless.io";
