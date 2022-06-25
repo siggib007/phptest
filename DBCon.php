@@ -18,8 +18,8 @@ require("secrets.php");
 // If you rather store everything in evironment variables uncomment this block
 /* $DBServerName = getenv("MYSQL_HOST");
 $UID = getenv("MYSQL_USER");
-$PWD = getenv("MYSQL_PASSWORD");  
-$MailUser = getenv("EMAILUSER");  
+$PWD = getenv("MYSQL_PASSWORD");
+$MailUser = getenv("EMAILUSER");
 $MailPWD = getenv("EMAILPWD");
 $MailHost = getenv("EMAILSERVER");
 $MailHostPort = getenv("EMAILPORT");
@@ -36,7 +36,7 @@ if (array_key_exists("secrets",$arrSecretValues))
   $DBServerName = $arrSecretValues["secrets"]["MYSQL_HOST"]["computed"];
   $UID = $arrSecretValues["secrets"]["MYSQL_USER"]["computed"];
   $PWD = $arrSecretValues["secrets"]["MYSQL_PASSWORD"]["computed"];
-  $MailUser = $arrSecretValues["secrets"]["EMAILUSER"]["computed"]; 
+  $MailUser = $arrSecretValues["secrets"]["EMAILUSER"]["computed"];
   $MailPWD = $arrSecretValues["secrets"]["EMAILPWD"]["computed"];
   $MailHost = $arrSecretValues["secrets"]["EMAILSERVER"]["computed"];
   $MailHostPort = $arrSecretValues["secrets"]["EMAILPORT"]["computed"];
@@ -109,7 +109,7 @@ else
 $strURL = "Localhost/";
 
 
-try 
+try
 {
   $dbh= new mysqli ($DBServerName, $UID, $PWD, $DefaultDB);
 }
@@ -240,6 +240,7 @@ else
             }
         }
     }
+//     Log_Array($ConfArray,"Dumping ConfArray");
     $FromEmail = "From:$eFromName <$eFromAddr>";
     if (!isset($_SESSION))
     {

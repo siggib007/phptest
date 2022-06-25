@@ -54,6 +54,7 @@ function UpdateSQL ($strQuery,$type)
     $SupportEmail = $GLOBALS['SupportEmail'];
     $FromEmail = $GLOBALS['FromEmail'];
 
+    error_log($strQuery);
     if ($dbh->query ($strQuery))
     {
         $NumAffected = $dbh->affected_rows;
@@ -395,7 +396,7 @@ function StripHTML ($content)
   $content = str_replace("<td>","|",$content);
   $content = str_replace("</td>","",$content);
   $unwanted = ['style','script'];
-  foreach ( $unwanted as $tag ) 
+  foreach ( $unwanted as $tag )
   {
     $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
   }
@@ -446,7 +447,7 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
       $mail->SMTPSecure = "";
     }
   }
-  
+
   // Construct email message
   $mail->setFrom($FromParts[1], $FromParts[0]);
   $mail->addAddress($ToParts[1], $ToParts[0]);
@@ -458,7 +459,7 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   // add string attachment
   if ($strAttach != "" and $strFileName != "")
   {
-    $mail->addStringAttachment($strAttach, $strFileName); 
+    $mail->addStringAttachment($strAttach, $strFileName);
   }
 
   // Process any custom headers
@@ -469,7 +470,7 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
       $mail->addCustomHeader($header);
     }
   }
-  else 
+  else
   {
     if ($strAddHeader != "")
     {
@@ -482,13 +483,13 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   {
     $mail->addAttachment($strFile2Attach);
   }
-  
+
   // send the message
- 
+
   if(!$mail->send())
   {
       return "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
-  } else 
+  } else
   {
       return "Message has been sent";
   }
@@ -541,7 +542,7 @@ function FetchKeylessStatic ($arrNames)
   $PostData['access-id'] = "$AccessID";
   $PostData['access-key'] = "$AccessKey";
   $jsonPostData = json_encode($PostData);
-  
+
   $Service = "/auth";
   $url = $APIEndpoint.$Service;
   $curl = curl_init();
@@ -554,7 +555,7 @@ function FetchKeylessStatic ($arrNames)
   curl_close($curl);
   $arrResponse = json_decode($response, TRUE);
   $token = $arrResponse["token"];
-  
+
   $PostData = array();
   $PostData["token"] = $token;
   $PostData["names"] = $arrNames;
@@ -590,7 +591,7 @@ function FetchDopplerStatic ($strProject,$strConfig)
     $Param = array();
     $Param['project'] = $strProject;
     $Param['config'] = $strConfig;
-    
+
     $url = $APIEndpoint.$Service . '?' . http_build_query($Param);
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_USERPWD, "$AccessKey:");
@@ -604,5 +605,5 @@ function FetchDopplerStatic ($strProject,$strConfig)
     $arrResponse = json_decode($response, TRUE);
     return json_decode($response, TRUE);
   }
-  
+
 ?>

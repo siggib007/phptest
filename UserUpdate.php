@@ -4,11 +4,10 @@
     $strURL = $strURL . "EmailUpdate.php?$uuid";
     if ($strUserID)
     {
-        $strQuery = "update tblUsers set vcName = '$strName', vcPhone = '$strPhone', vcAddr1 = '$strAddr1', " .
+        $strQuery = "update tblUsers set vcName = '$strName', vcAddr1 = '$strAddr1', " .
                          "vcAddr2 = '$strAddr2', vcCity = '$strCity', vcState = '$strState', vcZip = '$strZip', " .
-                         "vcCountry = '$strCountry', iPrivLevel = $iLevel, dtUpdated = '$dtNow', vcCell='$strCell', "  .
-                         "vcBirthdate='$strBdate', vcWedAnn='$strWedAnn', vcHealthIssues='$strHealth', " .
-                         "vcLocate='$strLocate', vcGender='$strGender ' where iUserID='$strUserID'";
+                         "vcCountry = '$strCountry', iPrivLevel = $iLevel, dtUpdated = '$dtNow', vcCell='$strCell' "  .
+                         " where iUserID='$strUserID'";
         UpdateSQL ($strQuery,"update");
 
 	if ($strEmail <> $strOEmail)

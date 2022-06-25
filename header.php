@@ -46,11 +46,21 @@ if (!$Result = $dbh->query ($strQuery))
     error_log ($strQuery);
     ShowErrHead();
 }
-$Row = $Result->fetch_assoc();
-$PrivReq = $Row['iReadPriv'];
-$iMenuID = $Row['iMenuID'];
-$iAdminCat = $Row['bAdmin'];
-
+$rowcount=mysqli_num_rows($Result);
+if ($rowcount > 0)
+{
+  $Row = $Result->fetch_assoc();
+  $PrivReq = $Row['iReadPriv'];
+  $iMenuID = $Row['iMenuID'];
+  $WritePriv = $Row['iWritePriv'];
+  $iAdminCat = $Row['bAdmin'];
+  $dbHead = $Row['vcHeader'];
+}
+else
+{
+  $WritePriv = "";
+  $dbHead = "";
+}
 if (!isset($_SERVER['HTTPS'])and $strSecOpt =="force" and $Row['bSecure'] == 1)
 {
     switch ($strHost)
@@ -70,12 +80,12 @@ if ($PrivReq == '')
 {
     $PrivReq = 0;
 }
-$WritePriv = $Row['iWritePriv'];
+
 if ($WritePriv == '')
 {
     $WritePriv = 0;
 }
-$strHeader = "$HeadAdd " . $Row['vcHeader'];
+$strHeader = "$HeadAdd " . $dbHead;
 
 if ($iMenuID)
 {
@@ -226,11 +236,15 @@ if ($strSiteLabel <> "")
 {
     print "<center><span class=SiteLabel>$strSiteLabel</span></center>\n";
 }
+$AllowReg = $GLOBALS["ConfArray"]["AllowReg"];
 print "<table width=\"100%\">\n<tr>\n";
 if ( ! isset($_SESSION["auth_username"] ) )
 {
     print "<td width=\"80%\"><span class=Attn>$LogoutReason</span></td>\n";
-    print "<td class=\"login\"><a class=\"login\" href=\"" . $ROOTPATH . "register.php\">New Account</a></td>\n";
+    if ($AllowReg=="True")
+    {
+        print "<td class=\"login\"><a class=\"login\" href=\"" . $ROOTPATH . "register.php\">New Account</a></td>\n";
+    }
     print "<td  class=\"login\"><a class=\"login\" href=\"" . $ROOTPATH . "Login.php\">Login</a></td>\n";
     $Priv = 0;
 }

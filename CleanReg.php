@@ -8,7 +8,6 @@
     $strState = substr(trim($_POST['cmbState']),0,49);
     $strZip = substr(trim($_POST['txtZip']),0,9);
     $strCountry = substr(trim($_POST['cmbCountry']),0,99);
-    $strPhone = substr(trim($_POST['txtPhone']),0,19);
     $strEmail = substr(trim($_POST['txtEmail']),0,49);
     $strOEmail = substr(trim($_POST['txtOEmail']),0,49);
     $strCell = substr(trim($_POST['txtCell']),0,19);
@@ -37,11 +36,6 @@
         print "<p class=\"Error\">URL detected in Zip field</p>";
         $bSpam = TRUE;
     }
-    if (SpamDetect($strPhone))
-    {
-        print "<p class=\"Error\">URL detected in Home phone field</p>";
-        $bSpam = TRUE;
-    }
     if (SpamDetect($strEmail))
     {
         print "<p class=\"Error\">URL detected in email field</p>";
@@ -57,7 +51,6 @@
     $strAddr2 = CleanReg($strAddr2);
     $strCity = CleanReg($strCity);
     $strZip = CleanReg($strZip);
-    $strPhone = CleanReg($strPhone);
     $strEmail = CleanReg($strEmail);
     $strOEmail = CleanReg($strOEmail);
     $strCell = CleanReg($strCell);
