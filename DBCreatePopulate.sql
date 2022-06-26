@@ -16,12 +16,10 @@
 
 
 -- Dumping database structure for PHPDemo
-DROP DATABASE IF EXISTS `PHPDemo`;
 CREATE DATABASE IF NOT EXISTS `PHPDemo` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
 USE `PHPDemo`;
 
--- Dumping structure for table CountryCodes
-DROP TABLE IF EXISTS `CountryCodes`;
+-- Dumping structure for table PHPDemo.CountryCodes
 CREATE TABLE IF NOT EXISTS `CountryCodes` (
   `iCountryID` int(11) NOT NULL,
   `vcCountryCode` char(2) NOT NULL DEFAULT '',
@@ -29,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `CountryCodes` (
   PRIMARY KEY (`iCountryID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Dumping data for table CountryCodes: 242 rows
+-- Dumping data for table PHPDemo.CountryCodes: 242 rows
 /*!40000 ALTER TABLE `CountryCodes` DISABLE KEYS */;
 INSERT INTO `CountryCodes` (`iCountryID`, `vcCountryCode`, `vcCountryName`) VALUES
 	(1, 'AF', 'AFGHANISTAN'),
@@ -276,8 +274,7 @@ INSERT INTO `CountryCodes` (`iCountryID`, `vcCountryCode`, `vcCountryName`) VALU
 	(242, 'ZW', 'ZIMBABWE');
 /*!40000 ALTER TABLE `CountryCodes` ENABLE KEYS */;
 
--- Dumping structure for procedure spMovePos
-DROP PROCEDURE IF EXISTS `spMovePos`;
+-- Dumping structure for procedure PHPDemo.spMovePos
 DELIMITER //
 CREATE PROCEDURE `spMovePos`(IN MenuID int, IN NewPos tinyint, IN Type varchar(10))
 BEGIN
@@ -290,23 +287,21 @@ UPDATE tblmenutype SET iMenuOrder = NewPos WHERE iMenuID = MenuID and vcMenuType
 END//
 DELIMITER ;
 
--- Dumping structure for procedure spUserMap
-DROP PROCEDURE IF EXISTS `spUserMap`;
+-- Dumping structure for procedure PHPDemo.spUserMap
 DELIMITER //
 CREATE PROCEDURE `spUserMap`(IN iMapUserID int)
 SELECT i.iInterestId, i.vcInterest, if(isnull(m.vcComment),'','Checked') bChecked
 FROM tblInterests i left join (select * from tblInterestMap where iUserid=iMapUserID) m on i.iInterestId = m.iInterestId//
 DELIMITER ;
 
--- Dumping structure for table tblAdminCategories
-DROP TABLE IF EXISTS `tblAdminCategories`;
+-- Dumping structure for table PHPDemo.tblAdminCategories
 CREATE TABLE IF NOT EXISTS `tblAdminCategories` (
   `iCatID` tinyint(4) NOT NULL AUTO_INCREMENT,
   `vcCatName` varchar(50) NOT NULL,
   PRIMARY KEY (`iCatID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblAdminCategories: ~8 rows (approximately)
+-- Dumping data for table PHPDemo.tblAdminCategories: ~5 rows (approximately)
 INSERT INTO `tblAdminCategories` (`iCatID`, `vcCatName`) VALUES
 	(0, 'Not Admin'),
 	(3, 'Site Configuration'),
@@ -314,8 +309,7 @@ INSERT INTO `tblAdminCategories` (`iCatID`, `vcCatName`) VALUES
 	(5, 'Reference'),
 	(7, 'Other');
 
--- Dumping structure for table tblconf
-DROP TABLE IF EXISTS `tblconf`;
+-- Dumping structure for table PHPDemo.tblconf
 CREATE TABLE IF NOT EXISTS `tblconf` (
   `vcValueName` varchar(50) NOT NULL,
   `vcValue` varchar(50) NOT NULL,
@@ -323,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `tblconf` (
   `vcValueType` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblconf: ~21 rows (approximately)
+-- Dumping data for table PHPDemo.tblconf: ~21 rows (approximately)
 INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) VALUES
 	('SupportEmail', 'support@example.com', 'Support Email', 'text'),
 	('ImgHeight', '100', 'Header Image height', 'int'),
@@ -345,10 +339,10 @@ INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) 
 	('ShowAdminSub', 'True', 'Show Administrative sub menu', 'Boolean'),
 	('UserTimeout', '25', 'User Login Timeout (minutes)', 'int'),
 	('NewPWDLen', '15', 'Initial Random Password Length', 'int'),
-	('AllowReg', 'False', 'Allow Self Registraton', 'Boolean');
+	('AllowReg', 'true', 'Allow Self Registraton', 'Boolean'),
+	('InitSetup', 'True', 'Initial Setup Mode is active. This should not exists past setup', 'Boolean');
 
--- Dumping structure for table tblContactInfo
-DROP TABLE IF EXISTS `tblContactInfo`;
+-- Dumping structure for table PHPDemo.tblContactInfo
 CREATE TABLE IF NOT EXISTS `tblContactInfo` (
   `iContactID` int(11) NOT NULL AUTO_INCREMENT,
   `vcType` varchar(25) NOT NULL,
@@ -358,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `tblContactInfo` (
   PRIMARY KEY (`iContactID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblContactInfo: ~5 rows (approximately)
+-- Dumping data for table PHPDemo.tblContactInfo: ~5 rows (approximately)
 INSERT INTO `tblContactInfo` (`iContactID`, `vcType`, `iSequence`, `vcLabel`, `vcValue`) VALUES
 	(1, 'Address', 1, '', 'Demo Org'),
 	(2, 'Address', 2, NULL, '123434 SE Main Street'),
@@ -366,20 +360,18 @@ INSERT INTO `tblContactInfo` (`iContactID`, `vcType`, `iSequence`, `vcLabel`, `v
 	(5, 'Email', 1, 'General Info', 'info@example.com'),
 	(7, 'Phone', 1, 'Office', '206-555-1212');
 
--- Dumping structure for table tblContactTypes
-DROP TABLE IF EXISTS `tblContactTypes`;
+-- Dumping structure for table PHPDemo.tblContactTypes
 CREATE TABLE IF NOT EXISTS `tblContactTypes` (
   `vcTypes` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblContactTypes: ~3 rows (approximately)
+-- Dumping data for table PHPDemo.tblContactTypes: ~3 rows (approximately)
 INSERT INTO `tblContactTypes` (`vcTypes`) VALUES
 	('Address'),
 	('Email'),
 	('Phone');
 
--- Dumping structure for table tblContent
-DROP TABLE IF EXISTS `tblContent`;
+-- Dumping structure for table PHPDemo.tblContent
 CREATE TABLE IF NOT EXISTS `tblContent` (
   `iRevID` int(11) NOT NULL AUTO_INCREMENT,
   `iMenuID` int(11) NOT NULL,
@@ -390,12 +382,11 @@ CREATE TABLE IF NOT EXISTS `tblContent` (
   PRIMARY KEY (`iRevID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblContent: ~0 rows (approximately)
+-- Dumping data for table PHPDemo.tblContent: ~1 rows (approximately)
 INSERT INTO `tblContent` (`iRevID`, `iMenuID`, `dtTimeStamp`, `vcPageHeader`, `tPageText`, `bLineBreak`) VALUES
 	(1, 1, '2022-06-19 18:51:18', 'Demo', '<p class=BlueAttn>This is just a demo site, nothing to see here!!!!</p>', 0);
 
--- Dumping structure for table tblemailupdate
-DROP TABLE IF EXISTS `tblemailupdate`;
+-- Dumping structure for table PHPDemo.tblemailupdate
 CREATE TABLE IF NOT EXISTS `tblemailupdate` (
   `iChangeID` int(11) NOT NULL AUTO_INCREMENT,
   `iClientID` int(11) NOT NULL,
@@ -408,13 +399,12 @@ CREATE TABLE IF NOT EXISTS `tblemailupdate` (
   UNIQUE KEY `vcGUID` (`vcGUID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblemailupdate: ~1 rows (approximately)
+-- Dumping data for table PHPDemo.tblemailupdate: ~2 rows (approximately)
 INSERT INTO `tblemailupdate` (`iChangeID`, `iClientID`, `vcGUID`, `vcNewEmail`, `vcReqIPAdd`, `dtTimeStamp`, `dtConfirmed`) VALUES
 	(1, 1, '165151037062b62eccd85aa7.27408699', 'siggi@infosechelp.net', '127.0.0.1', '2022-06-24 21:38:20', '2022-06-24 21:39:09'),
 	(2, 1, '53262205562b63a2ef3a421.41565761', 'siggi@supergeek.us', '127.0.0.1', '2022-06-24 22:26:54', '2022-06-24 22:27:17');
 
--- Dumping structure for table tblFAQ
-DROP TABLE IF EXISTS `tblFAQ`;
+-- Dumping structure for table PHPDemo.tblFAQ
 CREATE TABLE IF NOT EXISTS `tblFAQ` (
   `iFAQid` int(11) NOT NULL AUTO_INCREMENT,
   `vcQuestion` varchar(150) NOT NULL,
@@ -422,10 +412,9 @@ CREATE TABLE IF NOT EXISTS `tblFAQ` (
   PRIMARY KEY (`iFAQid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblFAQ: ~0 rows (approximately)
+-- Dumping data for table PHPDemo.tblFAQ: ~0 rows (approximately)
 
--- Dumping structure for table tblFeedback
-DROP TABLE IF EXISTS `tblFeedback`;
+-- Dumping structure for table PHPDemo.tblFeedback
 CREATE TABLE IF NOT EXISTS `tblFeedback` (
   `iFeedbackID` int(11) NOT NULL AUTO_INCREMENT,
   `vcFeedbackName` varchar(100) NOT NULL,
@@ -434,14 +423,13 @@ CREATE TABLE IF NOT EXISTS `tblFeedback` (
   PRIMARY KEY (`iFeedbackID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblFeedback: 1 rows
+-- Dumping data for table PHPDemo.tblFeedback: 1 rows
 /*!40000 ALTER TABLE `tblFeedback` DISABLE KEYS */;
 INSERT INTO `tblFeedback` (`iFeedbackID`, `vcFeedbackName`, `tFeedbackDescr`, `vcImgPath`) VALUES
 	(1, 'test feedback', 'Here would be some glowing remarks about this wonderful site.', '');
 /*!40000 ALTER TABLE `tblFeedback` ENABLE KEYS */;
 
--- Dumping structure for table tbllinkcategory
-DROP TABLE IF EXISTS `tbllinkcategory`;
+-- Dumping structure for table PHPDemo.tbllinkcategory
 CREATE TABLE IF NOT EXISTS `tbllinkcategory` (
   `iCatId` int(11) NOT NULL AUTO_INCREMENT,
   `vcCategory` varchar(100) NOT NULL,
@@ -449,13 +437,12 @@ CREATE TABLE IF NOT EXISTS `tbllinkcategory` (
   PRIMARY KEY (`iCatId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tbllinkcategory: ~2 rows (approximately)
+-- Dumping data for table PHPDemo.tbllinkcategory: ~2 rows (approximately)
 INSERT INTO `tbllinkcategory` (`iCatId`, `vcCategory`, `iSortNum`) VALUES
 	(1, 'Interesting Stuff', 10),
 	(2, 'Maybe interesting stuff', 11);
 
--- Dumping structure for table tbllinks
-DROP TABLE IF EXISTS `tbllinks`;
+-- Dumping structure for table PHPDemo.tbllinks
 CREATE TABLE IF NOT EXISTS `tbllinks` (
   `iLinkID` int(11) NOT NULL AUTO_INCREMENT,
   `iCategory` int(11) NOT NULL,
@@ -465,12 +452,11 @@ CREATE TABLE IF NOT EXISTS `tbllinks` (
   PRIMARY KEY (`iLinkID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tbllinks: ~0 rows (approximately)
+-- Dumping data for table PHPDemo.tbllinks: ~1 rows (approximately)
 INSERT INTO `tbllinks` (`iLinkID`, `iCategory`, `vcLink`, `vcName`, `vcComment`) VALUES
 	(1, 1, 'https://www.facebook.com/StudioBDanceRenton', 'Studio B on Facebook', 'Like us on Facebook & follow all of our activities!');
 
--- Dumping structure for table tblmenu
-DROP TABLE IF EXISTS `tblmenu`;
+-- Dumping structure for table PHPDemo.tblmenu
 CREATE TABLE IF NOT EXISTS `tblmenu` (
   `iMenuID` int(11) NOT NULL AUTO_INCREMENT,
   `vcTitle` varchar(50) NOT NULL,
@@ -486,9 +472,9 @@ CREATE TABLE IF NOT EXISTS `tblmenu` (
   PRIMARY KEY (`iMenuID`),
   KEY `bAdmin` (`bAdmin`),
   CONSTRAINT `tblmenu_ibfk_1` FOREIGN KEY (`bAdmin`) REFERENCES `tblAdminCategories` (`iCatID`)
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblmenu: ~61 rows (approximately)
+-- Dumping data for table PHPDemo.tblmenu: ~61 rows (approximately)
 INSERT INTO `tblmenu` (`iMenuID`, `vcTitle`, `vcLink`, `iReadPriv`, `iWritePriv`, `vcHeader`, `bAdmin`, `bNewWindow`, `bCont`, `bdel`, `bSecure`) VALUES
 	(1, 'Home', 'index.php', 0, 300, 'Demo Site', 0, 0, 1, 0, 0),
 	(3, 'Contact Us', 'contact.php', 0, 300, 'Contact Information', 0, 0, 0, 0, 0),
@@ -550,10 +536,10 @@ INSERT INTO `tblmenu` (`iMenuID`, `vcTitle`, `vcLink`, `iReadPriv`, `iWritePriv`
 	(93, 'UserDBVar.php', 'UserDBVar.php', 500, 300, 'UserDBVar.php', 0, 0, 0, 0, 0),
 	(94, 'UserRegForm.php', 'UserRegForm.php', 500, 300, 'UserRegForm.php', 0, 0, 0, 0, 0),
 	(95, 'UserUpdate.php', 'UserUpdate.php', 500, 300, 'UserUpdate.php', 0, 0, 0, 0, 0),
-	(96, 'validate.php', 'validate.php', 500, 300, 'validate.php', 0, 0, 0, 0, 0);
+	(96, 'validate.php', 'validate.php', 500, 300, 'validate.php', 0, 0, 0, 0, 0),
+	(97, 'InitialRegister1st.php', 'InitialRegister1st.php', 0, 0, 'InitialRegister1st.php', 0, 0, 0, 0, 0);
 
--- Dumping structure for table tblmenutype
-DROP TABLE IF EXISTS `tblmenutype`;
+-- Dumping structure for table PHPDemo.tblmenutype
 CREATE TABLE IF NOT EXISTS `tblmenutype` (
   `iTypeID` int(11) NOT NULL AUTO_INCREMENT,
   `iMenuID` int(11) NOT NULL,
@@ -563,7 +549,7 @@ CREATE TABLE IF NOT EXISTS `tblmenutype` (
   PRIMARY KEY (`iTypeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblmenutype: ~15 rows (approximately)
+-- Dumping data for table PHPDemo.tblmenutype: ~14 rows (approximately)
 INSERT INTO `tblmenutype` (`iTypeID`, `iMenuID`, `vcMenuType`, `iMenuOrder`, `iSubOfMenu`) VALUES
 	(1, 1, 'head', 1, 0),
 	(3, 3, 'head', 3, 0),
@@ -580,8 +566,7 @@ INSERT INTO `tblmenutype` (`iTypeID`, `iMenuID`, `vcMenuType`, `iMenuOrder`, `iS
 	(37, 63, 'head', 16, 0),
 	(38, 66, 'head', 13, 0);
 
--- Dumping structure for table tblPageMeta
-DROP TABLE IF EXISTS `tblPageMeta`;
+-- Dumping structure for table PHPDemo.tblPageMeta
 CREATE TABLE IF NOT EXISTS `tblPageMeta` (
   `iMetaID` int(11) NOT NULL AUTO_INCREMENT,
   `iMenuID` int(11) DEFAULT NULL,
@@ -591,7 +576,7 @@ CREATE TABLE IF NOT EXISTS `tblPageMeta` (
   PRIMARY KEY (`iMetaID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblPageMeta: ~10 rows (approximately)
+-- Dumping data for table PHPDemo.tblPageMeta: ~10 rows (approximately)
 INSERT INTO `tblPageMeta` (`iMetaID`, `iMenuID`, `vcMetaName`, `vcMetaValue`, `vcAttrName`) VALUES
 	(1, NULL, 'resource-type', 'document', 'name'),
 	(2, NULL, 'revisit-after', '60', 'name'),
@@ -604,8 +589,7 @@ INSERT INTO `tblPageMeta` (`iMetaID`, `iMenuID`, `vcMetaName`, `vcMetaValue`, `v
 	(12, NULL, 'Content-Language', 'English', 'http-equiv'),
 	(13, NULL, 'content-type', 'text/html charset=UTF-8', 'http-equiv');
 
--- Dumping structure for table tblPageTable
-DROP TABLE IF EXISTS `tblPageTable`;
+-- Dumping structure for table PHPDemo.tblPageTable
 CREATE TABLE IF NOT EXISTS `tblPageTable` (
   `iTableID` int(11) NOT NULL AUTO_INCREMENT,
   `iMenuID` int(11) NOT NULL,
@@ -618,10 +602,9 @@ CREATE TABLE IF NOT EXISTS `tblPageTable` (
   KEY `iMenuID` (`iMenuID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblPageTable: ~0 rows (approximately)
+-- Dumping data for table PHPDemo.tblPageTable: ~0 rows (approximately)
 
--- Dumping structure for table tblPageTexts
-DROP TABLE IF EXISTS `tblPageTexts`;
+-- Dumping structure for table PHPDemo.tblPageTexts
 CREATE TABLE IF NOT EXISTS `tblPageTexts` (
   `vcTextName` varchar(10) NOT NULL,
   `vcTextDescr` varchar(100) NOT NULL,
@@ -629,32 +612,33 @@ CREATE TABLE IF NOT EXISTS `tblPageTexts` (
   PRIMARY KEY (`vcTextName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblPageTexts: ~0 rows (approximately)
+-- Dumping data for table PHPDemo.tblPageTexts: ~4 rows (approximately)
 INSERT INTO `tblPageTexts` (`vcTextName`, `vcTextDescr`, `tPageTexts`) VALUES
+	('RegFoot', 'Text for Bottom of the registration page', 'I tried to warn you, but did you listen?? Doesn\'t look that way. Oh well you might as well go ahead and submitt now. Just know that this is all on you and you agree to everything and accept responsibility for everything even things that aren\'t your fault or responsibilites.'),
+	('RegHead', 'Text to display at head of registration page', 'This form is to sign up for an account on this useless demo site. Trust me signing up here will lead to nothing but trouble. If you insist go ahead and fill it out but don\'t say I didn\'t warn you.'),
+	('SetupReg', 'Text for the initial setup registration page', 'Since this is the first time setup you need to create an adminstrative account'),
 	('Wemail', 'Welcome Email Intro', 'welcome welcome');
 
--- Dumping structure for table tblPageTypes
-DROP TABLE IF EXISTS `tblPageTypes`;
+-- Dumping structure for table PHPDemo.tblPageTypes
 CREATE TABLE IF NOT EXISTS `tblPageTypes` (
   `iTypeID` int(11) NOT NULL AUTO_INCREMENT,
   `vcPageType` varchar(50) NOT NULL,
   PRIMARY KEY (`iTypeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblPageTypes: ~2 rows (approximately)
+-- Dumping data for table PHPDemo.tblPageTypes: ~2 rows (approximately)
 INSERT INTO `tblPageTypes` (`iTypeID`, `vcPageType`) VALUES
 	(1, 'Text Page'),
 	(2, 'Table Page');
 
--- Dumping structure for table tblprivlevels
-DROP TABLE IF EXISTS `tblprivlevels`;
+-- Dumping structure for table PHPDemo.tblprivlevels
 CREATE TABLE IF NOT EXISTS `tblprivlevels` (
   `iPrivLevel` int(11) NOT NULL,
   `vcPrivName` varchar(25) NOT NULL,
   PRIMARY KEY (`iPrivLevel`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblprivlevels: ~7 rows (approximately)
+-- Dumping data for table PHPDemo.tblprivlevels: ~7 rows (approximately)
 INSERT INTO `tblprivlevels` (`iPrivLevel`, `vcPrivName`) VALUES
 	(0, 'Public'),
 	(1, 'Registered Public'),
@@ -664,8 +648,7 @@ INSERT INTO `tblprivlevels` (`iPrivLevel`, `vcPrivName`) VALUES
 	(400, 'Web Master'),
 	(500, 'Hidden');
 
--- Dumping structure for table tblReviewSiteURL
-DROP TABLE IF EXISTS `tblReviewSiteURL`;
+-- Dumping structure for table PHPDemo.tblReviewSiteURL
 CREATE TABLE IF NOT EXISTS `tblReviewSiteURL` (
   `iSiteID` int(11) NOT NULL AUTO_INCREMENT,
   `vcSiteName` varchar(100) NOT NULL,
@@ -674,7 +657,7 @@ CREATE TABLE IF NOT EXISTS `tblReviewSiteURL` (
   PRIMARY KEY (`iSiteID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblReviewSiteURL: 3 rows
+-- Dumping data for table PHPDemo.tblReviewSiteURL: 3 rows
 /*!40000 ALTER TABLE `tblReviewSiteURL` DISABLE KEYS */;
 INSERT INTO `tblReviewSiteURL` (`iSiteID`, `vcSiteName`, `vcSiteURL`, `vcImgPath`) VALUES
 	(1, 'Speed test', 'http://www.speedtest.net/ ', 'http://www.speedtest.net/images/link120x60.gif'),
@@ -682,22 +665,20 @@ INSERT INTO `tblReviewSiteURL` (`iSiteID`, `vcSiteName`, `vcSiteURL`, `vcImgPath
 	(3, 'Siggi\'s Testing', 'www.supergeek.us ', '');
 /*!40000 ALTER TABLE `tblReviewSiteURL` ENABLE KEYS */;
 
--- Dumping structure for table tblSecureOption
-DROP TABLE IF EXISTS `tblSecureOption`;
+-- Dumping structure for table PHPDemo.tblSecureOption
 CREATE TABLE IF NOT EXISTS `tblSecureOption` (
   `iOrder` tinyint(4) NOT NULL,
   `vcType` varchar(50) NOT NULL,
   `vcText` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblSecureOption: ~3 rows (approximately)
+-- Dumping data for table PHPDemo.tblSecureOption: ~3 rows (approximately)
 INSERT INTO `tblSecureOption` (`iOrder`, `vcType`, `vcText`) VALUES
 	(10, 'force', 'Force Security'),
 	(20, 'allow', 'Users choice'),
 	(30, 'prevent', 'No security is available');
 
--- Dumping structure for table tblSpamLog
-DROP TABLE IF EXISTS `tblSpamLog`;
+-- Dumping structure for table PHPDemo.tblSpamLog
 CREATE TABLE IF NOT EXISTS `tblSpamLog` (
   `iLogID` int(11) NOT NULL AUTO_INCREMENT,
   `dtLogDateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -708,10 +689,9 @@ CREATE TABLE IF NOT EXISTS `tblSpamLog` (
   KEY `vcIPAddress` (`vcIPAddress`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblSpamLog: ~0 rows (approximately)
+-- Dumping data for table PHPDemo.tblSpamLog: ~0 rows (approximately)
 
--- Dumping structure for table tblstats
-DROP TABLE IF EXISTS `tblstats`;
+-- Dumping structure for table PHPDemo.tblstats
 CREATE TABLE IF NOT EXISTS `tblstats` (
   `iStatID` int(11) NOT NULL AUTO_INCREMENT,
   `vcFromClause` varchar(300) NOT NULL,
@@ -725,25 +705,23 @@ CREATE TABLE IF NOT EXISTS `tblstats` (
   PRIMARY KEY (`iStatID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblstats: ~0 rows (approximately)
+-- Dumping data for table PHPDemo.tblstats: ~1 rows (approximately)
 INSERT INTO `tblstats` (`iStatID`, `vcFromClause`, `vcWhereClause`, `vcGroupByClause`, `vcUnique`, `vcStatName`, `iOrderID`, `vcModifiedBy`, `dtModifiedTime`) VALUES
 	(1, 'tblUsers', '', '', '', 'All Registered users', 1.0, 'Siggi Bjarnason', '2011-01-15 13:51:39');
 
--- Dumping structure for table tblTimeUnits
-DROP TABLE IF EXISTS `tblTimeUnits`;
+-- Dumping structure for table PHPDemo.tblTimeUnits
 CREATE TABLE IF NOT EXISTS `tblTimeUnits` (
   `iOrder` tinyint(4) NOT NULL,
   `vcType` varchar(50) NOT NULL,
   `vcText` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblTimeUnits: ~2 rows (approximately)
+-- Dumping data for table PHPDemo.tblTimeUnits: ~2 rows (approximately)
 INSERT INTO `tblTimeUnits` (`iOrder`, `vcType`, `vcText`) VALUES
 	(1, 'minute', 'Minutes'),
 	(2, 'hour', 'Hours');
 
--- Dumping structure for table tblUsers
-DROP TABLE IF EXISTS `tblUsers`;
+-- Dumping structure for table PHPDemo.tblUsers
 CREATE TABLE IF NOT EXISTS `tblUsers` (
   `iUserID` bigint(20) NOT NULL AUTO_INCREMENT,
   `vcName` varchar(50) NOT NULL,
@@ -756,11 +734,6 @@ CREATE TABLE IF NOT EXISTS `tblUsers` (
   `vcState` varchar(50) DEFAULT NULL,
   `vcZip` varchar(10) DEFAULT NULL,
   `vcCountry` varchar(100) DEFAULT NULL,
-  `vcGender` varchar(15) DEFAULT NULL,
-  `vcBirthdate` varchar(100) DEFAULT NULL,
-  `vcWedAnn` varchar(100) DEFAULT NULL,
-  `vcHealthIssues` varchar(500) DEFAULT NULL,
-  `vcLocate` varchar(500) DEFAULT NULL,
   `vcUID` varchar(20) NOT NULL,
   `vcPWD` varchar(60) NOT NULL,
   `dtUpdated` datetime DEFAULT NULL,
@@ -768,23 +741,25 @@ CREATE TABLE IF NOT EXISTS `tblUsers` (
   `tMailSent` time DEFAULT NULL,
   `dtLastLogin` datetime DEFAULT NULL,
   `iPrivLevel` int(11) NOT NULL DEFAULT '1',
-  `iDelegateUserID` int(11) DEFAULT NULL,
   PRIMARY KEY (`iUserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblUsers: ~1 rows (approximately)
-INSERT INTO `tblUsers` (`iUserID`, `vcName`, `vcEmail`, `vcPhone`, `vcCell`, `vcAddr1`, `vcAddr2`, `vcCity`, `vcState`, `vcZip`, `vcCountry`, `vcGender`, `vcBirthdate`, `vcWedAnn`, `vcHealthIssues`, `vcLocate`, `vcUID`, `vcPWD`, `dtUpdated`, `dMailSent`, `tMailSent`, `dtLastLogin`, `iPrivLevel`, `iDelegateUserID`) VALUES
-	(1, 'Siggi Bjarnason', 'siggi@supergeek.us', '', '206-779-1175', '1037 NE 65th Street', 'PMB 80031', 'Seattle', 'WA', '98115-665', 'UNITED STATES', ' ', '', '', '', '', 'siggib', 'siND12v6GkGbo', '2022-06-24 22:26:54', NULL, NULL, '2022-06-25 00:05:43', 400, 0);
+-- Dumping data for table PHPDemo.tblUsers: ~3 rows (approximately)
+INSERT INTO `tblUsers` (`iUserID`, `vcName`, `vcEmail`, `vcPhone`, `vcCell`, `vcAddr1`, `vcAddr2`, `vcCity`, `vcState`, `vcZip`, `vcCountry`, `vcUID`, `vcPWD`, `dtUpdated`, `dMailSent`, `tMailSent`, `dtLastLogin`, `iPrivLevel`) VALUES
+	(1, 'Siggi Bjarnason', 'siggi@supergeek.us', '', '206-779-1175', '1037 NE 65th Street', 'PMB 80031', 'Seattle', 'WA', '98115-665', 'UNITED STATES', 'siggib', 'siND12v6GkGbo', '2022-06-25 15:12:07', NULL, NULL, '2022-06-26 22:57:22', 400),
+	(2, 'Testing Tester', 'test@example.com', '', '206-555-1234', '2123 Some Street', 'nada', 'No Place', 'WA', '98115-665', 'UNITED STATES', 'ttester', 'ttkb44M4CAJSc', '2022-06-25 14:00:48', '2022-06-25', '13:58:46', '2022-06-25 14:00:34', 1),
+	(3, 'Brother Best', 'bbs@somplace.bs', '', '', '', '', '', 'WA', '', 'UNITED STATES', 'bbs', 'bbTdyOM4g6r9Q', '2022-06-25 14:02:50', '2022-06-25', '14:01:46', '2022-06-25 14:03:06', 1),
+	(5, 'Super Admin', 'admin@demo.net', NULL, '206-555-1234', 'street 5', 'apt 1', 'No Place', 'OR', '98115-665', 'UNITED STATES', 'sadmin', 'sag3agmyBB96M', NULL, '2022-06-26', '23:26:35', NULL, 300),
+	(6, 'Super Admin', 'admin2@demo.net', NULL, '206-555-1234', '2123 Some Street', 'nada', 'No Place', 'WA', '98115-665', 'UNITED STATES', 'sadmin1', 'sazddN.wpZDHs', '2022-06-26 23:43:56', '2022-06-26', '23:42:20', '2022-06-26 23:43:03', 300);
 
--- Dumping structure for table tblWeekdays
-DROP TABLE IF EXISTS `tblWeekdays`;
+-- Dumping structure for table PHPDemo.tblWeekdays
 CREATE TABLE IF NOT EXISTS `tblWeekdays` (
   `iDayNum` int(11) NOT NULL AUTO_INCREMENT,
   `vcDayName` varchar(25) NOT NULL,
   PRIMARY KEY (`iDayNum`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table tblWeekdays: ~7 rows (approximately)
+-- Dumping data for table PHPDemo.tblWeekdays: ~7 rows (approximately)
 INSERT INTO `tblWeekdays` (`iDayNum`, `vcDayName`) VALUES
 	(1, 'Sundays'),
 	(2, 'Mondays'),
@@ -794,8 +769,7 @@ INSERT INTO `tblWeekdays` (`iDayNum`, `vcDayName`) VALUES
 	(6, 'Fridays'),
 	(7, 'Saturdays');
 
--- Dumping structure for table US_States
-DROP TABLE IF EXISTS `US_States`;
+-- Dumping structure for table PHPDemo.US_States
 CREATE TABLE IF NOT EXISTS `US_States` (
   `iStateID` int(11) NOT NULL,
   `vcStateAbr` char(2) NOT NULL DEFAULT '',
@@ -803,7 +777,7 @@ CREATE TABLE IF NOT EXISTS `US_States` (
   PRIMARY KEY (`iStateID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Dumping data for table US_States: 65 rows
+-- Dumping data for table PHPDemo.US_States: 65 rows
 /*!40000 ALTER TABLE `US_States` DISABLE KEYS */;
 INSERT INTO `US_States` (`iStateID`, `vcStateAbr`, `vcStateName`) VALUES
 	(1, 'AL', 'ALABAMA'),
@@ -873,39 +847,104 @@ INSERT INTO `US_States` (`iStateID`, `vcStateAbr`, `vcStateName`) VALUES
 	(65, 'WY', 'WYOMING');
 /*!40000 ALTER TABLE `US_States` ENABLE KEYS */;
 
--- Dumping structure for view vwAdminCat
-DROP VIEW IF EXISTS `vwAdminCat`;
-CREATE VIEW `vwAdminCat` AS select `m`.`vcTitle` AS `vcTitle`,`m`.`vcLink` AS `vcLink`,`m`.`bNewWindow` AS `bNewWindow`,`m`.`iReadPriv` AS `iReadPriv`,`c`.`vcCatName` AS `vcCatName`,`c`.`iCatID` AS `iCatID` from (`tblmenu` `m` join `tblAdminCategories` `c` on((`m`.`bAdmin` = `c`.`iCatID`))) order by `c`.`vcCatName`,`m`.`vcTitle`;
+-- Dumping structure for view PHPDemo.vwAdminCat
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `vwAdminCat` (
+	`vcTitle` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`vcLink` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`bNewWindow` TINYINT(4) NOT NULL,
+	`iReadPriv` INT(11) NOT NULL,
+	`vcCatName` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`iCatID` TINYINT(4) NOT NULL
+) ENGINE=MyISAM;
 
--- Dumping structure for view vwemailupdate
-DROP VIEW IF EXISTS `vwemailupdate`;
+-- Dumping structure for view PHPDemo.vwemailupdate
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `vwemailupdate` (
+	`iChangeID` INT(11) NOT NULL,
+	`vcName` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`vcGUID` VARCHAR(60) NOT NULL COLLATE 'latin1_swedish_ci',
+	`vcNewEmail` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`vcReqIPAdd` VARCHAR(20) NOT NULL COLLATE 'latin1_swedish_ci',
+	`dtTimeStamp` DATETIME NOT NULL
+) ENGINE=MyISAM;
+
+-- Dumping structure for view PHPDemo.vwlinks
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `vwlinks` (
+	`vcLink` VARCHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
+	`vcName` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
+	`vcComment` VARCHAR(500) NOT NULL COLLATE 'latin1_swedish_ci',
+	`icatid` INT(11) NOT NULL,
+	`vcCategory` VARCHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
+	`iSortNum` INT(11) NOT NULL
+) ENGINE=MyISAM;
+
+-- Dumping structure for view PHPDemo.vwmenuitem
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `vwmenuitem` (
+	`iMenuID` INT(11) NOT NULL,
+	`vcTitle` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`vcLink` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`iReadPriv` INT(11) NOT NULL,
+	`iWritePriv` INT(11) NOT NULL,
+	`bNewWindow` TINYINT(4) NOT NULL,
+	`vcMenuType` VARCHAR(25) NOT NULL COLLATE 'latin1_swedish_ci',
+	`iMenuOrder` INT(11) NOT NULL,
+	`iSubOfMenu` INT(11) NOT NULL
+) ENGINE=MyISAM;
+
+-- Dumping structure for view PHPDemo.vwmenupriv
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `vwmenupriv` (
+	`iMenuID` INT(11) NOT NULL,
+	`vcTitle` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`ReadPriv` VARCHAR(25) NOT NULL COLLATE 'latin1_swedish_ci',
+	`WritePriv` VARCHAR(25) NOT NULL COLLATE 'latin1_swedish_ci',
+	`vcHeader` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
+	`bAdmin` TINYINT(1) NOT NULL,
+	`bSecure` TINYINT(4) NOT NULL,
+	`iMenuOrder` INT(11) NULL,
+	`bNewWindow` TINYINT(4) NOT NULL
+) ENGINE=MyISAM;
+
+-- Dumping structure for view PHPDemo.vwPrivLevels
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `vwPrivLevels` (
+	`iOrder` INT(11) NOT NULL,
+	`vcType` INT(11) NOT NULL,
+	`vcText` VARCHAR(25) NOT NULL COLLATE 'latin1_swedish_ci'
+) ENGINE=MyISAM;
+
+-- Dumping structure for view PHPDemo.vwAdminCat
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `vwAdminCat`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwAdminCat` AS select `m`.`vcTitle` AS `vcTitle`,`m`.`vcLink` AS `vcLink`,`m`.`bNewWindow` AS `bNewWindow`,`m`.`iReadPriv` AS `iReadPriv`,`c`.`vcCatName` AS `vcCatName`,`c`.`iCatID` AS `iCatID` from (`tblmenu` `m` join `tblAdminCategories` `c` on((`m`.`bAdmin` = `c`.`iCatID`))) order by `c`.`vcCatName`,`m`.`vcTitle`;
+
+-- Dumping structure for view PHPDemo.vwemailupdate
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `vwemailupdate`;
-CREATE VIEW `vwemailupdate` AS select `e`.`iChangeID` AS `iChangeID`,`u`.`vcName` AS `vcName`,`e`.`vcGUID` AS `vcGUID`,`e`.`vcNewEmail` AS `vcNewEmail`,`e`.`vcReqIPAdd` AS `vcReqIPAdd`,`e`.`dtTimeStamp` AS `dtTimeStamp` from (`tblemailupdate` `e` join `tblUsers` `u` on((`e`.`iClientID` = `u`.`iUserID`))) order by `e`.`dtTimeStamp` desc;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwemailupdate` AS select `e`.`iChangeID` AS `iChangeID`,`u`.`vcName` AS `vcName`,`e`.`vcGUID` AS `vcGUID`,`e`.`vcNewEmail` AS `vcNewEmail`,`e`.`vcReqIPAdd` AS `vcReqIPAdd`,`e`.`dtTimeStamp` AS `dtTimeStamp` from (`tblemailupdate` `e` join `tblUsers` `u` on((`e`.`iClientID` = `u`.`iUserID`))) order by `e`.`dtTimeStamp` desc;
 
--- Dumping structure for view vwlinks
-DROP VIEW IF EXISTS `vwlinks`;
+-- Dumping structure for view PHPDemo.vwlinks
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `vwlinks`;
-CREATE VIEW `vwlinks` AS select `tbllinks`.`vcLink` AS `vcLink`,`tbllinks`.`vcName` AS `vcName`,`tbllinks`.`vcComment` AS `vcComment`,`tbllinkcategory`.`iCatId` AS `icatid`,`tbllinkcategory`.`vcCategory` AS `vcCategory`,`tbllinkcategory`.`iSortNum` AS `iSortNum` from (`tbllinks` join `tbllinkcategory` on((`tbllinkcategory`.`iCatId` = `tbllinks`.`iCategory`)));
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwlinks` AS select `tbllinks`.`vcLink` AS `vcLink`,`tbllinks`.`vcName` AS `vcName`,`tbllinks`.`vcComment` AS `vcComment`,`tbllinkcategory`.`iCatId` AS `icatid`,`tbllinkcategory`.`vcCategory` AS `vcCategory`,`tbllinkcategory`.`iSortNum` AS `iSortNum` from (`tbllinks` join `tbllinkcategory` on((`tbllinkcategory`.`iCatId` = `tbllinks`.`iCategory`)));
 
--- Dumping structure for view vwmenuitem
-DROP VIEW IF EXISTS `vwmenuitem`;
+-- Dumping structure for view PHPDemo.vwmenuitem
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `vwmenuitem`;
-CREATE VIEW `vwmenuitem` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`tblmenu`.`vcLink` AS `vcLink`,`tblmenu`.`iReadPriv` AS `iReadPriv`,`tblmenu`.`iWritePriv` AS `iWritePriv`,`tblmenu`.`bNewWindow` AS `bNewWindow`,`tblmenutype`.`vcMenuType` AS `vcMenuType`,`tblmenutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenutype`.`iSubOfMenu` AS `iSubOfMenu` from (`tblmenu` join `tblmenutype` on((`tblmenu`.`iMenuID` = `tblmenutype`.`iMenuID`))) order by `tblmenutype`.`vcMenuType`,`tblmenutype`.`iMenuOrder`,`tblmenutype`.`iSubOfMenu`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwmenuitem` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`tblmenu`.`vcLink` AS `vcLink`,`tblmenu`.`iReadPriv` AS `iReadPriv`,`tblmenu`.`iWritePriv` AS `iWritePriv`,`tblmenu`.`bNewWindow` AS `bNewWindow`,`tblmenutype`.`vcMenuType` AS `vcMenuType`,`tblmenutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenutype`.`iSubOfMenu` AS `iSubOfMenu` from (`tblmenu` join `tblmenutype` on((`tblmenu`.`iMenuID` = `tblmenutype`.`iMenuID`))) order by `tblmenutype`.`vcMenuType`,`tblmenutype`.`iMenuOrder`,`tblmenutype`.`iSubOfMenu`;
 
--- Dumping structure for view vwmenupriv
-DROP VIEW IF EXISTS `vwmenupriv`;
+-- Dumping structure for view PHPDemo.vwmenupriv
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `vwmenupriv`;
-CREATE VIEW `vwmenupriv` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`readpriv`.`vcPrivName` AS `ReadPriv`,`writepriv`.`vcPrivName` AS `WritePriv`,`tblmenu`.`vcHeader` AS `vcHeader`,`tblmenu`.`bAdmin` AS `bAdmin`,`tblmenu`.`bSecure` AS `bSecure`,`menutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenu`.`bNewWindow` AS `bNewWindow` from (((`tblmenu` join `tblprivlevels` `readpriv` on((`tblmenu`.`iReadPriv` = `readpriv`.`iPrivLevel`))) join `tblprivlevels` `writepriv` on((`tblmenu`.`iWritePriv` = `writepriv`.`iPrivLevel`))) left join `tblmenutype` `menutype` on((`tblmenu`.`iMenuID` = `menutype`.`iMenuID`)));
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwmenupriv` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`readpriv`.`vcPrivName` AS `ReadPriv`,`writepriv`.`vcPrivName` AS `WritePriv`,`tblmenu`.`vcHeader` AS `vcHeader`,`tblmenu`.`bAdmin` AS `bAdmin`,`tblmenu`.`bSecure` AS `bSecure`,`menutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenu`.`bNewWindow` AS `bNewWindow` from (((`tblmenu` join `tblprivlevels` `readpriv` on((`tblmenu`.`iReadPriv` = `readpriv`.`iPrivLevel`))) join `tblprivlevels` `writepriv` on((`tblmenu`.`iWritePriv` = `writepriv`.`iPrivLevel`))) left join `tblmenutype` `menutype` on((`tblmenu`.`iMenuID` = `menutype`.`iMenuID`)));
 
--- Dumping structure for view vwPrivLevels
-DROP VIEW IF EXISTS `vwPrivLevels`;
+-- Dumping structure for view PHPDemo.vwPrivLevels
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `vwPrivLevels`;
-CREATE VIEW `vwPrivLevels` AS select `tblprivlevels`.`iPrivLevel` AS `iOrder`,`tblprivlevels`.`iPrivLevel` AS `vcType`,`tblprivlevels`.`vcPrivName` AS `vcText` from `tblprivlevels` where (`tblprivlevels`.`iPrivLevel` > 0);
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwPrivLevels` AS select `tblprivlevels`.`iPrivLevel` AS `iOrder`,`tblprivlevels`.`iPrivLevel` AS `vcType`,`tblprivlevels`.`vcPrivName` AS `vcText` from `tblprivlevels` where (`tblprivlevels`.`iPrivLevel` > 0);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

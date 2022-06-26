@@ -93,27 +93,13 @@
             if(EmailText($toEmail,"Your new account at $strHost",$StrMsg . $StrMsg2,$FromEmail))
             {
                 print "<p class=\"MainText\">The account was created successful and an confirmation email was sent to $strEmail.<br>\n";
+                $bRegOK = TRUE;
             }
             else
             {
                 print "<p class=\"Error\">Signup was successful but Failed to send the confirmation email</p>";
                 print "<p class=\"Error\">Please notify us at $SupportEmail, " .
                     "including the email address you used to sign up with.</p>\n";
-            }
-            $strQuery = "select iUserID from tblUsers where vcUID = '$strUID';";
-            if (!$Result2 = $dbh->query ($strQuery))
-            {
-                error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-                error_log ($strQuery);
-                print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-                exit(2);
-            }
-            $Row2 = $Result2->fetch_assoc();
-            $strUserID = $Row2['iUserID'];
-            $bOK = TRUE;
-            if (!$bOK)
-            {
-                print "<p class=\"Attn\" align=center>$ErrMsg Some interests may not have been saved.</p>\n";
             }
             $bSuccess = TRUE;
         }

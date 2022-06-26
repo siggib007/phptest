@@ -16,7 +16,7 @@
         exit;
     }
 
-    if (isset($GLOBALS["ConfArray"]["InitSetup"]) )
+    if (!isset($GLOBALS["ConfArray"]["InitSetup"]) )
     {
         print "<p class=\"Error\">Setup Mode isn't enable so you can't use this page</p> ";
         exit;
@@ -61,7 +61,7 @@
     }
 
 
-    print $RegHeader;
+    print "<p class=\"BlueAttn\">$RegHeader</p>";
 
     $strName = "";
     $strAddr1 = "";
@@ -75,6 +75,7 @@
     $strUserID = "";
     $strCell = "";
     $bSuccess = FALSE;
+    $bRegOK = FALSE;
     if ($btnSubmitValue == 'Submit')
     {
         require_once 'CleanReg.php';
@@ -100,7 +101,18 @@
             print "<p class=\"Error\">Can't create new admin account without an email..</p>";
         }
     }
-    if (!$bSuccess)
+    $bSuccess = $bRegOK;
+    if ($bSuccess)
+    {
+      $strQuery = "DELETE FROM tblconf WHERE vcValueName='InitSetup' LIMIT 1;";
+      UpdateSQL ($strQuery,"delete");
+      $strQuery = "DELETE FROM tblPageTexts WHERE vcTextName='SetupReg' LIMIT 1;";
+      UpdateSQL ($strQuery,"delete");
+      $strQuery = "DELETE FROM tblmenu WHERE vcLink='InitialRegister1st.php' LIMIT 1;";
+      UpdateSQL ($strQuery,"delete");
+      unlink("test.txt");
+    }
+    else
     {
         print "<form method=\"POST\">\n";
         require 'UserRegForm.php';

@@ -15,15 +15,9 @@
     $strState = $Row['vcState'];
     $strZip = $Row['vcZip'];
     $strCountry = $Row['vcCountry'];
-    $strPhone = $Row['vcPhone'];
     $iPrivLevel = $Row['iPrivLevel'];
     $strEmail = $Row['vcEmail'];
     $strCell = $Row['vcCell'];
-    $strBdate = $Row['vcBirthdate'];
-    $strWedAnn = $Row['vcWedAnn'];
-    $strHealth = $Row['vcHealthIssues'];
-    $strLocate = $Row['vcLocate'];
     $strUID = $Row['vcUID'];
     $dtUpdated = $Row['dtUpdated'];
-    $strGender = $Row['vcGender'];
 ?>

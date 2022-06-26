@@ -76,6 +76,17 @@ if (!isset($_SERVER['HTTPS'])and $strSecOpt =="force" and $Row['bSecure'] == 1)
     header("Location: $strSecure");
 }
 
+if (isset($GLOBALS["ConfArray"]["InitSetup"]) and $strPageName != "InitialRegister1st.php")
+{
+    header("Location: InitialRegister1st.php");
+}
+
+if (!isset($GLOBALS["ConfArray"]["InitSetup"]) and $strPageName == "InitialRegister1st.php")
+{
+    header("Location: index.php");
+}
+
+
 if ($PrivReq == '')
 {
     $PrivReq = 0;
@@ -153,7 +164,7 @@ if (isset($_SESSION["UID"] ) )
 
     $dtLastLogin = $Row['dtLastLogin'];
     $dbiPrivLevel = $Row['iPrivLevel'];
-    if (($_SESSION["iPrivLevel"] != $dbiPrivLevel) or ($_SESSION["LoginTime"] != $dtLastLogin))
+    if (($_SESSION["iPrivLevel"] != $dbiPrivLevel) or ($_SESSION["LoginTime"] != $dtLastLogin)or ($strPageName == "InitialRegister1st.php"))
     {
         require("KillSession.php");
         $LogoutReason = "Logged out due to invalid session.  ";
@@ -243,11 +254,14 @@ print "<table width=\"100%\">\n<tr>\n";
 if ( ! isset($_SESSION["auth_username"] ) )
 {
     print "<td width=\"80%\"><span class=Attn>$LogoutReason</span></td>\n";
-    if ($AllowReg=="true")
+    if (!isset($GLOBALS["ConfArray"]["InitSetup"]) )
     {
-        print "<td class=\"login\"><a class=\"login\" href=\"" . $ROOTPATH . "register.php\">New Account</a></td>\n";
+        if ($AllowReg=="true")
+        {
+            print "<td class=\"login\"><a class=\"login\" href=\"" . $ROOTPATH . "register.php\">New Account</a></td>\n";
+        }
+        print "<td  class=\"login\"><a class=\"login\" href=\"" . $ROOTPATH . "Login.php\">Login</a></td>\n";
     }
-    print "<td  class=\"login\"><a class=\"login\" href=\"" . $ROOTPATH . "Login.php\">Login</a></td>\n";
     $Priv = 0;
 }
 else
@@ -309,38 +323,41 @@ if ($Maintenance == "true")
     exit;
 }
 print "</table>\n";
-print "<ul class=\"nav\">\n";
-while ($Row = $Result->fetch_assoc())
+if (!isset($GLOBALS["ConfArray"]["InitSetup"]) )
 {
-    $key = str_replace(" ", "&nbsp;", $Row['vcTitle']);
-    $value = $Row['vcLink'];
-    $FileName = $ROOTPATH . $value;
-    if ($Row['bNewWindow'] == 1)
+    print "<ul class=\"nav\">\n";
+    while ($Row = $Result->fetch_assoc())
     {
-        $target = "_blank";
+        $key = str_replace(" ", "&nbsp;", $Row['vcTitle']);
+        $value = $Row['vcLink'];
+        $FileName = $ROOTPATH . $value;
+        if ($Row['bNewWindow'] == 1)
+        {
+            $target = "_blank";
+        }
+        else
+        {
+            $target = "_self";
+        }
+        if ($strURI == $ROOTPATH and $key == "Home")
+        {
+            print "<li class=\"HL\"><a href=\"$FileName\" target=\"$target\">Home</a></li>\n";
+        }
+        elseif ($strSubOfLink == $value)
+        {
+            print "<li class=\"HL\"><a href=\"$FileName\" target=\"$target\">$key</a></li>\n";
+        }
+        elseif ($value == "admin.php" and $iAdminCat > 0)
+        {
+            print "<li class=\"HL\"><a href=\"$FileName\" target=\"$target\">$key</a></li>\n";
+        }
+        else
+        {
+            print "<li class=\"Norm\"><a href=\"$FileName\" target=\"$target\">$key</a></li>\n";
+        }
     }
-    else
-    {
-        $target = "_self";
-    }
-    if ($strURI == $ROOTPATH and $key == "Home")
-    {
-        print "<li class=\"HL\"><a href=\"$FileName\" target=\"$target\">Home</a></li>\n";
-    }
-    elseif ($strSubOfLink == $value)
-    {
-        print "<li class=\"HL\"><a href=\"$FileName\" target=\"$target\">$key</a></li>\n";
-    }
-    elseif ($value == "admin.php" and $iAdminCat > 0)
-    {
-        print "<li class=\"HL\"><a href=\"$FileName\" target=\"$target\">$key</a></li>\n";
-    }
-    else
-    {
-        print "<li class=\"Norm\"><a href=\"$FileName\" target=\"$target\">$key</a></li>\n";
-    }
+    print "</ul>\n";
 }
-print "</ul>\n";
 print "</div>\n</div>\n";
 
 if ($iMenuID)
