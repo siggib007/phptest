@@ -26,5 +26,4 @@
     $strUID = $Row['vcUID'];
     $dtUpdated = $Row['dtUpdated'];
     $strGender = $Row['vcGender'];
-    $iDelegate = $Row['iDelegateUserID'];
 ?>

@@ -202,6 +202,7 @@ if ($PrivReq > 0)
         header("Location: $LoginPage" );
     }
 }
+header('Content-Type: text/html; charset=utf-8');
 print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n\"http://www.w3.org/TR/html4/loose.dtd\">\n";
 print "<html>\n";
 print "<head>\n";
@@ -236,12 +237,13 @@ if ($strSiteLabel <> "")
 {
     print "<center><span class=SiteLabel>$strSiteLabel</span></center>\n";
 }
-$AllowReg = $GLOBALS["ConfArray"]["AllowReg"];
+$AllowReg = strtolower ($GLOBALS["ConfArray"]["AllowReg"]);
+// error_log("AllowReg = $AllowReg");
 print "<table width=\"100%\">\n<tr>\n";
 if ( ! isset($_SESSION["auth_username"] ) )
 {
     print "<td width=\"80%\"><span class=Attn>$LogoutReason</span></td>\n";
-    if ($AllowReg=="True")
+    if ($AllowReg=="true")
     {
         print "<td class=\"login\"><a class=\"login\" href=\"" . $ROOTPATH . "register.php\">New Account</a></td>\n";
     }

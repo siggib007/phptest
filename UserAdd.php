@@ -72,18 +72,16 @@
         $StrMsg2 .= "Please login into your account at $strURL ";
         $StrMsg2 .= "and confirm your account to activate it.\n";
         $strNotification  = "$strName has registered for a new account on $strHost.\n";
-        $strNotification .= "They provided $strPhone as their phone and $strCell as their cell.\n";
+        $strNotification .= "They provided $strCell as their cell.\n";
         $strNotification .= "The email they provided is $strEmail and they listed their address as:\n";
         $strNotification .= " $strAddr1\n $strAddr2\n $strCity, $strState $strZip";
         //print $StrMsg;
         $salt = substr($strUID , 0, 4) ;
         $PWD = crypt($Password , $salt);
-        $strQuery = "INSERT INTO tblUsers (vcName, vcEmail, vcPhone, vcAddr1, vcAddr2, vcCity, vcState, vcZip, vcGender, " .
-                                "vcCountry, vcUID, vcPWD, dMailSent, tMailSent, iPrivLevel, " .
-                                "vcCell,vcBirthdate,vcWedAnn,vcHealthIssues,vcLocate)" .
-                                "VALUES ('$strName', '$strEmail', '$strPhone', '$strAddr1', '$strAddr2', '$strCity', '$strState', " .
-                                "'$strZip','$strGender', '$strCountry', '$strUID', '$PWD', CURDATE(), CURTIME(), '$iLevel', " .
-                                "'$strCell','$strBdate','$strWedAnn','$strHealth','$strLocate')";
+        $strQuery = "INSERT INTO tblUsers (vcName, vcEmail, vcAddr1, vcAddr2, vcCity, vcState, vcZip, " .
+                                "vcCountry, vcUID, vcPWD, dMailSent, tMailSent, iPrivLevel,vcCell) " .
+                                "VALUES ('$strName', '$strEmail', '$strAddr1', '$strAddr2', '$strCity', '$strState', " .
+                                "'$strZip','$strCountry', '$strUID', '$PWD', CURDATE(), CURTIME(), '$iLevel', '$strCell')";
         if ($dbh->query ($strQuery))
         {
             $NumAffected = $dbh->affected_rows;
@@ -113,20 +111,6 @@
             $Row2 = $Result2->fetch_assoc();
             $strUserID = $Row2['iUserID'];
             $bOK = TRUE;
-            foreach ($iInterests as $value)
-            {
-                if ($value>0)
-                {
-                $strQuery = "insert into tblInterestMap (iInterestID,iUserID) " .
-                             "values ($value,$strUserID);";
-                }
-                else
-                {
-                $strQuery = "insert into tblInterestMap (iInterestID,iUserID,vcComment) " .
-                             "values ($value,$strUserID,'$strOther');";
-                }
-               $bOK = CallSPNoOut($strQuery);
-            }
             if (!$bOK)
             {
                 print "<p class=\"Attn\" align=center>$ErrMsg Some interests may not have been saved.</p>\n";

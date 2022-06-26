@@ -2,9 +2,10 @@
     require_once("header.php");
 
     $strUserID = $_SESSION["UID"];
+
     if ($strReferer != $strPageURL and $PostVarCount > 0)
     {
-        print "<p class=\"Error\">Invalid operation, Bad Reference!!!</p> ";
+        print "<p class=\"Error\">Invalid operation, very Bad Reference!!!</p> ";
         exit;
     }
 

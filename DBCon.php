@@ -1,6 +1,8 @@
 <?php
 require_once("functions.php");
 
+// default_charset = "utf-8";
+ini_set( 'default_charset', 'UTF-8' );
 $ROOTPATH = "/";
 $HeadImg ="img/PHPDemoBanner.png";
 $CSSName = "SiteStyle.css";
@@ -68,6 +70,10 @@ $DefaultDB = "PHPDemo" ;
 $strRemoteIP = $_SERVER["REMOTE_ADDR"];
 $Priv = 0; // Default Privledge level is public or 0
 $strHost = $_SERVER["SERVER_NAME"];
+if ($_SERVER['SERVER_PORT'] != 80)
+{
+  $strHost .= ":".$_SERVER['SERVER_PORT'];
+}
 $strScriptName = $_SERVER["SCRIPT_NAME"];
 $gFileName = __FILE__;
 $strURI = $_SERVER["REQUEST_URI"];
@@ -80,11 +86,11 @@ $OSEnv = "not used";
 
 if ($HostnamePartCount == 1)
 {
-	$SiteType = "a";
+  $SiteType = "a";
 }
 else
 {
-	$SiteType = $strHostNameParts[0];
+  $SiteType = $strHostNameParts[0];
 }
 
 //switch ($SiteType)
@@ -108,7 +114,7 @@ else
 //$strURL = "http://" . $strHost . $ROOTPATH;
 $strURL = "Localhost/";
 
-
+// mysqli_set_charset("utf8");
 try
 {
   $dbh= new mysqli ($DBServerName, $UID, $PWD, $DefaultDB);

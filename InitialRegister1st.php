@@ -15,13 +15,14 @@
         print "<p class=\"Error\">Invalid operation, Bad Reference!!!</p> ";
         exit;
     }
-    if (isset($_SESSION["auth_username"] ) )
+
+    if (isset($GLOBALS["ConfArray"]["InitSetup"]) )
     {
-        print "<p class=\"Error\">You're already registered, what are you trying to do????</p> ";
+        print "<p class=\"Error\">Setup Mode isn't enable so you can't use this page</p> ";
         exit;
     }
 
-    $strQuery = "SELECT vcTextName, tPageTexts FROM tblPageTexts WHERE vcTextName IN ('RegFoot', 'RegHead');";
+    $strQuery = "SELECT vcTextName, tPageTexts FROM tblPageTexts WHERE vcTextName IN ('SetupReg');";
     if (!$Result = $dbh->query ($strQuery))
     {
         error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
@@ -34,14 +35,31 @@
     {
         switch ($Row['vcTextName'])
         {
-            case "RegFoot":
-                    $RegFoot = $Row['tPageTexts'];
-                    break;
-            case "RegHead":
-                    $RegHeader = $Row['tPageTexts'];
-                    break;
+            case "SetupReg":
+              $RegHeader = $Row['tPageTexts'];
+              break;
         }
     }
+
+    $strQuery = "SELECT iPrivLevel FROM tblprivlevels WHERE vcPrivName LIKE '%admin%';";
+    if (!$Result = $dbh->query ($strQuery))
+    {
+        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
+        error_log ($strQuery);
+        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
+        exit(2);
+    }
+    $rowcount=mysqli_num_rows($Result);
+    if ($rowcount > 0)
+    {
+      $Row = $Result->fetch_assoc();
+      $iLevel = $Row['iPrivLevel'];
+    }
+    else
+    {
+      $iLevel = 300;
+    }
+
 
     print $RegHeader;
 
@@ -57,14 +75,6 @@
     $strUserID = "";
     $strCell = "";
     $bSuccess = FALSE;
-    if (isset($GLOBALS["ConfArray"]["minRegLevel"]) )
-    {
-        $iLevel = $GLOBALS["ConfArray"]["minRegLevel"];
-    }
-    else
-    {
-        $iLevel = 1;
-    }
     if ($btnSubmitValue == 'Submit')
     {
         require_once 'CleanReg.php';
@@ -87,14 +97,13 @@
         }
         else
         {
-            print "<p class=\"Error\">Can't create new user without an email. Contact $SupportEmail if you have any questions.</p>";
+            print "<p class=\"Error\">Can't create new admin account without an email..</p>";
         }
     }
     if (!$bSuccess)
     {
         print "<form method=\"POST\">\n";
         require 'UserRegForm.php';
-        print "<tr>\n<td colspan=\"2\" align=\"center\">$RegFoot</td>\n</tr>\n";
         print "<tr>\n<td colspan=\"2\" align=\"center\"><input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\"></td>\n</tr>\n";
         print "</table>\n</form>\n";
     }
