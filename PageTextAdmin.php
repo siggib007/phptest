@@ -20,8 +20,8 @@
 	if (($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
 	{
 //		header("Location: $strPageURL");
-	}    
-	
+	}
+
 	if ($btnSubmit == 'Save')
 	{
             $strTextName = CleanSQLInput(substr(trim($_POST['TextName']),0,49));
@@ -30,12 +30,12 @@
             $strQuery = "update tblPageTexts set tPageTexts = '$strContent' WHERE vcTextName = '$strTextName';";
             UpdateSQL ($strQuery,"update");
 	}
-	
-	
+
+
 	//Print the normal form after update is complete.
 	print "<table>\n<tr><th class=lbl>Update existing texts</th>";
         print "<th width = 100></th>";
- 
+
 	print "</tr>\n<tr>\n<td valign=\"top\">\n<table border = 0>\n";
 	$strQuery = "SELECT vcTextName, vcTextDescr, tPageTexts FROM tblPageTexts;";
 	if (!$Result = $dbh->query ($strQuery))
@@ -62,14 +62,14 @@
             else
             {
                     print "<tr><td>$strTextDescr</td></tr>\n";
-            }		
+            }
 	}
-	print "</table>\n";	    
+	print "</table>\n";
         print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
 	print "</td>\n<td>\n</td>\n<td valign=\"top\">\n";
         if (isset($_POST['TextName']) and $_POST['btnSubmit'] == 'Edit')
         {
-            $TextName = $_POST['TextName'];
+            $TextName = CleanReg($_POST['TextName']);
             $strQuery = "SELECT tPageTexts, vcTextDescr FROM tblPageTexts WHERE vcTextName = '$TextName';";
             if (!$Result = $dbh->query ($strQuery))
             {
@@ -79,22 +79,22 @@
                 exit(2);
             }
             $Row = $Result->fetch_assoc();
-            $strPageText  = $Row['tPageTexts'];    
-            $strPageDescr = $Row['vcTextDescr'];    
+            $strPageText  = $Row['tPageTexts'];
+            $strPageDescr = $Row['vcTextDescr'];
             print "<form method=\"POST\">\n";
             print "<input type=\"hidden\" value=\"$TextName\" name=\"TextName\">";
             print "<div class=\"lbl\">$strPageDescr</div>\n";
-            print "<textarea name=\"txtDescr\" rows=\"20\" cols=\"90\">$strPageText</textarea>\n<br>\n";        
+            print "<textarea name=\"txtDescr\" rows=\"20\" cols=\"90\">$strPageText</textarea>\n<br>\n";
             print "<div align=\"center\"><input type=\"Submit\" value=\"Save\" name=\"btnSubmit\"></div>\n";
             print "</form>\n";
             if (isset($_POST['iClassid']))
             {
-                print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";   
+                print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
             }
         }
 	print "</td>\n";
         print "</tr>\n";
         print "</table>";
-        
-	require("footer.php"); 
+
+	require("footer.php");
 ?>

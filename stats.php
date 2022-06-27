@@ -18,8 +18,8 @@
 	{
 		unset($_POST);
 		$PostVarCount = 0;
-//		header("Location: $strPageURL");		
-	}    
+//		header("Location: $strPageURL");
+	}
 	require("header.php");
 	print "<p class=\"Header1\">Web site statistics</p>\n";
 
@@ -75,10 +75,10 @@
 			print "</form>\n";
 		}
 	}
-	
+
 	if ($btnSubmit == 'Delete')
 	{
-		$iStatID = trim($_POST['txtStatID']);
+		$iStatID = intval(trim($_POST['txtStatID']));
 		$strQuery =  "SELECT iStatID,vcStatName,iOrderID FROM tblstats where iStatID=$iStatID;";
 		if (!$Result = $dbh->query ($strQuery))
 		{
@@ -94,11 +94,11 @@
 		print "<form method=\"POST\">\n";
 		print "<p><input type=\"Submit\" value=\"Yes I am sure!\" name=\"btnSubmit\"></p>";
 		print "<input type=\"hidden\" value=\"$iStatID\" name=\"txtStatID\"></form>\n</center>\n";
-	}				
+	}
 
 	if ($btnSubmit == 'Yes I am sure!')
 	{
-		$iStatID = trim($_POST['txtStatID']);
+		$iStatID = intval(trim($_POST['txtStatID']));
 		$strQuery = "Delete from tblstats where iStatID=$iStatID;";
 		$type = "Delete";
 //		print "Calling updateSQL with $type and query<br>\n $strQuery<br>\n";
@@ -106,11 +106,11 @@
 		unset($_POST);
 		$PostVarCount = 0;
 	}
-	
+
 	if ($btnSubmit == 'Edit')
 	{
 		print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
-		$iStatID = trim($_POST['txtStatID']);
+		$iStatID = intval(trim($_POST['txtStatID']));
 		$strQuery =  "SELECT iStatID,vcFromClause,vcWhereClause,vcGroupByClause,vcUnique,vcStatName, iOrderID FROM tblstats where iStatID=$iStatID;";
 		if (!$Result = $dbh->query ($strQuery))
 		{
@@ -162,7 +162,7 @@
 		print "<td align=left><input type=\"Submit\" value=\"Update\" name=\"btnSubmit\"></td>\n";
 		print "</tr>\n";
 		print "</table>\n";
-		print "</form>\n";		
+		print "</form>\n";
 	}
 
 	if ($btnSubmit == 'Update')
@@ -184,7 +184,7 @@
 //			print "Calling updateSQL with: $strQuery<br>\n";
 			UpdateSQL ($strQuery,$type);
 			unset($_POST);
-			$PostVarCount = 0;			
+			$PostVarCount = 0;
 		}
 		else
 		{
@@ -224,10 +224,10 @@
 			print "<td align=left><input type=\"Submit\" value=\"Update\" name=\"btnSubmit\"></td>\n";
 			print "</tr>\n";
 			print "</table>\n";
-			print "</form>\n";		
+			print "</form>\n";
 		}
 	}
-	
+
 	if ($btnSubmit == 'Insert')
 	{
 		$strStatName = substr(CleanSQLInput (trim($_POST['txtStatName'])),0,49);
@@ -243,7 +243,7 @@
 			$type = "insert";
 			UpdateSQL ($strQuery,$type);
 			unset($_POST);
-			$PostVarCount = 0;			
+			$PostVarCount = 0;
 		}
 		else
 		{
@@ -282,13 +282,13 @@
 			print "<td>&nbsp;</td>\n<td align=left><input type=\"Submit\" value=\"Insert\" name=\"btnSubmit\"></td>\n";
 			print "</tr>\n";
 			print "</table>\n";
-			print "</form>\n";		
+			print "</form>\n";
 		}
 	}
-	
+
 
 	if ($PostVarCount == 0)
-	{	
+	{
 		if ($WritePriv <=  $Priv)
 		{
 			print "<center><form method=\"POST\">\n<input type=\"Submit\" value=\"New\" name=\"btnSubmit\"></form></center>";
@@ -302,7 +302,7 @@
 			exit(2);
 		}
 		$NumAffected = $Result->num_rows;
-		
+
 		if ($NumAffected ==0)
 		{
 			print "<p class=alert>No statistics have been defined</p>\n";
@@ -372,10 +372,10 @@
 				}
 				print "</tr>\n";
 			}
-    	
+
 		}
 		print "</table>\n";
-	}  
-	
-	require("footer.php"); 
+	}
+
+	require("footer.php");
 ?>

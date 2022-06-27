@@ -19,7 +19,7 @@
     if ($btnSubmit == 'Edit')
     {
         print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
-        $iMenuID = substr(trim($_POST['MenuID']),0,49);
+        $iMenuID = intval(substr(trim($_POST['MenuID']),0,49));
         $strQuery = "SELECT * FROM tblmenu where iMenuID = $iMenuID;";
         if (!$Result = $dbh->query ($strQuery))
         {
@@ -129,12 +129,12 @@
 
     if ($btnSubmit == 'Save')
     {
-        $strTitle = substr(trim($_POST['txtTitle']),0,49);
-        $strHeader = substr(trim($_POST['txtHeader']),0,49);
-        $iReadPriv = substr(trim($_POST['cmbReadPrivLevel']),0,6);
-        $iWritePriv = substr(trim($_POST['cmbWritePrivLevel']),0,6);
-        $iAdminCatID = substr(trim($_POST['cmbAdminCat']),0,6);
-        $iMenuID = substr(trim($_POST['MenuID']),0,4);
+        $strTitle = CleanReg(substr(trim($_POST['txtTitle']),0,49));
+        $strHeader = CleanReg(substr(trim($_POST['txtHeader']),0,49));
+        $iReadPriv = intval(substr(trim($_POST['cmbReadPrivLevel']),0,6));
+        $iWritePriv = intval(substr(trim($_POST['cmbWritePrivLevel']),0,6));
+        $iAdminCatID = intval(substr(trim($_POST['cmbAdminCat']),0,6));
+        $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
         if (isset($_POST['chkSensitive']))
         {
            $bSensitive = 1;
@@ -159,9 +159,9 @@
 
     if ($btnSubmit == 'Update Position')
     {
-        $NewHeadPos = substr(trim($_POST['NewHeadPos']),0,4);
-        $OldHeadPos = substr(trim($_POST['OldHeadPos']),0,4);
-        $iMenuID = substr(trim($_POST['MenuID']),0,4);
+        $NewHeadPos = intval(substr(trim($_POST['NewHeadPos']),0,4));
+        $OldHeadPos = intval(substr(trim($_POST['OldHeadPos']),0,4));
+        $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
 
         if ($NewHeadPos > 0)
         {
@@ -172,7 +172,7 @@
 
     if ($btnSubmit == 'Add to menu')
     {
-        $iMenuID = substr(trim($_POST['MenuID']),0,4);
+        $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
         $strQuery = "SELECT max(iMenuOrder)+1 AS NextID FROM tblmenutype";
         if (!$Result = $dbh->query ($strQuery))
         {
@@ -194,7 +194,7 @@
 
     if ($btnSubmit == 'Remove from Menu')
     {
-        $iMenuID = substr(trim($_POST['MenuID']),0,4);
+        $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
         $strQuery = "DELETE FROM tblmenutype WHERE iMenuID=$iMenuID;";
         // print $strQuery;
         UpdateSQL ($strQuery,"delete");

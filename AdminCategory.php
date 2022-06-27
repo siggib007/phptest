@@ -25,10 +25,10 @@
             $strQuery = "update tblAdminCategories set vcCatName = '$strAdminCat' where iCatID = $iCatID;";
             UpdateSQL ($strQuery,"update");
 	}
-	
+
 	if ($btnSubmit == 'Delete')
 	{
-            $iCatID = substr(trim($_POST['iCatID']),0,49);
+            $iCatID = intval(substr(trim($_POST['iCatID']),0,49));
 
             $strQuery = "delete from tblAdminCategories where iCatID = $iCatID;";
             UpdateSQL ($strQuery,"delete");
@@ -48,7 +48,7 @@
                 UpdateSQL ($strQuery,"insert");
             }
 	}
-	
+
 	//Print the normal form after update is complete.
 	print "<table>\n";
         print "<tr>\n";
@@ -89,9 +89,9 @@
             else
             {
                 print "$vcAdminCat<br>\n";
-            }		
+            }
 	}
-	print "</table>\n";	    
+	print "</table>\n";
 	print "</td>\n";
         print "<td>\n";
         print "</td>\n";
@@ -103,6 +103,6 @@
 	print "<tr><td colspan=2 align=center><input type=\"Submit\" value=\"Insert\" name=\"btnSubmit\"></td></tr>\n";
 	print "</table>\n";
 	print "</form>\n</td>\n</tr>\n</table>";
-	
-	require("footer.php"); 
+
+	require("footer.php");
 ?>

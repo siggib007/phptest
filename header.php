@@ -412,7 +412,7 @@ if ($ShowAdminSub == "True")
     {
         if (isset($_GET['cat']))
         {
-            $strCatID = $_GET['cat'];
+            $strCatID = intval($_GET['cat']);
         }
         else
         {
@@ -424,7 +424,7 @@ if ($ShowAdminSub == "True")
         }
         else
         {
-            $iAdminCat=$strCatID;
+            $iAdminCat=intval($strCatID);
         }
         $strQuery = "SELECT * FROM tblAdminCategories WHERE iCatID > 0 order by vcCatName";
         if (!$Result = $dbh->query ($strQuery))

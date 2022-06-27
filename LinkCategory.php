@@ -20,28 +20,28 @@
 	if (($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
 	{
 		header("Location: $strPageURL");
-	}    
-	
+	}
+
 	if ($btnSubmit == 'Save')
 	{
 		$iSortNum = CleanSQLInput(substr(trim($_POST['iSortNum']),0,49));
 		$strLinkCat = CleanSQLInput(substr(trim($_POST['txtLinkCat']),0,49));
 		$iLinkCatID = CleanSQLInput(substr(trim($_POST['iLinkCatID']),0,49));
-		
+
 		if ($iSortNum == '')
 		{
 			$iSortNum = 0;
 		}
-		
+
 		$strQuery = "update tbllinkcategory set vcCategory = '$strLinkCat', iSortNum = $iSortNum where iCatID = $iLinkCatID;";
 		UpdateSQL ($strQuery,"update");
 		//print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
 	}
-	
+
 	if ($btnSubmit == 'Delete')
 	{
-		$iLinkCatID = substr(trim($_POST['iLinkCatID']),0,49);
-		
+		$iLinkCatID = intval(substr(trim($_POST['iLinkCatID']),0,49));
+
 		$strQuery = "delete from tbllinkcategory where iCatID = $iLinkCatID;";
 		UpdateSQL ($strQuery,"delete");
 	}
@@ -50,12 +50,12 @@
 	{
 		$iSortNum = CleanSQLInput(substr(trim($_POST['iSortNum']),0,49));
 		$strLinkCat = CleanSQLInput(substr(trim($_POST['txtLinkCat']),0,49));
-		
+
 		if ($iSortNum == '')
 		{
 			$iSortNum = 0;
 		}
-		
+
 		if ($strLinkCat == '')
 		{
 			print "<p>Please provide a document catergory name to insert</p>\n";
@@ -66,7 +66,7 @@
 			UpdateSQL ($strQuery,"insert");
 		}
 	}
-	
+
 	//Print the normal form after update is complete.
 	print "<table>\n<tr><th class=lbl>Update existing Category</th><th width = 100></th><th class=lbl>Or Insert New one</th></tr>\n";
 	print "<tr>\n<td>\n<table border = 0>\n<tr><th></th><th class=lbl>Category Name</th><th class=lbl>Sort order</th></tr>\n";
@@ -97,9 +97,9 @@
 		else
 		{
 			print "$vcLinkCat : $iSortNum<br>\n";
-		}		
+		}
 	}
-	print "</table>\n";	    
+	print "</table>\n";
 	print "</td>\n<td>\n</td>\n<td>\n";
 	print "<form method=\"POST\">\n";
 	print "<table>\n";
@@ -110,6 +110,6 @@
 	print "<tr><td colspan=2 align=center><input type=\"Submit\" value=\"Insert\" name=\"btnSubmit\"></td></tr>\n";
 	print "</table>\n";
 	print "</form>\n</td>\n</tr>\n</table>";
-	
-	require("footer.php"); 
+
+	require("footer.php");
 ?>

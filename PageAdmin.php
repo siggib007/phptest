@@ -15,7 +15,7 @@
     }
     if (isset($_POST['PageID']))
     {
-        $iPageID = substr(trim($_POST['PageID']),0,49);
+        $iPageID = intval(substr(trim($_POST['PageID']),0,49));
     }
     else
     {
@@ -24,7 +24,7 @@
 
     if (isset($_POST['cmbType']))
     {
-        $PageType = $_POST['cmbType'];
+        $PageType = intval($_POST['cmbType']);
     }
     else
     {
@@ -142,7 +142,7 @@
         {
             if (isset($_POST['cmbRevTime']))
             {
-                $RevTime = substr(trim($_POST['cmbRevTime']),0,49);
+                $RevTime = CleanReg(substr(trim($_POST['cmbRevTime']),0,49));
                 $QueryAdd = "'$RevTime'";
             }
             else
@@ -259,12 +259,12 @@
 
     if ($btnSubmit == 'Save')
     {
-        $iSubPage = substr(trim($_POST['cmbSubPage']),0,49);
+        $iSubPage = intval(substr(trim($_POST['cmbSubPage']),0,49));
         if (isset($_POST['txtFile']))
         {
-            $FileName = substr(trim($_POST['txtFile']),0,49);
-            $PageName = substr(trim($_POST['txtName']),0,49);
-            $MenuTitle = substr(trim($_POST['txtTitle']),0,49);
+            $FileName = CleanReg(substr(trim($_POST['txtFile']),0,49));
+            $PageName = CleanReg(substr(trim($_POST['txtName']),0,49));
+            $MenuTitle = CleanReg(substr(trim($_POST['txtTitle']),0,49));
 
             if (substr($FileName,-4)!=".php")
             {
@@ -458,7 +458,7 @@
 
     if ($btnSubmit == 'Yes I am very sure')
     {
-        $FileName = substr(trim($_POST['FileName']),0,49);
+        $FileName = CleanReg(substr(trim($_POST['FileName']),0,49));
 
         if (unlink($FileName))
         {

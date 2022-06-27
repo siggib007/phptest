@@ -1,6 +1,5 @@
 <?php
     $bSpam = FALSE;
-    $strUserID = trim($_POST['iUserID']);
     $strName = substr(trim($_POST['txtName']),0,49);
     $strAddr1 = substr(trim($_POST['txtAddr1']),0,49);
     $strAddr2 = substr(trim($_POST['txtAddr2']),0,49);

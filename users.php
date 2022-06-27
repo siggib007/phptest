@@ -69,7 +69,7 @@
 
     if ($btnSubmitValue == 'Search')
     {
-        $strName = substr(trim($_POST['txtName']),0,49);
+        $strName = CleanReg(substr(trim($_POST['txtName']),0,49));
         $strQuery = "select iUserID, vcName from tblUsers ";
         $strQuery .= "where vcName like '%$strName%' order by vcName;";
         $crit = "name contains $strName";
@@ -99,7 +99,7 @@
 
     if ($btnSubmitValue == 'View')
     {
-        $strUserID = substr(trim($_POST['UserID']),0,9);
+        $strUserID = intval(substr(trim($_POST['UserID']),0,9));
         $strQuery = "select * from tblUsers where iUserID = $strUserID;";
         if (!$Result = $dbh->query ($strQuery))
         {
@@ -157,7 +157,7 @@
 
     if ($btnSubmitValue == 'Edit')
     {
-        $strUserID = substr(trim($_POST['UserID']),0,9);
+        $strUserID = intval(substr(trim($_POST['UserID']),0,9));
         require 'UserDBVar.php';
         print "<p>RegistrationID: $strUserID";
         print "<form method=\"POST\">\n";
@@ -245,7 +245,7 @@
 
     if ($btnSubmitValue =="Delete Account")
     {
-        $iRegNum = trim($_POST['UserID']);
+        $iRegNum = intval(trim($_POST['UserID']));
         $BeenSubmitted = trim($_POST['BeenSubmitted']);
 
         if($iRegNum)
@@ -314,7 +314,7 @@
     if ($btnSubmitValue == 'Add User')
     {
         require_once 'CleanReg.php';
-        $iLevel = $_POST['cmbPrivLevel'];
+        $iLevel = intval($_POST['cmbPrivLevel']);
 
         if ($strEmail)
         {
@@ -364,7 +364,7 @@
     if ($btnSubmitValue == 'Submit')
     {
         require_once 'CleanReg.php';
-        $iLevel = $_POST['cmbPrivLevel'];
+        $iLevel = intval($_POST['cmbPrivLevel']);
         if (!$bSpam)
         {
             require 'UserUpdate.php';

@@ -20,23 +20,23 @@
 	if (($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
 	{
 //		header("Location: $strPageURL");
-	}    
-	
+	}
+
 	if ($btnSubmit == 'Save')
 	{
 		$iFAQID = CleanSQLInput(substr(trim($_POST['iFAQid']),0,49));
 		$strQuestion = CleanSQLInput(substr(trim($_POST['txtQuestion']),0,49));
 		$strAnswer = CleanSQLInput($_POST['txtAnswer']);
-		
+
 		$strQuery = "update tblFAQ set vcQuestion = '$strQuestion', tAnswer = '$strAnswer' where iFAQid = $iFAQID;";
 		UpdateSQL ($strQuery,"update");
 //		print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
 	}
-	
+
 	if ($btnSubmit == 'Delete')
 	{
 		$iFAQID = CleanSQLInput(substr(trim($_POST['iFAQid']),0,49));
-		
+
 		$strQuery = "delete from tblFAQ where iFAQid = $iFAQID;";
 		UpdateSQL ($strQuery,"delete");
 	}
@@ -45,12 +45,12 @@
 	{
 		$strQuestion = CleanSQLInput(substr(trim($_POST['txtQuestion']),0,49));
 		$strAnswer = CleanSQLInput($_POST['txtAnswer']);
-		
+
 		if ($iSortNum == '')
 		{
 			$iSortNum = 0;
 		}
-		
+
 		if ($strQuestion == '')
 		{
 			print "<p>Please provide a Question to insert</p>\n";
@@ -61,13 +61,13 @@
 			UpdateSQL ($strQuery,"insert");
 		}
 	}
-	
+
 	//Print the normal form after update is complete.
 	print "<table>\n<tr><th class=lbl>Update existing FAQ</th>";
         print "<th width = 100></th>";
         if (!isset($_POST['iFAQid']))
         {
-            print "<th class=lbl>Or Insert New one</th>";   
+            print "<th class=lbl>Or Insert New one</th>";
         }
 	print "</tr>\n<tr>\n<td valign=\"top\">\n<table border = 0>\n";
 	$strQuery = "select iFAQid, vcQuestion, tAnswer from tblFAQ;";
@@ -96,14 +96,14 @@
 		else
 		{
 			print "<tr><td>$vcQuestion</td></tr>\n";
-		}		
+		}
 	}
-	print "</table>\n";	    
+	print "</table>\n";
         print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
 	print "</td>\n<td>\n</td>\n<td valign=\"top\">\n";
         if (isset($_POST['iFAQid']) and $_POST['btnSubmit'] == 'Edit')
         {
-            $iFAQid = $_POST['iFAQid'];
+            $iFAQid = intval($_POST['iFAQid']);
             $strQuery = "select iFAQid, vcQuestion, tAnswer from tblFAQ where iFAQid = $iFAQid;";
             if (!$Result = $dbh->query ($strQuery))
             {
@@ -114,13 +114,13 @@
             }
             $Row = $Result->fetch_assoc();
             $strQuestion = $Row['vcQuestion'];
-            $strClassDescr = $Row['tAnswer'];    
+            $strClassDescr = $Row['tAnswer'];
             $strBtnLabel = "Save";
         }
          else
         {
             $strQuestion = "";
-            $strClassDescr = "";                         
+            $strClassDescr = "";
             $iFAQid = "";
             $strBtnLabel = "Insert";
         }
@@ -129,16 +129,16 @@
 	print "<span class=\"lbl\">Class Name:</span>\n";
 	print "<input type=\"text\" name=\"txtQuestion\" size=\"70\" value=\"$strQuestion\"><br>\n";
 	print "<div class=\"lbl\">Description:</div>\n";
-        print "<textarea name=\"txtAnswer\" rows=\"20\" cols=\"80\">$strClassDescr</textarea>\n<br>\n";        
+        print "<textarea name=\"txtAnswer\" rows=\"20\" cols=\"80\">$strClassDescr</textarea>\n<br>\n";
 	print "<div align=\"center\"><input type=\"Submit\" value=\"$strBtnLabel\" name=\"btnSubmit\"></div>\n";
 	print "</form>\n";
         if (isset($_POST['iFAQid']))
         {
-            print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";   
+            print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
         }
 	print "</td>\n";
         print "</tr>\n";
         print "</table>";
-        
-	require("footer.php"); 
+
+	require("footer.php");
 ?>

@@ -12,7 +12,7 @@
 	if (($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
 	{
 		header("Location: $strPageURL");
-	}    
+	}
 
 	if (isset($_POST['btnSubmit']))
 	{
@@ -22,7 +22,7 @@
 	{
 		$btnSubmit = "";
 	}
-	
+
 	if ($btnSubmit == 'Save')
 	{
 		$iLinkID = substr(trim($_POST['iLinkID']),0,49);
@@ -30,15 +30,15 @@
 		$vcLinkName = CleanSQLInput(substr(trim($_POST['txtName']),0,49));
 		$vcComment = CleanSQLInput(substr(trim($_POST['txtComment']),0,499));
 		$iLinkCat = substr(trim($_POST['cmbCategory']),0,49);
-		
+
 		$strQuery = "update tbllinks set iCategory ='$iLinkCat', vcLink='$vcLink', vcName='$vcLinkName', vcComment='$vcComment' where iLinkID=$iLinkID;";
 		UpdateSQL ($strQuery,"update");
 	}
-	
+
 	if ($btnSubmit == 'Delete')
 	{
-		$iLinkID = substr(trim($_POST['iLinkID']),0,49);
-		
+		$iLinkID = inval(substr(trim($_POST['iLinkID']),0,49));
+
 		$strQuery = "delete from tbllinks where iLinkID = $iLinkID;";
 		UpdateSQL ($strQuery,"delete");
 	}
@@ -48,8 +48,8 @@
 		$vcLink = CleanSQLInput(substr(trim($_POST['txtLink']),0,499));
 		$vcLinkName = CleanSQLInput(substr(trim($_POST['txtName']),0,49));
 		$vcComment = CleanSQLInput(substr(trim($_POST['txtComment']),0,49));
-		$iLinkCat = substr(trim($_POST['cmbCategory']),0,49);
-				
+		$iLinkCat = intval(substr(trim($_POST['cmbCategory']),0,49));
+
 		if ($vcLink == '' or $vcLinkName == '')
 		{
 			print "<p>Please provide the link and a link name to insert</p>\n";
@@ -60,8 +60,8 @@
 			UpdateSQL ($strQuery,"insert");
 		}
 		//print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
-	}		
-	
+	}
+
 	//Print the normal form after update is complete.
 	print "<form method=\"POST\">\n";
 	print "<table>\n";
@@ -87,7 +87,7 @@
 		{
 			print("<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n");
 		}
-	}			
+	}
 	print("</select>\n</td>");
 	print "<tr>\n<td align = right class = lbl>Link: </td>\n";
 	print "<td><input type=\"text\" name=\"txtLink\" size=\"60\" ></td>\n</tr>\n";
@@ -98,7 +98,7 @@
 	print "<tr><td colspan=2 align=center><input type=\"Submit\" value=\"Insert\" name=\"btnSubmit\"></td></tr>\n";
 	print "</table>\n";
 	print "</form>\n";
-	
+
 	print "<div class=lbl>Or Update existing Links</th><th width = 100></div>\n";
 	print "<table border = 0>\n";
 	print "<tr><th></th><th class=lbl>Category</th><th class=lbl>Link</th><th class=lbl>Name</th><th class=lbl>Comment</th></tr>\n";
@@ -135,7 +135,7 @@
 				{
 					print("<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n");
 				}
-			}			
+			}
 			print("</select>\n</td>");
 			print "<td><input type=\"text\" value=\"$Row[vcLink]\" name=\"txtLink\" size=\"50\" ></td>\n";
 			print "<td><input type=\"text\" value=\"$Row[vcName]\" name=\"txtName\" size=\"30\" ></td>\n";
@@ -148,9 +148,9 @@
 		else
 		{
 			print "<tr><td>$Row[vcLink]</td><td>$Row[vcName]</td><td>$Row[vcComment]</td></tr>\n";
-		}		
+		}
 	}
-	print "</table>\n";	    
-	
-	require("footer.php"); 
+	print "</table>\n";
+
+	require("footer.php");
 ?>

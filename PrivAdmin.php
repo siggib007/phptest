@@ -7,7 +7,7 @@
     }
     if (isset($_POST['cmbUser']))
     {
-        $iUserArray = $_POST['cmbUser'];
+        $iUserArray = intval($_POST['cmbUser']);
     }
     else
     {
@@ -43,7 +43,7 @@
        $strUserList .= "-55";
        $strQuery = "update tblUsers set iPrivLevel = $iPrivUpdate where iUserID in ($strUserList);";
        UpdateSQL ($strQuery,"update");
-       
+
     }
 
 
@@ -138,9 +138,9 @@
         }
     }
     print "</select>\n";
-    
+
     print "<input type=\"Submit\" value=\"Update\" name=\"btnSubmit\">\n";
     print "</form>\n <br>\n";
-    
+
     require("footer.php");
 ?>

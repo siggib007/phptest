@@ -87,8 +87,8 @@
             {
                 $strUID = substr(trim($_POST['txtUID']),0,19);
                 $strOUID = substr(trim($_POST['txtOUID']),0,19);
-                $Password = substr(trim($_POST['txtPWD']),0,19);
-                $PWDConf = substr(trim($_POST['txtPWDConf']),0,19);
+                $Password = trim($_POST['txtPWD']);
+                $PWDConf = trim($_POST['txtPWDConf']);
                 $strUID = str_replace("'","",$strUID);
                 CleanReg($strUID);
                 CleanReg($strOUID);
@@ -214,7 +214,8 @@
         print "<tr>";
         print "<td colspan=2 align=\"center\" >";
         print "You can change your username and password here,<br>\n";
-        print "Just make sure you provide password and confirm it when changing your username.";
+        print "Just make sure you provide password and confirm it when changing your username.<br>";
+        print "Also the following characters are stripped out of the password = \ \" '";
         print "</td>";
         print "</tr>";
         print "<tr><td align=\"right\" class=\"lbl\">UserName:</td>\n";
