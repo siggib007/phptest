@@ -709,18 +709,6 @@ CREATE TABLE IF NOT EXISTS `tblstats` (
 INSERT INTO `tblstats` (`iStatID`, `vcFromClause`, `vcWhereClause`, `vcGroupByClause`, `vcUnique`, `vcStatName`, `iOrderID`, `vcModifiedBy`, `dtModifiedTime`) VALUES
 	(1, 'tblUsers', '', '', '', 'All Registered users', 1.0, 'Siggi Bjarnason', '2011-01-15 13:51:39');
 
--- Dumping structure for table PHPDemo.tblTimeUnits
-CREATE TABLE IF NOT EXISTS `tblTimeUnits` (
-  `iOrder` tinyint(4) NOT NULL,
-  `vcType` varchar(50) NOT NULL,
-  `vcText` varchar(150) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Dumping data for table PHPDemo.tblTimeUnits: ~2 rows (approximately)
-INSERT INTO `tblTimeUnits` (`iOrder`, `vcType`, `vcText`) VALUES
-	(1, 'minute', 'Minutes'),
-	(2, 'hour', 'Hours');
-
 -- Dumping structure for table PHPDemo.tblUsers
 CREATE TABLE IF NOT EXISTS `tblUsers` (
   `iUserID` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -743,31 +731,6 @@ CREATE TABLE IF NOT EXISTS `tblUsers` (
   `iPrivLevel` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`iUserID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-
--- Dumping data for table PHPDemo.tblUsers: ~3 rows (approximately)
-INSERT INTO `tblUsers` (`iUserID`, `vcName`, `vcEmail`, `vcPhone`, `vcCell`, `vcAddr1`, `vcAddr2`, `vcCity`, `vcState`, `vcZip`, `vcCountry`, `vcUID`, `vcPWD`, `dtUpdated`, `dMailSent`, `tMailSent`, `dtLastLogin`, `iPrivLevel`) VALUES
-	(1, 'Siggi Bjarnason', 'siggi@supergeek.us', '', '206-779-1175', '1037 NE 65th Street', 'PMB 80031', 'Seattle', 'WA', '98115-665', 'UNITED STATES', 'siggib', 'siND12v6GkGbo', '2022-06-25 15:12:07', NULL, NULL, '2022-06-26 22:57:22', 400),
-	(2, 'Testing Tester', 'test@example.com', '', '206-555-1234', '2123 Some Street', 'nada', 'No Place', 'WA', '98115-665', 'UNITED STATES', 'ttester', 'ttkb44M4CAJSc', '2022-06-25 14:00:48', '2022-06-25', '13:58:46', '2022-06-25 14:00:34', 1),
-	(3, 'Brother Best', 'bbs@somplace.bs', '', '', '', '', '', 'WA', '', 'UNITED STATES', 'bbs', 'bbTdyOM4g6r9Q', '2022-06-25 14:02:50', '2022-06-25', '14:01:46', '2022-06-25 14:03:06', 1),
-	(5, 'Super Admin', 'admin@demo.net', NULL, '206-555-1234', 'street 5', 'apt 1', 'No Place', 'OR', '98115-665', 'UNITED STATES', 'sadmin', 'sag3agmyBB96M', NULL, '2022-06-26', '23:26:35', NULL, 300),
-	(6, 'Super Admin', 'admin2@demo.net', NULL, '206-555-1234', '2123 Some Street', 'nada', 'No Place', 'WA', '98115-665', 'UNITED STATES', 'sadmin1', 'sazddN.wpZDHs', '2022-06-26 23:43:56', '2022-06-26', '23:42:20', '2022-06-26 23:43:03', 300);
-
--- Dumping structure for table PHPDemo.tblWeekdays
-CREATE TABLE IF NOT EXISTS `tblWeekdays` (
-  `iDayNum` int(11) NOT NULL AUTO_INCREMENT,
-  `vcDayName` varchar(25) NOT NULL,
-  PRIMARY KEY (`iDayNum`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-
--- Dumping data for table PHPDemo.tblWeekdays: ~7 rows (approximately)
-INSERT INTO `tblWeekdays` (`iDayNum`, `vcDayName`) VALUES
-	(1, 'Sundays'),
-	(2, 'Mondays'),
-	(3, 'Tuesdays'),
-	(4, 'Wednesdays'),
-	(5, 'Thursdays'),
-	(6, 'Fridays'),
-	(7, 'Saturdays');
 
 -- Dumping structure for table PHPDemo.US_States
 CREATE TABLE IF NOT EXISTS `US_States` (
@@ -847,104 +810,12 @@ INSERT INTO `US_States` (`iStateID`, `vcStateAbr`, `vcStateName`) VALUES
 	(65, 'WY', 'WYOMING');
 /*!40000 ALTER TABLE `US_States` ENABLE KEYS */;
 
--- Dumping structure for view PHPDemo.vwAdminCat
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `vwAdminCat` (
-	`vcTitle` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
-	`vcLink` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
-	`bNewWindow` TINYINT(4) NOT NULL,
-	`iReadPriv` INT(11) NOT NULL,
-	`vcCatName` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
-	`iCatID` TINYINT(4) NOT NULL
-) ENGINE=MyISAM;
-
--- Dumping structure for view PHPDemo.vwemailupdate
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `vwemailupdate` (
-	`iChangeID` INT(11) NOT NULL,
-	`vcName` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
-	`vcGUID` VARCHAR(60) NOT NULL COLLATE 'latin1_swedish_ci',
-	`vcNewEmail` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
-	`vcReqIPAdd` VARCHAR(20) NOT NULL COLLATE 'latin1_swedish_ci',
-	`dtTimeStamp` DATETIME NOT NULL
-) ENGINE=MyISAM;
-
--- Dumping structure for view PHPDemo.vwlinks
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `vwlinks` (
-	`vcLink` VARCHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
-	`vcName` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
-	`vcComment` VARCHAR(500) NOT NULL COLLATE 'latin1_swedish_ci',
-	`icatid` INT(11) NOT NULL,
-	`vcCategory` VARCHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
-	`iSortNum` INT(11) NOT NULL
-) ENGINE=MyISAM;
-
--- Dumping structure for view PHPDemo.vwmenuitem
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `vwmenuitem` (
-	`iMenuID` INT(11) NOT NULL,
-	`vcTitle` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
-	`vcLink` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
-	`iReadPriv` INT(11) NOT NULL,
-	`iWritePriv` INT(11) NOT NULL,
-	`bNewWindow` TINYINT(4) NOT NULL,
-	`vcMenuType` VARCHAR(25) NOT NULL COLLATE 'latin1_swedish_ci',
-	`iMenuOrder` INT(11) NOT NULL,
-	`iSubOfMenu` INT(11) NOT NULL
-) ENGINE=MyISAM;
-
--- Dumping structure for view PHPDemo.vwmenupriv
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `vwmenupriv` (
-	`iMenuID` INT(11) NOT NULL,
-	`vcTitle` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
-	`ReadPriv` VARCHAR(25) NOT NULL COLLATE 'latin1_swedish_ci',
-	`WritePriv` VARCHAR(25) NOT NULL COLLATE 'latin1_swedish_ci',
-	`vcHeader` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
-	`bAdmin` TINYINT(1) NOT NULL,
-	`bSecure` TINYINT(4) NOT NULL,
-	`iMenuOrder` INT(11) NULL,
-	`bNewWindow` TINYINT(4) NOT NULL
-) ENGINE=MyISAM;
-
--- Dumping structure for view PHPDemo.vwPrivLevels
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `vwPrivLevels` (
-	`iOrder` INT(11) NOT NULL,
-	`vcType` INT(11) NOT NULL,
-	`vcText` VARCHAR(25) NOT NULL COLLATE 'latin1_swedish_ci'
-) ENGINE=MyISAM;
-
--- Dumping structure for view PHPDemo.vwAdminCat
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `vwAdminCat`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwAdminCat` AS select `m`.`vcTitle` AS `vcTitle`,`m`.`vcLink` AS `vcLink`,`m`.`bNewWindow` AS `bNewWindow`,`m`.`iReadPriv` AS `iReadPriv`,`c`.`vcCatName` AS `vcCatName`,`c`.`iCatID` AS `iCatID` from (`tblmenu` `m` join `tblAdminCategories` `c` on((`m`.`bAdmin` = `c`.`iCatID`))) order by `c`.`vcCatName`,`m`.`vcTitle`;
-
--- Dumping structure for view PHPDemo.vwemailupdate
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `vwemailupdate`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwemailupdate` AS select `e`.`iChangeID` AS `iChangeID`,`u`.`vcName` AS `vcName`,`e`.`vcGUID` AS `vcGUID`,`e`.`vcNewEmail` AS `vcNewEmail`,`e`.`vcReqIPAdd` AS `vcReqIPAdd`,`e`.`dtTimeStamp` AS `dtTimeStamp` from (`tblemailupdate` `e` join `tblUsers` `u` on((`e`.`iClientID` = `u`.`iUserID`))) order by `e`.`dtTimeStamp` desc;
-
--- Dumping structure for view PHPDemo.vwlinks
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `vwlinks`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwlinks` AS select `tbllinks`.`vcLink` AS `vcLink`,`tbllinks`.`vcName` AS `vcName`,`tbllinks`.`vcComment` AS `vcComment`,`tbllinkcategory`.`iCatId` AS `icatid`,`tbllinkcategory`.`vcCategory` AS `vcCategory`,`tbllinkcategory`.`iSortNum` AS `iSortNum` from (`tbllinks` join `tbllinkcategory` on((`tbllinkcategory`.`iCatId` = `tbllinks`.`iCategory`)));
-
--- Dumping structure for view PHPDemo.vwmenuitem
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `vwmenuitem`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwmenuitem` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`tblmenu`.`vcLink` AS `vcLink`,`tblmenu`.`iReadPriv` AS `iReadPriv`,`tblmenu`.`iWritePriv` AS `iWritePriv`,`tblmenu`.`bNewWindow` AS `bNewWindow`,`tblmenutype`.`vcMenuType` AS `vcMenuType`,`tblmenutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenutype`.`iSubOfMenu` AS `iSubOfMenu` from (`tblmenu` join `tblmenutype` on((`tblmenu`.`iMenuID` = `tblmenutype`.`iMenuID`))) order by `tblmenutype`.`vcMenuType`,`tblmenutype`.`iMenuOrder`,`tblmenutype`.`iSubOfMenu`;
-
--- Dumping structure for view PHPDemo.vwmenupriv
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `vwmenupriv`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwmenupriv` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`readpriv`.`vcPrivName` AS `ReadPriv`,`writepriv`.`vcPrivName` AS `WritePriv`,`tblmenu`.`vcHeader` AS `vcHeader`,`tblmenu`.`bAdmin` AS `bAdmin`,`tblmenu`.`bSecure` AS `bSecure`,`menutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenu`.`bNewWindow` AS `bNewWindow` from (((`tblmenu` join `tblprivlevels` `readpriv` on((`tblmenu`.`iReadPriv` = `readpriv`.`iPrivLevel`))) join `tblprivlevels` `writepriv` on((`tblmenu`.`iWritePriv` = `writepriv`.`iPrivLevel`))) left join `tblmenutype` `menutype` on((`tblmenu`.`iMenuID` = `menutype`.`iMenuID`)));
-
--- Dumping structure for view PHPDemo.vwPrivLevels
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `vwPrivLevels`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwPrivLevels` AS select `tblprivlevels`.`iPrivLevel` AS `iOrder`,`tblprivlevels`.`iPrivLevel` AS `vcType`,`tblprivlevels`.`vcPrivName` AS `vcText` from `tblprivlevels` where (`tblprivlevels`.`iPrivLevel` > 0);
+CREATE VIEW `vwAdminCat` AS select `m`.`vcTitle` AS `vcTitle`,`m`.`vcLink` AS `vcLink`,`m`.`bNewWindow` AS `bNewWindow`,`m`.`iReadPriv` AS `iReadPriv`,`c`.`vcCatName` AS `vcCatName`,`c`.`iCatID` AS `iCatID` from (`tblmenu` `m` join `tblAdminCategories` `c` on((`m`.`bAdmin` = `c`.`iCatID`))) order by `c`.`vcCatName`,`m`.`vcTitle`;
+CREATE VIEW `vwemailupdate` AS select `e`.`iChangeID` AS `iChangeID`,`u`.`vcName` AS `vcName`,`e`.`vcGUID` AS `vcGUID`,`e`.`vcNewEmail` AS `vcNewEmail`,`e`.`vcReqIPAdd` AS `vcReqIPAdd`,`e`.`dtTimeStamp` AS `dtTimeStamp` from (`tblemailupdate` `e` join `tblUsers` `u` on((`e`.`iClientID` = `u`.`iUserID`))) order by `e`.`dtTimeStamp` desc;
+CREATE VIEW `vwlinks` AS select `tbllinks`.`vcLink` AS `vcLink`,`tbllinks`.`vcName` AS `vcName`,`tbllinks`.`vcComment` AS `vcComment`,`tbllinkcategory`.`iCatId` AS `icatid`,`tbllinkcategory`.`vcCategory` AS `vcCategory`,`tbllinkcategory`.`iSortNum` AS `iSortNum` from (`tbllinks` join `tbllinkcategory` on((`tbllinkcategory`.`iCatId` = `tbllinks`.`iCategory`)));
+CREATE VIEW `vwmenuitem` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`tblmenu`.`vcLink` AS `vcLink`,`tblmenu`.`iReadPriv` AS `iReadPriv`,`tblmenu`.`iWritePriv` AS `iWritePriv`,`tblmenu`.`bNewWindow` AS `bNewWindow`,`tblmenutype`.`vcMenuType` AS `vcMenuType`,`tblmenutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenutype`.`iSubOfMenu` AS `iSubOfMenu` from (`tblmenu` join `tblmenutype` on((`tblmenu`.`iMenuID` = `tblmenutype`.`iMenuID`))) order by `tblmenutype`.`vcMenuType`,`tblmenutype`.`iMenuOrder`,`tblmenutype`.`iSubOfMenu`;
+CREATE VIEW `vwmenupriv` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`readpriv`.`vcPrivName` AS `ReadPriv`,`writepriv`.`vcPrivName` AS `WritePriv`,`tblmenu`.`vcHeader` AS `vcHeader`,`tblmenu`.`bAdmin` AS `bAdmin`,`tblmenu`.`bSecure` AS `bSecure`,`menutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenu`.`bNewWindow` AS `bNewWindow` from (((`tblmenu` join `tblprivlevels` `readpriv` on((`tblmenu`.`iReadPriv` = `readpriv`.`iPrivLevel`))) join `tblprivlevels` `writepriv` on((`tblmenu`.`iWritePriv` = `writepriv`.`iPrivLevel`))) left join `tblmenutype` `menutype` on((`tblmenu`.`iMenuID` = `menutype`.`iMenuID`)));
+CREATE VIEW `vwPrivLevels` AS select `tblprivlevels`.`iPrivLevel` AS `iOrder`,`tblprivlevels`.`iPrivLevel` AS `vcType`,`tblprivlevels`.`vcPrivName` AS `vcText` from `tblprivlevels` where (`tblprivlevels`.`iPrivLevel` > 0);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
