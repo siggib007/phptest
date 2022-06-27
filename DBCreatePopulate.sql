@@ -711,7 +711,7 @@ CREATE TABLE IF NOT EXISTS `tblUsers` (
   `vcZip` varchar(10) DEFAULT NULL,
   `vcCountry` varchar(100) DEFAULT NULL,
   `vcUID` varchar(20) NOT NULL,
-  `vcPWD` varchar(60) NOT NULL,
+  `vcPWD` varchar(260) NOT NULL,
   `dtUpdated` datetime DEFAULT NULL,
   `dMailSent` date DEFAULT NULL,
   `tMailSent` time DEFAULT NULL,
