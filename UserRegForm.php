@@ -25,12 +25,9 @@
         print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
         exit(2);
     }
-    if ($strState=="")
-    {
-        $strState = "WA";
-    }
     print "<select size=\"1\" name=\"cmbState\">\n";
     print "<option>Please Select State</option>\n";
+    print "<option>N/A</option>\n";
     while ($Row2 = $Result2->fetch_assoc())
     {
         if ($Row2['vcStateAbr'] == $strState)
