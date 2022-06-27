@@ -108,10 +108,10 @@
       UpdateSQL ($strQuery,"delete");
       $strQuery = "DELETE FROM tblPageTexts WHERE vcTextName='SetupReg' LIMIT 1;";
       UpdateSQL ($strQuery,"delete");
-      $strQuery = "DELETE FROM tblmenu WHERE vcLink='InitialRegister1st.php' LIMIT 1;";
+      $strQuery = "DELETE FROM tblmenu WHERE vcLink='$strPageName' LIMIT 1;";
       UpdateSQL ($strQuery,"delete");
-      unlink("InitialRegister1st.php");
-      print "<p class=\"BlueAttn\"><a href='index.php'>Setup completed. Click here to go home</a>\n";
+      unlink($strPageName);
+      print "<p class=\"BlueAttn\">\n<a href='index.php'>Setup completed. Click here to go home</a>\n</p>\n";
     }
     else
     {
