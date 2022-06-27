@@ -252,32 +252,27 @@
         {
             if($BeenSubmitted == "True")
             {
-                $strQuery = "Delete from tblInterestMap where iUserID='$iRegNum'";
-                if(UpdateSQL($strQuery, "delete"))
+                $strQuery = "Delete from tblUsers where iUserID='$iRegNum';";
+                if ($dbh->query ($strQuery))
                 {
-                    $strQuery = "Delete from tblUsers where iUserID='$iRegNum';";
-                    //print("Querystring: $strQuery<br>\n");
-                    if ($dbh->query ($strQuery))
+                    print "Account Deleted successful<br>\n";
+                }
+                else
+                {
+                    $strError = "Database update failed. Error (". $dbh->errno . ") " . $dbh->error . "\n";
+                    $strError .= "$strQuery\n";
+                    error_log($strError);
+                    if(EmailText("$SupportEmail","Automatic Error Report", $strError . "\n\n\n" . $strQuery ,"From:$SupportEmail"))
                     {
-                        print "Account Deleted successful<br>\n";
+                        print "<p class=\"Error\">We seem to be experiencing technical difficulties. " .
+                        "We have been notified. Please try again later. If you have any " .
+                        "questions you can contact us at $SupportEmail.</p>";
                     }
                     else
                     {
-                        $strError = "Database update failed. Error (". $dbh->errno . ") " . $dbh->error . "\n";
-                        $strError .= "$strQuery\n";
-                        error_log($strError);
-                        if(EmailText("$SupportEmail","Automatic Error Report", $strError . "\n\n\n" . $strQuery ,"From:$SupportEmail"))
-                        {
-                            print "<p class=\"Error\">We seem to be experiencing technical difficulties. " .
-                            "We have been notified. Please try again later. If you have any " .
-                            "questions you can contact us at $SupportEmail.</p>";
-                        }
-                        else
-                        {
-                            print "<p class=\"Error\">We seem to be experiencing technical difficulties. " .
-                                    "Please send us a message at $SupportEmail with information about " .
-                                    "what you were doing.</p>";
-                        }
+                        print "<p class=\"Error\">We seem to be experiencing technical difficulties. " .
+                                "Please send us a message at $SupportEmail with information about " .
+                                "what you were doing.</p>";
                     }
                 }
             }

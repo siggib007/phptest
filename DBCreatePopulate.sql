@@ -632,8 +632,6 @@ CREATE TABLE IF NOT EXISTS `tblprivlevels` (
 INSERT INTO `tblprivlevels` (`iPrivLevel`, `vcPrivName`) VALUES
 	(0, 'Public'),
 	(1, 'Registered Public'),
-	(100, 'Student'),
-	(200, 'Instructor'),
 	(300, 'Administrator'),
 	(400, 'Web Master'),
 	(500, 'Hidden');

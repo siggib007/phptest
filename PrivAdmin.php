@@ -7,7 +7,7 @@
     }
     if (isset($_POST['cmbUser']))
     {
-        $iUserArray = intval($_POST['cmbUser']);
+        $iUserArray = $_POST['cmbUser'];
     }
     else
     {

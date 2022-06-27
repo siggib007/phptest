@@ -107,6 +107,7 @@ if ($dbh->connect_errno)
 }
 else
 {
+    // $dbh->set_charset("utf-8");
     $strQuery = "SELECT * FROM tblconf";
     if (!$Result = $dbh->query ($strQuery))
     {

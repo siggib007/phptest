@@ -67,7 +67,6 @@
 	print "<table>\n";
 	print "<tr><td colspan=2 align=center class=lbl>Insert New Link</td></tr>\n";
 	$strQuery = "select iCatID, vcCategory from tbllinkcategory order by vcCategory;";
-	//print "$strQuery<br>\n";
 	print "<tr>\n<td align = right class = lbl>Link Category: </td>\n";
 	print("<td>\n<select size=\"1\" name=\"cmbCategory\">\n");
 	if (!$Result2 = $dbh->query ($strQuery))
@@ -79,14 +78,7 @@
 
 	while ($Row2 = $Result2->fetch_assoc())
 	{
-		if ($Row2['iCatID'] == $Row['iCategory'])
-		{
-			print("<option selected value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n");
-		}
-		else
-		{
-			print("<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n");
-		}
+		print("<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n");
 	}
 	print("</select>\n</td>");
 	print "<tr>\n<td align = right class = lbl>Link: </td>\n";

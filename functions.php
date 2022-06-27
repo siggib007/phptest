@@ -54,7 +54,6 @@ function UpdateSQL ($strQuery,$type)
     $SupportEmail = $GLOBALS['SupportEmail'];
     $FromEmail = $GLOBALS['FromEmail'];
 
-    error_log($strQuery);
     if ($dbh->query ($strQuery))
     {
         $NumAffected = $dbh->affected_rows;
@@ -273,7 +272,7 @@ function return_bytes($val)
 {
     $val = trim($val);
     $last = strtolower($val[strlen($val)-1]);
-    switch($last)
+    switch(intval($last))
     {
         // The 'G' modifier is available since PHP 5.1.0
         case 'g':
