@@ -554,6 +554,12 @@ function FetchKeylessStatic ($arrNames)
   $response = curl_exec($curl);
   curl_close($curl);
   $arrResponse = json_decode($response, TRUE);
+  if (array_key_exists("error",$arrResponse))
+  {
+    error_log("Failed to authenticate to the AKEYLESS system. ".$arrResponse["error"]);
+    return $arrResponse;
+  }
+
   $token = $arrResponse["token"];
 
   $PostData = array();

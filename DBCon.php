@@ -10,59 +10,24 @@ $ErrMsg = "We seem to be experiencing some technical difficulties, " .
           "hopefully we'll have it resolved shortly.<br>" .
           "If you have any questions please contact us at support@example.com.";
 
+/*
+Decide How you want to keep and access environment variables and secrets by including (aka requiring) the appropriate file
+secrets.php     : You want to hard code all your secrets in file, along with other environment values.
+                  While this is a very convenient solution it is the least secure method.
+                  It is critical that you gitignore this file to keep it as secret as possibl
+                  and pay attention to the access rights at the operating system level.
+EnvVar.php      : You are storing all you secrets in OS level environment variables along with all other environment values
+                  This is considered more secure than hard coding into a file but is still sub-optimal
+DopplerVar.php  : This is a highly secure and recommended approach. See https://infosechelp.net/secrets-management/
+                  for how to work with Doppler if you are not familiar with Doppler.
+                  Requires a single env variable of DopplerKEY for the API key to the appropriate Doppler configuration
+AkeylessVar.php : Another highly secure and recommended approach. See https://infosechelp.net/secrets-management-a-key-less-edition
+                  if you are not familiar with the Secret Management system from AKEYLESS.
+                  Requires a two env variables: KEYLESSID and KEYLESSKEY for authenticating to the AKEYLESS API Secrets Vault
+*/
 
-// Decide How you want to keep and access environment variables and secrets
 
-// uncomment this line if you want to store it all in a special secrets file. make sure you gitignore this file
-// require("secrets.php");
-
-// If you rather store everything in evironment variables uncomment this block
-/* $DBServerName = getenv("MYSQL_HOST");
-$UID = getenv("MYSQL_USER");
-$PWD = getenv("MYSQL_PASSWORD");
-$MailUser = getenv("EMAILUSER");
-$MailPWD = getenv("EMAILPWD");
-$MailHost = getenv("EMAILSERVER");
-$MailHostPort = getenv("EMAILPORT");
-$UseSSL = getenv("USESSL");
-$UseStartTLS = getenv("USESTARTTLS"); */
-
-
-// The recommended approach is to store everything in Doppler
-// See https://infosechelp.net/secrets-management/ for how to get started with Doppler
-// If you don't want to use Doppler comment this block out and uncomment one of the above ones.
-$arrSecretValues = FetchDopplerStatic("phpdev","dev");
-if (array_key_exists("secrets",$arrSecretValues))
-{
-  $DBServerName = $arrSecretValues["secrets"]["MYSQL_HOST"]["computed"];
-  $UID = $arrSecretValues["secrets"]["MYSQL_USER"]["computed"];
-  $PWD = $arrSecretValues["secrets"]["MYSQL_PASSWORD"]["computed"];
-  $MailUser = $arrSecretValues["secrets"]["EMAILUSER"]["computed"];
-  $MailPWD = $arrSecretValues["secrets"]["EMAILPWD"]["computed"];
-  $MailHost = $arrSecretValues["secrets"]["EMAILSERVER"]["computed"];
-  $MailHostPort = $arrSecretValues["secrets"]["EMAILPORT"]["computed"];
-  $UseSSL = $arrSecretValues["secrets"]["USESSL"]["computed"];
-  $UseStartTLS = $arrSecretValues["secrets"]["USESTARTTLS"]["computed"];
-}
-else
-{
-  if (array_key_exists("messages",$arrSecretValues))
-  {
-    $strMsg = "There was an issue fetching the secrets: ";
-    foreach ($arrSecretValues["messages"] as $msg)
-    {
-      $strMsg .= "$msg. ";
-    }
-    error_log($strMsg);
-    ShowErrHead();
-  }
-  else
-  {
-    Log_Array($arrSecretValues,"Unexpected reponse from FetchDopplerStatic");
-    ShowErrHead();
-  }
-}
-# end Fetching Doppler secrets
+require("AkeylessVar.php");
 
 if ($DBServerName == "" or $UID == "" or $PWD == "" or $MailUser == ""
     or $MailPWD == "" or $MailHost == "" or $MailHostPort == ""

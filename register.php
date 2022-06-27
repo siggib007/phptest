@@ -43,8 +43,6 @@
         }
     }
 
-    print $RegHeader;
-
     $strName = "";
     $strAddr1 = "";
     $strAddr2 = "";
@@ -57,6 +55,10 @@
     $strUserID = "";
     $strCell = "";
     $bSuccess = FALSE;
+    if (!$bSuccess)
+    {
+
+    }
     if (isset($GLOBALS["ConfArray"]["minRegLevel"]) )
     {
         $iLevel = $GLOBALS["ConfArray"]["minRegLevel"];
@@ -92,6 +94,7 @@
     }
     if (!$bSuccess)
     {
+        print "<p>$RegHeader</p>\n";
         print "<form method=\"POST\">\n";
         require 'UserRegForm.php';
         print "<tr>\n<td colspan=\"2\" align=\"center\">$RegFoot</td>\n</tr>\n";

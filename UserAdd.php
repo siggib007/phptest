@@ -92,7 +92,7 @@
             $StrMsg = str_replace("&quot;",'"',$StrMsg);
             if(EmailText($toEmail,"Your new account at $strHost",$StrMsg . $StrMsg2,$FromEmail))
             {
-                print "<p class=\"MainText\">The account was created successful and an confirmation email was sent to $strEmail.<br>\n";
+                print "<p class=\"alert\">The account was created successful and an confirmation email was sent to $strEmail.<br>\n";
                 $bRegOK = TRUE;
             }
             else

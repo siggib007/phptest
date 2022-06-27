@@ -60,9 +60,6 @@
       $iLevel = 300;
     }
 
-
-    print "<p class=\"BlueAttn\">$RegHeader</p>";
-
     $strName = "";
     $strAddr1 = "";
     $strAddr2 = "";
@@ -76,6 +73,7 @@
     $strCell = "";
     $bSuccess = FALSE;
     $bRegOK = FALSE;
+
     if ($btnSubmitValue == 'Submit')
     {
         require_once 'CleanReg.php';
@@ -115,6 +113,7 @@
     }
     else
     {
+        print "<p class=\"BlueAttn\">$RegHeader</p>";
         print "<form method=\"POST\">\n";
         require 'UserRegForm.php';
         print "<tr>\n<td colspan=\"2\" align=\"center\"><input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\"></td>\n</tr>\n";
