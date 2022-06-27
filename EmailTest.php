@@ -1,7 +1,5 @@
 <?php
-	//require("header.php");
-	require("functions.php");
-	require("DBCon.php");
+	require("header.php");
 	if ($strReferer != $strPageURL and $PostVarCount > 0)
 	{
 			print "<p class=\"Error\">Invalid operation, Bad Reference!!!</p> ";
@@ -9,6 +7,14 @@
 	}
 	$strFileName = "";
 	$strAttach = "";
+  if (isset($_POST['btnSubmit']))
+  {
+    $btnSubmit = $_POST['btnSubmit'];
+  }
+  else
+  {
+    $btnSubmit = "";
+  }
 
 	print "<style>\n";
 	print ".LargeAttnCenter
@@ -37,7 +43,7 @@
 	print "<p class='Notice'>Doing so might allow hackers to send spam from your configured email address via your email server, severly damaging your email reputation.<br>\n";
 	print "Only run this in a secure environment where you have absolute control over who has access.<br>\n";
 	print "For example run this on your laptop and set your winodws firewall to block all inbound connections.</p>\n";
-	
+
 	print "<center>\n";
 	print "<p>Fill out this form and hit send and your message will be sent through your configured email service<p/>\n";
 	if ($btnSubmit == 'Send')
@@ -86,5 +92,5 @@
 	}
 	print "</center>";
 
-	//require("footer.php");
+	require("footer.php");
 ?>
