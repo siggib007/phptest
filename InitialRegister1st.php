@@ -110,7 +110,7 @@
       UpdateSQL ($strQuery,"delete");
       $strQuery = "DELETE FROM tblmenu WHERE vcLink='InitialRegister1st.php' LIMIT 1;";
       UpdateSQL ($strQuery,"delete");
-      unlink("test.txt");
+      unlink("InitialRegister1st.php");
     }
     else
     {
