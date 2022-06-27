@@ -11,7 +11,8 @@ $ErrMsg = "We seem to be experiencing some technical difficulties, " .
           "If you have any questions please contact us at support@example.com.";
 
 /*
-Decide How you want to keep and access environment variables and secrets by including (aka requiring) the appropriate file
+Decide where and how secure you want to keep and access environment variables and secrets
+by including (aka requiring) the appropriate file
 secrets.php     : You want to hard code all your secrets in file, along with other environment values.
                   While this is a very convenient solution it is the least secure method.
                   It is critical that you gitignore this file to keep it as secret as possibl
@@ -27,7 +28,7 @@ AkeylessVar.php : Another highly secure and recommended approach. See https://in
 */
 
 
-require("AkeylessVar.php");
+require("DopplerVar.php");
 
 if ($DBServerName == "" or $UID == "" or $PWD == "" or $MailUser == ""
     or $MailPWD == "" or $MailHost == "" or $MailHostPort == ""
