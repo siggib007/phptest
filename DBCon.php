@@ -13,9 +13,8 @@ $ErrMsg = "We seem to be experiencing some technical difficulties, " .
 
 // Decide How you want to keep and access environment variables and secrets
 
-// uncomment this line if you want to store it all in a special secrets file
-// make sure you gitignore this file
-require("secrets.php");
+// uncomment this line if you want to store it all in a special secrets file. make sure you gitignore this file
+// require("secrets.php");
 
 // If you rather store everything in evironment variables uncomment this block
 /* $DBServerName = getenv("MYSQL_HOST");
@@ -64,6 +63,15 @@ else
   }
 }
 # end Fetching Doppler secrets
+
+if ($DBServerName == "" or $UID == "" or $PWD == "" or $MailUser == ""
+    or $MailPWD == "" or $MailHost == "" or $MailHostPort == ""
+    or $UseSSL =="" or $UseStartTLS =="")
+    {
+      error_log("One or more of the required email and DB creds variable are blank" );
+      error_log("Make sure database connections and email server conf in DBCon.php are correct.");
+      ShowErrHead();
+    }
 
 date_default_timezone_set('UTC');
 $DefaultDB = "PHPDemo" ;
@@ -122,13 +130,13 @@ try
 catch (Exception $e)
 {
   error_log("Error while attempting to create a new mysqli client:" . $e->getMessage());
-  error_log($e->getFile() . " line " . $e->getLine());
-  Log_BackTrace($e->getTrace(), "Here is the backtrace");
+  error_log("Make sure database connections in DBCon.php are correct.");
   ShowErrHead();
 }
 if ($dbh->connect_errno)
 {
     error_log( "Failed to connect to MySQL. Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);
+    error_log("Make sure database connections in DBCon.php are correct.");
     $DBError="true";
 }
 else
