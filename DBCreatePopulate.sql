@@ -287,13 +287,6 @@ UPDATE tblmenutype SET iMenuOrder = NewPos WHERE iMenuID = MenuID and vcMenuType
 END//
 DELIMITER ;
 
--- Dumping structure for procedure PHPDemo.spUserMap
-DELIMITER //
-CREATE PROCEDURE `spUserMap`(IN iMapUserID int)
-SELECT i.iInterestId, i.vcInterest, if(isnull(m.vcComment),'','Checked') bChecked
-FROM tblInterests i left join (select * from tblInterestMap where iUserid=iMapUserID) m on i.iInterestId = m.iInterestId//
-DELIMITER ;
-
 -- Dumping structure for table PHPDemo.tblAdminCategories
 CREATE TABLE IF NOT EXISTS `tblAdminCategories` (
   `iCatID` tinyint(4) NOT NULL AUTO_INCREMENT,
