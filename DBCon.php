@@ -12,11 +12,25 @@ $ErrMsg = "We seem to be experiencing some technical difficulties, " .
           "If you have any questions please contact us at support@example.com.";
 
 /*
+Following secrets and environment variables are requried:
+
+DBServerName # FQDN of the Database server
+DefaultDB    # Database Name
+UID          # Database Username
+PWD          # Database Password
+MailUser     # SMTP server Username
+MailPWD      # SMTP Password
+MailHost     # SMTP Server FQDN
+MailHostPort # TCP port to use when connecting to SMTP server
+UseSSL       # Establish an encrypted connection with SMTP server
+UseStartTLS  # Switch to encrypted connection post connection
+
 Decide where and how secure you want to keep and access environment variables and secrets
 by including (aka requiring) the appropriate file
 secrets.php     : You want to hard code all your secrets in file, along with other environment values.
                   While this is a very convenient solution it is the least secure method.
-                  It is critical that you gitignore this file to keep it as secret as possibl
+                  Sometimes this is only feasible option though.
+                  It is critical that you gitignore this file to keep it as secret as possible
                   and pay attention to the access rights at the operating system level.
 EnvVar.php      : You are storing all you secrets in OS level environment variables along with all other environment values
                   This is considered more secure than hard coding into a file but is still sub-optimal
@@ -45,7 +59,7 @@ $DefaultDB = "PHPDemo" ;
 $strRemoteIP = $_SERVER["REMOTE_ADDR"];
 $Priv = 0; // Default Privledge level is public or 0
 $strHost = $_SERVER["SERVER_NAME"];
-if ($_SERVER['SERVER_PORT'] != 80)
+if ($_SERVER['SERVER_PORT'] != 80 and $_SERVER['SERVER_PORT'] != 443)
 {
   $strHost .= ":".$_SERVER['SERVER_PORT'];
 }

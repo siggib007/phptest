@@ -16,7 +16,7 @@ To set this up using Docker and fetching secrets to Doppler run the following co
 
 Run the following commands from your terminal. FYI I'm doing this on a Windows 10 box and Docker Desktop for Windows. 
 
-1. git clone https://github.com/siggib007/phptest.git
+1. git clone https://github.com/siggib007/phptest.git phpdemo
 2. doppler import
 3. doppler setup -c dev -p PHPDemo
 4. doppler run -- docker-compose up -d
@@ -31,6 +31,6 @@ If you would rather deploy this manually to PHP server and a mySQL or MariaDB se
 2. Deploy all the php and CSS files from this repo to your php enabled web server
 3. Adjust DBConf.php according to how you are handling secrets and environmental varialbles. 
 4. Create any required environment variables and make sure they are exposed to the PHP engine.
-   1. I put them in httpd.conf during my testing using the format:
-      1. SetEnv DopplerKEY "topsecret key"
+   I put them in httpd.conf during my testing using the format:
+   `SetEnv DOPPLERKEY "topsecret key"`
 5. If you want to use AKEYLESS system there is a shell script file aKeylessImport.sh that will create all the secrets needed, assuming you have their CLI installed. You would then adjust these values as necessary. I recommend against having password and API authentication keys in any sort of shell scripting or import file, rather manually update those on the CLI or in the GUI later.
