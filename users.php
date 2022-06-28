@@ -13,7 +13,7 @@
     if ($btnSubmitValue == 'Export user to CSV file')
     {
         require_once("DBCon.php");
-        $filename = "StudioBDance_Users_".date("Y-m-d_Hi",time()).".csv";
+        $filename = "Example_Users_".date("Y-m-d_Hi",time()).".csv";
         header("Content-type: application/vnd.ms-excel");
         header("Content-Disposition: attachment; filename=$filename");
         print "Name,Unit,Phone,Email,Addr1,Addr2,City,State,Zip,Country,AuthCode,UserType,UnitUse\n";

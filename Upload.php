@@ -105,10 +105,10 @@
             print "Total size uploaded " .with_unit($SizeTotal) . "</p>\n";
             if ($WritePriv >  $Priv)
             {
-                $strEmailBody = "$UsersName has submitted the following files for the Studio B Dance photo gallary\n";
+                $strEmailBody = "$UsersName has submitted the following files for the photo gallary\n";
                 $strEmailBody .= str_replace("<br>","",$FileList);
                 $strEmailBody .= "Total size uploaded " .with_unit($SizeTotal) . "\n";
-                if (EmailText("$SupportEmail","Studio B Dance File upload Notification",$strEmailBody,$FromEmail))
+                if (EmailText("$SupportEmail","File upload Notification",$strEmailBody,$FromEmail))
                 {
                     print "<p class=\"MainText\">We have been notified of your contribution</p>\n";
                 }

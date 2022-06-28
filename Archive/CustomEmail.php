@@ -31,14 +31,6 @@ $strAttach = "";
 $strAddHeader = "X-Testing:This is my test header";
 $response = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader);
 print "$response <br>\n";
-// print "then from studio b<br>\n";
-// $strHTMLMsg = "Studio B email testing";
-// $FromEmail = "Studio B Dance|info@example.com";
-// $toEmail = "Siggi Bjarnason|siggi@bjarnason.us";
-// $strSubject = "More Studio B Sendmail function test";
-// $response = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$strAddHeader);
-
-// print "Successfully sent $response recepients<br>\n";
 
 print "<br>I'm all done<br>\n";
 //require("footer.php");

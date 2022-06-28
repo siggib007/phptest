@@ -68,25 +68,6 @@ else
   $SiteType = $strHostNameParts[0];
 }
 
-//switch ($SiteType)
-//{
-//    case "192":
-//    case "a":
-//    case "b":
-//        $DefaultDB = "siggib_studiob";
-//        $ROOTPATH = "/studiob/";
-//        $DBServerName = "localhost";
-//        break;
-//    case "beta":
-//        $DefaultDB = "studiob_beta";
-//        $ROOTPATH = "/";
-//        break;
-//    default:
-//        //$DefaultDB = "studiob";
-//        $ROOTPATH = "/";
-//        break;
-//}
-//$strURL = "http://" . $strHost . $ROOTPATH;
 $strURL = "Localhost/";
 
 // mysqli_set_charset("utf8");

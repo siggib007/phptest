@@ -13,19 +13,19 @@
             <TABLE border="0" cellPadding="4" cellSpacing="0">
                 <TR>
                     <TD align="center" vAlign="middle">
-                        <img border="0" src="img/StudioB320.jpg" align="center" height="150">
+                        <img border="0" src="img/PHPDemoBanner.png" align="center" height="150">
                     </TD>
                 </TR>
             </TABLE>
         </div>
         <p class="Header1">Technical Difficulties</p>
         <p class="Attn" align=center>
-            We seem to be experiencing some technical difficulties, 
+            We seem to be experiencing some technical difficulties,
             hopefully we'll have it resolved shortly.<br>
-            If you have any questions please contact us at support@example.com.        
+            If you have any questions please contact us at support@example.com.
         </p>
     </body>
 </HTML>
-Error <!--#echo var="REDIRECT_STATUS" --> 
+Error <!--#echo var="REDIRECT_STATUS" -->
 When requesting <!--#echo var="HTTP_HOST" --><!--#echo var="REQUEST_URI" --><BR>
 You are using <!--#echo var="HTTP_USER_AGENT" --><BR>

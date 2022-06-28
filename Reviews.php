@@ -1,7 +1,7 @@
 <?php
 require "header.php";
 
-print "<p class=\"Header1\">Share Your Studio B Experience</p>\n";
+print "<p class=\"Header1\">Share Your Experience</p>\n";
 print "<center>";
 
 $strQuery = "select vcSiteName, vcSiteURL, vcImgPath from tblReviewSiteURL;";
