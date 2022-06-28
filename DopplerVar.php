@@ -1,5 +1,5 @@
 <?php
-$arrSecretValues = FetchDopplerStatic("phpdev","dev");
+$arrSecretValues = FetchDopplerStatic("phpdemo","dev");
 if (array_key_exists("secrets",$arrSecretValues))
 {
   $DBServerName = $arrSecretValues["secrets"]["MYSQL_HOST"]["computed"];

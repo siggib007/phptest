@@ -19,3 +19,4 @@ projects:
         EMAILUSER: ${shared.dev.EMAILUSER}
         USESSL: "True"
         USESTARTTLS: "False"
+        DOPPLERKEY: "setTheKey"
