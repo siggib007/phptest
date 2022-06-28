@@ -17,6 +17,5 @@ projects:
         EMAILPWD: ${shared.dev.EMAILPWD}
         EMAILSERVER: ${shared.dev.EMAILSERVER}
         EMAILUSER: ${shared.dev.EMAILUSER}
-        USESSL: True
-        USESTARTTLS: False
-
+        USESSL: "True"
+        USESTARTTLS: "False"

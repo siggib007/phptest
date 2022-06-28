@@ -588,7 +588,7 @@ function FetchDopplerStatic ($strProject,$strConfig)
     # with the secret name as key and the secret as the value
     # If success = false, there will a array of messages under top level key of messages with error messages
     # Requires DopplerKEY as environment variables
-    $AccessKey = getenv("DopplerKEY");
+    $AccessKey = getenv("DOPPLERKEY");
     $APIEndpoint = "https://api.doppler.com";
     $Service = "/v3/configs/config/secrets";
     $method = "GET";
