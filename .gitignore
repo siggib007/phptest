@@ -1,9 +1,11 @@
 secrets.php
 Secrets.php
-img/
 *.~1~
 *.txt
 *.jpg
+*.png
+*.gif
 *.sql~
 .bzr/
 *.bak
+!img/PHPDemoBanner.png
