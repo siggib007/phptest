@@ -25,11 +25,13 @@ EnvVar.php      : You are storing all you secrets in OS level environment variab
 DopplerVar.php  : This is a highly secure and recommended approach. See https://infosechelp.net/secrets-management/
                   for how to work with Doppler if you are not familiar with Doppler.
                   Requires a single env variable of DopplerKEY for the API key to the appropriate Doppler configuration
+                  Also needs to have what project and configuration to pull. Uses $DopplerProj and $DopplerConf for that
 AkeylessVar.php : Another highly secure and recommended approach. See https://infosechelp.net/secrets-management-a-key-less-edition
                   if you are not familiar with the Secret Management system from AKEYLESS.
                   Requires a two env variables: KEYLESSID and KEYLESSKEY for authenticating to the AKEYLESS API Secrets Vault
 */
 
-
+$DopplerProj = "phpdemo";
+$DopplerConf = "dev";
 require("DopplerVar.php");
 ?>

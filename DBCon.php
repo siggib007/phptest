@@ -62,7 +62,8 @@ try
 }
 catch (Exception $e)
 {
-  error_log("Error while attempting to create a new mysqli client:" . $e->getMessage());
+  error_log("Error while attempting to create a new mysqli client to $DBServerName.$DefaultDB using $UID and password that starts with "
+            . substr($PWD,0,3) . " " . $e->getMessage());
   error_log("Make sure database connections in DBCon.php are correct.");
   ShowErrHead();
 }

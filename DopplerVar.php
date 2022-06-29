@@ -1,8 +1,9 @@
 <?php
-$arrSecretValues = FetchDopplerStatic("phpdev","dev");
+$arrSecretValues = FetchDopplerStatic($DopplerProj,$DopplerConf);
 if (array_key_exists("secrets",$arrSecretValues))
 {
   $DBServerName = $arrSecretValues["secrets"]["MYSQL_HOST"]["computed"];
+  $DefaultDB = $arrSecretValues["secrets"]["MYSQL_DB"]["computed"];
   $UID = $arrSecretValues["secrets"]["MYSQL_USER"]["computed"];
   $PWD = $arrSecretValues["secrets"]["MYSQL_PASSWORD"]["computed"];
   $MailUser = $arrSecretValues["secrets"]["EMAILUSER"]["computed"];
