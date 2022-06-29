@@ -31,7 +31,7 @@ AkeylessVar.php : Another highly secure and recommended approach. See https://in
                   Requires a two env variables: KEYLESSID and KEYLESSKEY for authenticating to the AKEYLESS API Secrets Vault
 */
 
-$DopplerProj = "phpdemo";
+$DopplerProj = "phpdev";
 $DopplerConf = "dev";
 require("DopplerVar.php");
 ?>
