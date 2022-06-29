@@ -17,7 +17,8 @@ else
 {
   if (array_key_exists("messages",$arrSecretValues))
   {
-    $strMsg = "There was an issue fetching the secrets: ";
+    $AccessKey = getenv("DOPPLERKEY");
+    $strMsg = "There was an issue fetching the secrets from $DopplerProj - $DopplerConf. Key starts with '" . substr($AccessKey,0,6) ."'";
     foreach ($arrSecretValues["messages"] as $msg)
     {
       $strMsg .= "$msg. ";

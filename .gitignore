@@ -9,4 +9,3 @@ Secrets.php
 .bzr/
 *.bak
 !img/PHPDemoBanner.png
-ExtVars.php
