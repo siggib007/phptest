@@ -18,8 +18,9 @@ Run the following commands from your terminal. FYI I'm doing this on a Windows 1
 
 1. git clone https://github.com/siggib007/phptest.git phpdemo
 2. doppler import
-3. doppler setup -c dev -p PHPDemo
-4. doppler run -- docker-compose up -d
+3. In DopplerVar.php line 2, change phpdev to phpdemo
+4. doppler setup -c dev -p PHPDemo
+5. doppler run -- docker-compose up -d
 
 That should be it, you should be good to go now. Just open up a browser to http://localhost:88 and create yourself an account in this demo system.
 

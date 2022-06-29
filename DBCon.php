@@ -55,6 +55,7 @@ else
 
 $strURL = "Localhost/";
 
+
 // mysqli_set_charset("utf8");
 try
 {
@@ -68,7 +69,7 @@ catch (Exception $e)
 }
 if ($dbh->connect_errno)
 {
-    error_log( "Failed to connect to MySQL. Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);
+    error_log( "Failed to connect to MySQL using $UID and password that starts with " . substr($PWD,0,3) . " Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);
     error_log("Make sure database connections in DBCon.php are correct.");
     $DBError="true";
 }
