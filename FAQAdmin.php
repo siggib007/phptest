@@ -64,11 +64,11 @@
 
 	//Print the normal form after update is complete.
 	print "<table>\n<tr><th class=lbl>Update existing FAQ</th>";
-        print "<th width = 100></th>";
-        if (!isset($_POST['iFAQid']))
-        {
-            print "<th class=lbl>Or Insert New one</th>";
-        }
+  print "<th width = 100></th>";
+  if (!isset($_POST['iFAQid']))
+  {
+      print "<th class=lbl>Or Insert New one</th>";
+  }
 	print "</tr>\n<tr>\n<td valign=\"top\">\n<table border = 0>\n";
 	$strQuery = "select iFAQid, vcQuestion, tAnswer from tblFAQ;";
 	if (!$Result = $dbh->query ($strQuery))
