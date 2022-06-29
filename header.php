@@ -97,6 +97,10 @@ if ($WritePriv == '')
   $WritePriv = 0;
 }
 $strHeader = "$HeadAdd " . $dbHead;
+if ($_SERVER['SERVER_PORT'] != 80 and $_SERVER['SERVER_PORT'] != 443)
+{
+  $strHeader = "[p" . $_SERVER['SERVER_PORT'] . "] " . $strHeader;
+}
 
 if ($iMenuID)
 {
