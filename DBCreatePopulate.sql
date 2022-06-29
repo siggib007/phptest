@@ -332,7 +332,8 @@ INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) 
 	('ShowAdminSub', 'True', 'Show Administrative sub menu', 'Boolean'),
 	('UserTimeout', '25', 'User Login Timeout (minutes)', 'int'),
 	('NewPWDLen', '15', 'Initial Random Password Length', 'int'),
-	('AllowReg', 'true', 'Allow Self Registraton', 'Boolean'),
+	('ShowPort', 'true', 'Show non standard port in header name', 'Boolean'),
+  ('AllowReg', 'true', 'Allow Self Registraton', 'Boolean'),
 	('InitSetup', 'True', 'Initial Setup Mode is active. This should not exists past setup', 'Boolean');
 
 -- Dumping structure for table PHPDemo.tblContactInfo
