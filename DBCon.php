@@ -26,7 +26,7 @@ if ($DBServerName == "" or $UID == "" or $PWD == "" or $MailUser == ""
     }
 
 date_default_timezone_set('UTC');
-$DefaultDB = "PHPDemo" ;
+$DefaultDB = $DefaultDB;
 $strRemoteIP = $_SERVER["REMOTE_ADDR"];
 $Priv = 0; // Default Privledge level is public or 0
 $strHost = $_SERVER["SERVER_NAME"];
