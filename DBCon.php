@@ -26,7 +26,6 @@ if ($DBServerName == "" or $UID == "" or $PWD == "" or $MailUser == ""
     }
 
 date_default_timezone_set('UTC');
-$DefaultDB = $DefaultDB;
 $strRemoteIP = $_SERVER["REMOTE_ADDR"];
 $Priv = 0; // Default Privledge level is public or 0
 $strHost = $_SERVER["SERVER_NAME"];
@@ -69,7 +68,7 @@ catch (Exception $e)
 }
 if ($dbh->connect_errno)
 {
-    error_log( "Failed to connect to MySQL using $UID and password that starts with " . substr($PWD,0,3) . " Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);
+    error_log( "Failed to connect to $DBServerName.$DefaultDB using $UID and password that starts with " . substr($PWD,0,3) . " Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);
     error_log("Make sure database connections in DBCon.php are correct.");
     $DBError="true";
 }
