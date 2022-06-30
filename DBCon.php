@@ -233,5 +233,19 @@ else
   $strPageURL = $strProto . $strHost . $strURI;
   $PostVarCount = count($_POST);
   $dtNow = date("Y-m-d H:i:s");
+
+  $strQuery = "SELECT vcTextName, tPageTexts FROM tblPageTexts;";
+  if (!$Result = $dbh->query ($strQuery))
+  {
+      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
+      error_log ($strQuery);
+      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
+      exit(2);
+  }
+  while ($Row = $Result->fetch_assoc())
+  {
+    $TextArray[$Row['vcTextName']] = $Row['tPageTexts'];
+  }
+
 }
 ?>

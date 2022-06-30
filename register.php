@@ -21,27 +21,8 @@
         exit;
     }
 
-    $strQuery = "SELECT vcTextName, tPageTexts FROM tblPageTexts WHERE vcTextName IN ('RegFoot', 'RegHead');";
-    if (!$Result = $dbh->query ($strQuery))
-    {
-        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-        exit(2);
-    }
-
-    while ($Row = $Result->fetch_assoc())
-    {
-        switch ($Row['vcTextName'])
-        {
-            case "RegFoot":
-                    $RegFoot = $Row['tPageTexts'];
-                    break;
-            case "RegHead":
-                    $RegHeader = $Row['tPageTexts'];
-                    break;
-        }
-    }
+    $RegFoot = $TextArray["RegFoot"];
+    $RegHeader = $TextArray["RegHead"];
 
     $strName = "";
     $strAddr1 = "";

@@ -24,24 +24,7 @@
     $strQuery = "UPDATE tblmenu SET iReadPriv='300' WHERE vcLink = 'FileInv.php';";
     UpdateSQL ($strQuery,"update");
 
-    $strQuery = "SELECT vcTextName, tPageTexts FROM tblPageTexts WHERE vcTextName IN ('SetupReg');";
-    if (!$Result = $dbh->query ($strQuery))
-    {
-      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-
-    while ($Row = $Result->fetch_assoc())
-    {
-      switch ($Row['vcTextName'])
-      {
-        case "SetupReg":
-          $RegHeader = $Row['tPageTexts'];
-          break;
-      }
-    }
+    $RegHeader = $TextArray["RegForm"];
 
     $strQuery = "SELECT iPrivLevel FROM tblprivlevels WHERE vcPrivName LIKE '%admin%';";
     if (!$Result = $dbh->query ($strQuery))

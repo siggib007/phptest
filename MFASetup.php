@@ -54,6 +54,7 @@
   }
 
   print "<p class=\"Header1\">TOTP MFA Setup</p>\n";
+  $AuthApp = $TextArray["AuthApp"];
   if ($strUserEmail != "")
   {
     spl_autoload_register(
@@ -65,9 +66,7 @@
     print "<p class=\"Header2\">Setting up TOTP MFA (AKA Google Auth) for $strUserName</p>\n";
     if ($btnSubmit == "")
     {
-      print "<p class=\"MainTextCenter\">Please make sure you have a TOTP capable Authenticator app on your mobile. "
-            ."Google, Microsoft, LastPass, amongst others, all make compatible authenticators. They are all called Authenticator in the store."
-            ."Authy is my personal favorite TOTP Authenticator. When I talk about app below I'm referring to this authenticator app</p>\n";
+      print "<p class=\"MainTextCenter\">$AuthApp</p>\n";
     }
 
     $tfa = new TwoFactorAuth($ProdName);
