@@ -300,8 +300,8 @@
         }
         else
         {
-            print("<p class=\"Error\">Registration number seems to have gotten lost in transport. Please try again" .
-                        "<br>Feel free to contact us at $SupportEmail if you have questions.</p>\n");
+            print "<p class=\"Error\">Registration number seems to have gotten lost in transport. Please try again" .
+                        "<br>Feel free to contact us at $SupportEmail if you have questions.</p>\n";
         }
     }
 

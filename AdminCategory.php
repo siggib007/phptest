@@ -15,7 +15,7 @@
     $btnSubmit = "";
 	}
 
-	print("<p class=\"Header1\">Administrative Categories</p>\n");
+	print "<p class=\"Header1\">Administrative Categories</p>\n";
 
 	if ($btnSubmit == 'Save')
 	{

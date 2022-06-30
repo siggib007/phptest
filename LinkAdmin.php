@@ -7,7 +7,7 @@
 		exit;
 	}
 
-	print("<p class=\"Header1\">Link Administration</p>\n");
+	print "<p class=\"Header1\">Link Administration</p>\n";
 
 	if (($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
 	{
@@ -68,7 +68,7 @@
 	print "<tr><td colspan=2 align=center class=lbl>Insert New Link</td></tr>\n";
 	$strQuery = "select iCatID, vcCategory from tbllinkcategory order by vcCategory;";
 	print "<tr>\n<td align = right class = lbl>Link Category: </td>\n";
-	print("<td>\n<select size=\"1\" name=\"cmbCategory\">\n");
+	print "<td>\n<select size=\"1\" name=\"cmbCategory\">\n";
 	if (!$Result2 = $dbh->query ($strQuery))
 	{
 		error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
@@ -78,9 +78,9 @@
 
 	while ($Row2 = $Result2->fetch_assoc())
 	{
-		print("<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n");
+		print "<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n";
 	}
-	print("</select>\n</td>");
+	print "</select>\n</td>";
 	print "<tr>\n<td align = right class = lbl>Link: </td>\n";
 	print "<td><input type=\"text\" name=\"txtLink\" size=\"60\" ></td>\n</tr>\n";
 	print "<tr>\n<td align = right class = lbl>Name: </td>\n";
@@ -110,7 +110,7 @@
 			print "<td class=\"lbl\"><input type=\"hidden\" value=\"$Row[iLinkID]\" name=\"iLinkID\"> </td>\n";
 			$strQuery = "select iCatID, vcCategory from tbllinkcategory order by vcCategory;";
 			//print "$strQuery<br>\n";
-			print("<td>\n<select size=\"1\" name=\"cmbCategory\">\n");
+			print "<td>\n<select size=\"1\" name=\"cmbCategory\">\n";
 			if (!$Result2 = $dbh->query ($strQuery))
 			{
 				error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
@@ -121,14 +121,14 @@
 			{
 				if ($Row2['iCatID'] == $Row['iCategory'])
 				{
-					print("<option selected value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n");
+					print "<option selected value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n";
 				}
 				else
 				{
-					print("<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n");
+					print "<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n";
 				}
 			}
-			print("</select>\n</td>");
+			print "</select>\n</td>";
 			print "<td><input type=\"text\" value=\"$Row[vcLink]\" name=\"txtLink\" size=\"50\" ></td>\n";
 			print "<td><input type=\"text\" value=\"$Row[vcName]\" name=\"txtName\" size=\"30\" ></td>\n";
 			print "<td><input type=\"text\" value=\"$Row[vcComment]\" name=\"txtComment\" size=\"50\" ></td>\n";

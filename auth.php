@@ -130,7 +130,7 @@
       $strUPWD = "";
     }
     $strEPWD = crypt($strPWD,$salt);
-//		print("Correct password:$strUPWD<br>\nYou entered:$strPWD which encrypts to $strEPWD using a salt of $salt<br>\n");
+//		print "Correct password:$strUPWD<br>\nYou entered:$strPWD which encrypts to $strEPWD using a salt of $salt<br>\n";
     if ($strUPWD==$strEPWD)
     {
       //print "Login Successful<br>\n";
@@ -147,7 +147,7 @@
       }
 
       $strQuery = "update tblUsers set dtLastLogin = '$dtNow' where iUserID='$iUserID'";
-      //print("<p>$strQuery</p>");
+      //print "<p>$strQuery</p>";
       if (!$dbh->query ($strQuery))
       {
         $strError = 'Database update during loginfailed. Error ('. $dbh->errno . ') ' . $dbh->error;
@@ -158,14 +158,14 @@
       else
       {
         header("Location: " . $strReturn );
-        //print("<p class=\"Header1\">Welcome $Row[vcName] !!</p>");
-        //print("<p class=\"MainText\">You have level $iPrivlvl clerance. I need to take you back to $strReturn</p>\n");
+        //print "<p class=\"Header1\">Welcome $Row[vcName] !!</p>";
+        //print "<p class=\"MainText\">You have level $iPrivlvl clerance. I need to take you back to $strReturn</p>\n";
       }
     }
     else
     {
       require_once("header.php");
-      print("<p class=\"Attn\">Invalid username or password</p>");
+      print "<p class=\"Attn\">Invalid username or password</p>";
       require("LoginIncl.php");
       require_once("footer.php");
     }

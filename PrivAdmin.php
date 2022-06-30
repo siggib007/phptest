@@ -59,7 +59,7 @@
         print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
         exit(2);
     }
-    print("<select size=\"1\" name=\"cmbPriv\">\n");
+    print "<select size=\"1\" name=\"cmbPriv\">\n";
 
     while ($Row = $Result->fetch_assoc())
     {
@@ -103,7 +103,7 @@
             break;
     }
     print "<p align=\"center\">Choose users to change priviledges for:\n<br>\n";
-    print("<select size=\"10\" multiple name=\"cmbUser[]\" style=\"min-width: 100px;\">\n");
+    print "<select size=\"10\" multiple name=\"cmbUser[]\" style=\"min-width: 100px;\">\n";
 
     while ($Row = $Result->fetch_assoc())
     {
@@ -121,7 +121,7 @@
         print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
         exit(2);
     }
-    print("<select size=\"1\" name=\"cmbPrivUpdate\">\n");
+    print "<select size=\"1\" name=\"cmbPrivUpdate\">\n";
 
     while ($Row = $Result->fetch_assoc())
     {

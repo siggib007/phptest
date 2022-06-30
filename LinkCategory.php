@@ -15,7 +15,7 @@
 		$btnSubmit = "";
 	}
 
-	print("<p class=\"Header1\">Link Categories</p>\n");
+	print "<p class=\"Header1\">Link Categories</p>\n";
 
 	if (($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
 	{

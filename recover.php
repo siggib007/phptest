@@ -20,7 +20,7 @@
         $Row = $Result->fetch_assoc();
         if ($Row['vcEmail']!=$strEmail)
         {
-            print("Sorry can't find that email address. Please contact us at $SupportEmail for further help");
+            print "Sorry can't find that email address. Please contact us at $SupportEmail for further help";
         }
         else
         {
@@ -55,19 +55,19 @@
 
                 if(EmailText($toEmail,"Your Password request",$StrMsg,$fromEmail))
                 {
-                    print("<p class=\"MainText\">We have reset your password and emailed the new one to you.</p>\n");
+                    print "<p class=\"MainText\">We have reset your password and emailed the new one to you.</p>\n";
                 }
             }
             else
             {
-                print("<p class=\"Error\">There was an unknown error when attempting to email your password. " .
-                                    "Please let us know at $SupportEmail</p>\n");
+                print "<p class=\"Error\">There was an unknown error when attempting to email your password. " .
+                                    "Please let us know at $SupportEmail</p>\n";
             }
         }
     }
     else
     {
-        print("email is required to look up your password.");
+        print "email is required to look up your password.";
     }
 
     require("footer.php");

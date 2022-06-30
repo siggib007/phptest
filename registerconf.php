@@ -115,30 +115,30 @@
 					$StrMsg = str_replace("&quot;",'"',$StrMsg);
 					if(mail($toEmail,"Thanks for registering at $strHost",$StrMsg . $StrMsg2,$fromEmail))
 					{
-						print("<p class=\"MainText\">Your signup was successful and an confirmation email was sent to $strEmail." .
+						print "<p class=\"MainText\">Your signup was successful and an confirmation email was sent to $strEmail." .
 							" If you entered the wrong email address just registered again with the correct email." .
 							" This confirmation email contains a username and password. Please use this user name and password to login and view/change your info." .
-							" Please login to confirm your account.</p>\n<p>Please make sure you check your spam or junk folder for email from $FromEmail</p>\n");
+							" Please login to confirm your account.</p>\n<p>Please make sure you check your spam or junk folder for email from $FromEmail</p>\n";
 					}
 					else
 					{
-						print("<p class=\"Error\">Signup was successful but Failed to send the confirmation email</p>");
-						print("<p class=\"Error\">Please notify us at $SupportEmail, " .
-								"including the email address you used to sign up with.</p>\n");
+						print "<p class=\"Error\">Signup was successful but Failed to send the confirmation email</p>";
+						print "<p class=\"Error\">Please notify us at $SupportEmail, " .
+								"including the email address you used to sign up with.</p>\n";
 					}
 					unset($_SESSION["POSTArray"]);
 				}
 				else
 				{
-					print("<p class=\"Error\">Email address wasn't provided thus can't send confirmation email</p>");
+					print "<p class=\"Error\">Email address wasn't provided thus can't send confirmation email</p>";
 				}
 			}
 			mail("$SupportEmail","New registration at $strHost",$StrMsg,$fromEmail);
 		}
 		else
 		{
-			print("The email address you provided is already registered. Please log in to view/change your information. " .
-				"If you have forgot your username or password you can have the systerm email it to you.");
+			print "The email address you provided is already registered. Please log in to view/change your information. " .
+				"If you have forgot your username or password you can have the systerm email it to you.";
 		}
 	}
 	else
@@ -150,7 +150,7 @@
 			$strQuery = "INSERT INTO `tblSpamLog` (`vcIPAddress`, `vcContent`) VALUES ('$strRemoteIP', '$strContent');";
 			if ($dbh->query ($strQuery))
 				{
-					//print("$Database insert successful<br>\n");
+					//print "$Database insert successful<br>\n";
 				}
 			else
 				{
@@ -161,13 +161,13 @@
 				}
 			$strComment = "Your registration has been flagged as spam as it contained $strReason, and was not saved. Your IP has been logged";
 			$_SESSION["SpamComment"]= $strComment;
-//			print("<p class=\"Error\">$strComment</p>");
+//			print "<p class=\"Error\">$strComment</p>";
 		}
 		if ($bValid == "no")
 		{
 			$strComment = "Required information missing. $strReason Your registration was not saved, please resubmit.";
 			$_SESSION["InvalidComment"]= $strComment;
-//			print("<p class=\"Error\">$strComment</p>");
+//			print "<p class=\"Error\">$strComment</p>";
 		}
 		$_SESSION["ReasonArray"]= $arrReason;
 		header("Location: register.php");

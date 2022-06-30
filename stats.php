@@ -90,7 +90,7 @@
 		$Row =$Result->fetch_assoc();
 		$strStatName = $Row['vcStatName'];
 		print "<center><p class=alert>Are you sure you wish to delete statistic with the label \"$strStatName\"? </p>\n";
-		print("Just leave this page anyway you please if you do not want to delete it.</p>\n");
+		print "Just leave this page anyway you please if you do not want to delete it.</p>\n";
 		print "<form method=\"POST\">\n";
 		print "<p><input type=\"Submit\" value=\"Yes I am sure!\" name=\"btnSubmit\"></p>";
 		print "<input type=\"hidden\" value=\"$iStatID\" name=\"txtStatID\"></form>\n</center>\n";

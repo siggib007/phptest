@@ -7,7 +7,7 @@
         exit;
     }
 
-    print("<p class=\"Header1\">Site Configuration</p>\n");
+    print "<p class=\"Header1\">Site Configuration</p>\n";
 
     if (($PostVarCount == 1) and ($_POST['btnSubmit'] == 'Go Back'))
     {
