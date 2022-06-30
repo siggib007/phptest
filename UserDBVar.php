@@ -20,4 +20,5 @@
     $strCell = $Row['vcCell'];
     $strUID = $Row['vcUID'];
     $dtUpdated = $Row['dtUpdated'];
+    $strTOTP = $Row['vcMFASecret'];
 ?>

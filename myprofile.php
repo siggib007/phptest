@@ -23,6 +23,7 @@
     exit;
   }
 
+  print "<p class=\"Header1\">My Profile</p>\n";
   if (isset($_POST['btnSubmit']))
   {
     $btnSubmit = $_POST['btnSubmit'];
@@ -57,14 +58,14 @@
             if(EmailText("$SupportEmail","Automatic Error Report", $strError . "\n\n\n" . $strQuery ,"From:$SupportEmail"))
             {
               print "<p class=\"Error\">We seem to be experiencing technical difficulties. " .
-              "We have been notified. Please try again later. If you have any " .
-              "questions you can contact us at $SupportEmail.</p>";
+                    "We have been notified. Please try again later. If you have any " .
+                    "questions you can contact us at $SupportEmail.</p>";
             }
             else
             {
               print "<p class=\"Error\">We seem to be experiencing technical difficulties. " .
-                      "Please send us a message at $SupportEmail with information about " .
-                      "what you were doing.</p>";
+                    "Please send us a message at $SupportEmail with information about " .
+                    "what you were doing.</p>";
             }
           }
         }
@@ -84,7 +85,7 @@
     else
     {
       print "<p class=\"Error\">Registration number seems to have gotten lost in transport. Please try again" .
-                  "<br>Feel free to contact us at $SupportEmail if you have questions.</p>\n";
+            "<br>Feel free to contact us at $SupportEmail if you have questions.</p>\n";
     }
   }
 
@@ -161,14 +162,14 @@
           if ($Password == $PWDConf and $strUID != $strUID2)
           {
             print "<p>Requested username is already in use could not be changed, however the password will been changed. " .
-            "To change the username use a different username that is not in use. For example $strUID2 is available.</p>\n";
+                  "To change the username use a different username that is not in use. For example $strUID2 is available.</p>\n";
             $strQuery = "UPDATE tblUsers SET vcPWD = '$PWD' WHERE iUserID = '$iUserID'";
           }
           if ($Password != $PWDConf and $strUID != $strUID2)
           {
             print "<p>Passwords do not match so password was not changed. Requested username is already in use could not be changed. " .
-            "To change the username Try again and use a different username that is not in use. " .
-            "For example $strUID2 is available. When changing the password make sure you type the same one twice.</p>\n";
+                  "To change the username Try again and use a different username that is not in use. " .
+                  "For example $strUID2 is available. When changing the password make sure you type the same one twice.</p>\n";
           }
           if ($strQuery)
           {
@@ -181,6 +182,7 @@
 
   if ($btnSubmit !="Delete Account")
   {
+    print "<p class=\"Header2\">General Info</p>\n\n";
     $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = $Priv;";
     if (!$Result = $dbh->query ($strQuery))
     {
@@ -197,13 +199,17 @@
     }
 
     require("UserDBVar.php");
-
+    print "<div class=\"MainTextCenter\">\n";
     if ($dtUpdated=="")
     {
       print "<p class=\"Error\">This account has not been verified. Please verify the information, " .
-              "make any needed changes, then submit to verify your information.</p>\n";
+            "make any needed changes, then submit to verify your information.</p>\n";
     }
-
+    if ($strTOTP == "")
+    {
+      print "<p class=\"BlueNote\">You do not have MFA setup, to increase the security of your account " .
+            "please setup a MFA option at the bottom of this page <a href=#mfa>here</a></p>\n";
+    }
     print "<p>RegistrationID: $iUserID" ;
     $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = $iPrivLevel;";
     if (!$PrivResult = $dbh->query ($strQuery))
@@ -221,7 +227,7 @@
     }
 
     print "<p>Authorization level is set to $PrivName</p>\n";
-    print "<p class=\"Header2\">General Info</p>\n\n";
+    print "</div>\n";
     print "<form method=\"POST\">\n";
     require("UserRegForm.php");
     print "<tr>";
@@ -245,8 +251,17 @@
     print "<table border=\"0\" width=\"900\" class=\"center\">\n";
     print "<tr>";
     print "<td colspan=2 align=\"center\" >";
-    print "<p class=\"Header2\">MultiFactor Setup</p>\n";
-    print "To Setup TOTP MFA (AKA Google Authenticator) click <a href=MFASetup.php>here</a><br>\n";
+    print "<p class=\"Header2\"><a id=\"mfa\">MultiFactor Setup</a></p>\n";
+    print "<p class=\"Header3\">TOTP MFA (AKA Google Authenticator)</p>\n";
+    if ($strTOTP == "")
+    {
+      print "To Setup TOTP MFA click <a href=MFASetup.php>here</a><br>\n";
+    }
+    else
+    {
+      print "Thank you for securing your account with TOTP MFA. <br>\n";
+      print "To change your TOTP MFA setup click <a href=MFASetup.php>here</a><br>\n";
+    }
     print "</td>";
     print "</tr>";
     print "</table></form>\n";

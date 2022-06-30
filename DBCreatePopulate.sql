@@ -704,7 +704,6 @@ CREATE TABLE IF NOT EXISTS `tblUsers` (
   `iUserID` bigint(20) NOT NULL AUTO_INCREMENT,
   `vcName` varchar(50) NOT NULL,
   `vcEmail` varchar(50) NOT NULL,
-  `vcPhone` varchar(20) DEFAULT NULL,
   `vcCell` varchar(20) DEFAULT NULL,
   `vcAddr1` varchar(50) DEFAULT NULL,
   `vcAddr2` varchar(50) DEFAULT NULL,
