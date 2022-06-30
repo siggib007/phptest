@@ -603,6 +603,12 @@ table.ClassListing
     margin-top: 5px;
 }
 
+.MainTextCenter
+{
+    font-size:16px;
+    text-align: center;
+}
+
 .ClassDescr{
     font-size: 14px;
     margin-left: 10px;

@@ -9,4 +9,5 @@ unset ($_SESSION["LogoutReasonCount"]);
 unset ($_SESSION["UID"]);
 unset ($_SESSION["Reason"]);
 unset ($_SESSION["ReturnPage"]);
+unset ($_SESSION["2FASecret"]);
 ?>

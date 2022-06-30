@@ -718,6 +718,7 @@ CREATE TABLE IF NOT EXISTS `tblUsers` (
   `tMailSent` time DEFAULT NULL,
   `dtLastLogin` datetime DEFAULT NULL,
   `iPrivLevel` int(11) NOT NULL DEFAULT '1',
+  `vcMFASecret` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`iUserID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
