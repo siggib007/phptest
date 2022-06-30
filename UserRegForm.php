@@ -2,6 +2,9 @@
     $RegCol1 = 400;
     $RegCol2 = 500;
     $iNumCol = 3;
+    print "<p class=\"BlueAttn\">Only Name and email address is required. " .
+    "For the name just put two or more words you would like this system to use as your name. "
+    ."The email address you provide will be used to send initial password as well as password resets to.</p>\n";
     print "<table border=\"0\" width=\"900\" class=\"center\">\n";
     print "<tr>\n<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">Name: </td>\n";
     print "<td width=\"$RegCol2\"><input type=\"text\" name=\"txtName\" size=\"50\" value=\"$strName\">\n";
