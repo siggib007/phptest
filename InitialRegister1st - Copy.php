@@ -78,28 +78,28 @@
 
     if ($btnSubmitValue == 'Submit')
     {
-        require_once 'CleanReg.php';
+      require_once("CleanReg.php");
 
-        if ($strEmail)
-        {
-            $strNameParts = explode(' ',$strName);
-            $HowMany = count($strNameParts);
-            if ($HowMany==1)
-            {
-                print "<p class=\"Error\">Please provide both first and last name</p>";
-            }
-            else
-            {
-                if (!$bSpam)
-                {
-                    require 'UserAdd.php';
-                }
-            }
-        }
-        else
-        {
-            print "<p class=\"Error\">Can't create new admin account without an email..</p>";
-        }
+      if ($strEmail)
+      {
+          $strNameParts = explode(' ',$strName);
+          $HowMany = count($strNameParts);
+          if ($HowMany==1)
+          {
+            print "<p class=\"Error\">Please provide both first and last name</p>";
+          }
+          else
+          {
+              if (!$bSpam)
+              {
+                require("UserAdd.php");
+              }
+          }
+      }
+      else
+      {
+        print "<p class=\"Error\">Can't create new admin account without an email..</p>";
+      }
     }
     $bSuccess = $bRegOK;
     if ($bSuccess)
@@ -117,9 +117,9 @@
     {
         print "<p class=\"BlueAttn\">$RegHeader</p>";
         print "<form method=\"POST\">\n";
-        require 'UserRegForm.php';
+        require("UserRegForm.php");
         print "<tr>\n<td colspan=\"2\" align=\"center\"><input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\"></td>\n</tr>\n";
         print "</table>\n</form>\n";
     }
-    require ("footer.php");
+    require("footer.php");
 ?>

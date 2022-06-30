@@ -1,5 +1,5 @@
 <?php
-  require "header.php";
+  require("header.php");
   // print "<script src=\"ckeditor/ckeditor.js\"></script>\n";
 
   $TextTemplatefile = "TemplatePage.php";

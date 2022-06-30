@@ -1,5 +1,5 @@
 <?php
-    require "header.php";
+    require("header.php");
     print "<div class=Header1>Administration tasks</div>";
 
     $strCat = "";
@@ -65,5 +65,5 @@
     print "</tr>\n";
     print "</table>\n";
 
-    require "footer.php";
+    require("footer.php");
 ?>

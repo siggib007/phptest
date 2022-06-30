@@ -4,7 +4,7 @@ use PHPMailer\PHPMailer\Exception;
 
 $MailHost = getenv("EMAILSERVER");
 $MailHostPort = getenv("EMAILPORT");
-$MailUser = getenv("EMAILUSER");  
+$MailUser = getenv("EMAILUSER");
 $MailPWD = getenv("EMAILPWD");
 $UseSSL = getenv("USESSL");
 $UseStartTLS = getenv("USESTARTTLS");
@@ -12,7 +12,7 @@ $UseStartTLS = getenv("USESTARTTLS");
 function StripHTML ($content)
 {
   $unwanted = ['style','script'];
-  foreach ( $unwanted as $tag ) 
+  foreach ( $unwanted as $tag )
   {
     $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
   }
@@ -24,9 +24,9 @@ function StripHTML ($content)
 function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName = "", $strAttach = "", $strAddHeader = "", $strFile2Attach = "")
 {
 
-  require_once 'PHPMailer/Exception.php';
-  require_once 'PHPMailer/PHPMailer.php';
-  require_once 'PHPMailer/SMTP.php';
+  require_once("PHPMailer/Exception.php");
+  require_once("PHPMailer/PHPMailer.php");
+  require_once("PHPMailer/SMTP.php");
 
   $strHTMLMsg = preg_replace("/(<script>.*?<\/script>)/is","",$strHTMLMsg);
 
@@ -59,7 +59,7 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
       $mail->SMTPSecure = "";
     }
   }
-  
+
   // Construct email message
   $mail->setFrom($FromParts[1], $FromParts[0]);
   $mail->addAddress($ToParts[1], $ToParts[0]);
@@ -71,7 +71,7 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   // add string attachment
   if ($strAttach != "" and $strFileName != "")
   {
-    $mail->addStringAttachment($strAttach, $strFileName); 
+    $mail->addStringAttachment($strAttach, $strFileName);
   }
 
   // Process any custom headers
@@ -82,7 +82,7 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
       $mail->addCustomHeader($header);
     }
   }
-  else 
+  else
   {
     if ($strAddHeader != "")
     {
@@ -95,13 +95,13 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   {
     $mail->addAttachment($strFile2Attach);
   }
-  
+
   // send the message
- 
+
   if(!$mail->send())
   {
       return "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
-  } else 
+  } else
   {
       return "Message has been sent";
   }

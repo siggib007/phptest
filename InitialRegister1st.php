@@ -27,29 +27,29 @@
     $strQuery = "SELECT vcTextName, tPageTexts FROM tblPageTexts WHERE vcTextName IN ('SetupReg');";
     if (!$Result = $dbh->query ($strQuery))
     {
-        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-        exit(2);
+      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
+      error_log ($strQuery);
+      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
+      exit(2);
     }
 
     while ($Row = $Result->fetch_assoc())
     {
-        switch ($Row['vcTextName'])
-        {
-            case "SetupReg":
-              $RegHeader = $Row['tPageTexts'];
-              break;
-        }
+      switch ($Row['vcTextName'])
+      {
+        case "SetupReg":
+          $RegHeader = $Row['tPageTexts'];
+          break;
+      }
     }
 
     $strQuery = "SELECT iPrivLevel FROM tblprivlevels WHERE vcPrivName LIKE '%admin%';";
     if (!$Result = $dbh->query ($strQuery))
     {
-        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-        exit(2);
+      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
+      error_log ($strQuery);
+      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
+      exit(2);
     }
     $rowcount=mysqli_num_rows($Result);
     if ($rowcount > 0)
@@ -78,28 +78,28 @@
 
     if ($btnSubmitValue == 'Submit')
     {
-        require_once 'CleanReg.php';
+      require_once("CleanReg.php");
 
-        if ($strEmail)
+      if ($strEmail)
+      {
+        $strNameParts = explode(' ',$strName);
+        $HowMany = count($strNameParts);
+        if ($HowMany==1)
         {
-            $strNameParts = explode(' ',$strName);
-            $HowMany = count($strNameParts);
-            if ($HowMany==1)
-            {
-                print "<p class=\"Error\">Please provide both first and last name</p>";
-            }
-            else
-            {
-                if (!$bSpam)
-                {
-                    require 'UserAdd.php';
-                }
-            }
+          print "<p class=\"Error\">Please provide both first and last name</p>";
         }
         else
         {
-            print "<p class=\"Error\">Can't create new admin account without an email..</p>";
+          if (!$bSpam)
+          {
+            require("UserAdd.php");
+          }
         }
+      }
+      else
+      {
+        print "<p class=\"Error\">Can't create new admin account without an email..</p>";
+      }
     }
     $bSuccess = $bRegOK;
     if ($bSuccess)
@@ -115,11 +115,11 @@
     }
     else
     {
-        print "<p class=\"BlueAttn\">$RegHeader</p>";
-        print "<form method=\"POST\">\n";
-        require 'UserRegForm.php';
-        print "<tr>\n<td colspan=\"2\" align=\"center\"><input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\"></td>\n</tr>\n";
-        print "</table>\n</form>\n";
+      print "<p class=\"BlueAttn\">$RegHeader</p>";
+      print "<form method=\"POST\">\n";
+      require("UserRegForm.php");
+      print "<tr>\n<td colspan=\"2\" align=\"center\"><input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\"></td>\n</tr>\n";
+      print "</table>\n</form>\n";
     }
-    require ("footer.php");
+    require("footer.php");
 ?>

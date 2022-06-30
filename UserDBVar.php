@@ -2,10 +2,10 @@
     $strQuery = "select * from tblUsers where iUserID = $strUserID;";
     if (!$Result = $dbh->query ($strQuery))
     {
-        error_log ('Failed to data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-        exit(2);
+      error_log ('Failed to data. Error ('. $dbh->errno . ') ' . $dbh->error);
+      error_log ($strQuery);
+      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
+      exit(2);
     }
     $Row = $Result->fetch_assoc();
     $strName = $Row['vcName'];

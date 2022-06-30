@@ -91,11 +91,11 @@
   if ($btnSubmit =="Submit")
   {
     //Saving updates to my profile to database
-    require_once 'CleanReg.php';
+    require_once("CleanReg.php");
     $iLevel = $Priv;
     if (!$bSpam)
     {
-      require 'UserUpdate.php';
+      require("UserUpdate.php");
       if ($iUserID)
       {
         $strUID = substr(trim($_POST['txtUID']),0,19);
@@ -196,7 +196,7 @@
       $PrivName = $Priv;
     }
 
-    require 'UserDBVar.php';
+    require("UserDBVar.php");
 
     if ($dtUpdated=="")
     {
@@ -221,9 +221,9 @@
     }
 
     print "<p>Authorization level is set to $PrivName</p>\n";
+    print "<p class=\"Header2\">General Info</p>\n\n";
     print "<form method=\"POST\">\n";
-    require 'UserRegForm.php';
-    print "<tr><td>&nbsp</td></tr>";
+    require("UserRegForm.php");
     print "<tr>";
     print "<td colspan=2 align=\"center\" >";
     print "<p class=\"Header2\">Username and password</p>\n\n";
@@ -242,11 +242,24 @@
     print "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" value=\"Submit\" name=\"btnSubmit\"></td></tr>";
     print "</table></form>\n";
 
+    print "<table border=\"0\" width=\"900\" class=\"center\">\n";
+    print "<tr>";
+    print "<td colspan=2 align=\"center\" >";
+    print "<p class=\"Header2\">MultiFactor Setup</p>\n";
+    print "To Setup TOTP MFA (AKA Google Authenticator) click <a href=MFASetup.php>here</a><br>\n";
+    print "</td>";
+    print "</tr>";
+    print "</table></form>\n";
+
+    print "<p></p>\n<p class=\"Header2\">Account deletion</p>\n";
+    print "<div class=\"MainTextCenter\">\n";
+    print "<p>If you wish to completely delete your account you can do that here.</p>\n";
     print "<form method=\"post\">\n";
     print "<input type=\"submit\" value=\"Delete Account\" name=\"btnSubmit\">\n";
     print "<input type=\"hidden\" name=\"BeenSubmitted\" value=\"false\">\n";
     print "<input type=\"hidden\" name=\"iUserID\" size=\"5\" value=\"$iUserID\">\n";
     print "</form>\n";
+    print "</div>\n";
   }
   require_once("footer.php");
-?>
+  ?>

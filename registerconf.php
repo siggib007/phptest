@@ -2,7 +2,7 @@
 	$bSpam = "no";
 	$bValid = "yes";
 	$strReason = "";
-	require ("validate.php");
+	require("validate.php");
 
 	//print "Include: $bIncludeName\n<br>";
 

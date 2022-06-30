@@ -69,7 +69,7 @@
     }
     if ($btnSubmitValue == 'Submit')
     {
-        require_once 'CleanReg.php';
+        require_once("CleanReg.php");
 
         if ($strEmail)
         {
@@ -83,7 +83,7 @@
             {
                 if (!$bSpam)
                 {
-                    require 'UserAdd.php';
+                    require("UserAdd.php");
                 }
             }
         }
@@ -96,10 +96,10 @@
     {
         print "<p>$RegHeader</p>\n";
         print "<form method=\"POST\">\n";
-        require 'UserRegForm.php';
+        require("UserRegForm.php");
         print "<tr>\n<td colspan=\"2\" align=\"center\">$RegFoot</td>\n</tr>\n";
         print "<tr>\n<td colspan=\"2\" align=\"center\"><input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\"></td>\n</tr>\n";
         print "</table>\n</form>\n";
     }
-    require ("footer.php");
+    require("footer.php");
 ?>
