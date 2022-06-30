@@ -1,6 +1,6 @@
 <?php
 
-//Copyright © 2009,2015  Siggi Bjarnason.
+//Copyright © 2009,2015,2022  Siggi Bjarnason.
 //
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by

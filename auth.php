@@ -1,53 +1,77 @@
 <?php
-	require_once("DBCon.php");
-	if (isset($_SESSION["auth_username"] ) )
-	{
-    header("Location: index.php");
-    exit;
-	}
+  //Copyright © 2009,2015,2022  Siggi Bjarnason.
+  //
+  //This program is free software: you can redistribute it and/or modify
+  //it under the terms of the GNU General Public License as published by
+  //the Free Software Foundation, either version 3 of the License, or
+  //(at your option) any later version.
+  //
+  //This program is distributed in the hope that it will be useful,
+  //but WITHOUT ANY WARRANTY; without even the implied warranty of
+  //MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  //GNU General Public License for more details.
+  //
+  //You should have received a copy of the GNU General Public License
+  //along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-	if (isset($_POST['txtDest']))
-	{
-    $strDest = trim($_POST['txtDest']);
-	}
-	else
-	{
-    $strDest ="";
-}
-	if (isset($_SERVER['HTTP_REFERER']))
-	{
-    $strReferer = $_SERVER['HTTP_REFERER'];
-	}
-	else
-	{
-    $strReferer = "";
-	}
-	$strURI = $_SERVER["REQUEST_URI"];
-	$strPageNameParts = explode('/',$strURI);
-	$HowMany = count($strPageNameParts);
-	$LastIndex = $HowMany - 1;
-	$strPageName = strtolower($strPageNameParts[$LastIndex]);
-	if ($strPageName == 'auth.php')
-	{
+	require_once("DBCon.php");
+  use RobThree\Auth\TwoFactorAuth;
+  spl_autoload_register(
+    function ($className)
+    {
+      include_once str_replace(array('RobThree\\Auth', '\\'), array(__DIR__.'/RobThree2FA', '/'), $className) . '.php';
+    }
+  );
+
+  if (isset($_SESSION["auth_username"] ) )
+  {
     header("Location: index.php");
     exit;
-	}
-	$strPageNameParts = explode('/',$strReferer);
-	$HowMany = count($strPageNameParts);
-	$LastIndex = $HowMany - 1;
-	$strReferPage = $strPageNameParts[$LastIndex];
-	if ($strReferPage=='registerconf.php')
-	{
+  }
+
+  if (isset($_POST['txtDest']))
+  {
+    $strDest = trim($_POST['txtDest']);
+  }
+  else
+  {
+    $strDest ="";
+  }
+  if (isset($_SERVER['HTTP_REFERER']))
+  {
+    $strReferer = $_SERVER['HTTP_REFERER'];
+  }
+  else
+  {
+    $strReferer = "";
+  }
+  $strURI = $_SERVER["REQUEST_URI"];
+  $strPageNameParts = explode('/',$strURI);
+  $HowMany = count($strPageNameParts);
+  $LastIndex = $HowMany - 1;
+  $strPageName = strtolower($strPageNameParts[$LastIndex]);
+  if ($strPageName == 'auth.php')
+  {
+    header("Location: index.php");
+    exit;
+  }
+  $strPageNameParts = explode('/',$strReferer);
+  $HowMany = count($strPageNameParts);
+  $LastIndex = $HowMany - 1;
+  $strReferPage = $strPageNameParts[$LastIndex];
+  if ($strReferPage=='registerconf.php')
+  {
     $strReferPage = 'index.php';
-	}
-	if ($strReferPage=='register.php')
-	{
+  }
+  if ($strReferPage=='register.php')
+  {
     $strReferPage = 'index.php';
-	}
-	if ($strReferPage=='delete.php')
-	{
+  }
+  if ($strReferPage=='delete.php')
+  {
     $strReferPage = 'index.php';
-	}
+  }
+
 	if ($strReferPage=='update.php')
   {
     $strReferPage = 'index.php';
@@ -103,8 +127,18 @@
     $strPWD ="";
 	}
 
+  if (isset($_POST['txtCode']))
+	{
+    $strCode = CleanReg(trim($_POST['txtCode']));
+	}
+	else
+	{
+    $strCode ="";
+	}
+
 	$dtNow = date("Y-m-d H:i:s");
 	$salt = substr($strLogin,0,4);
+  $tfa = new TwoFactorAuth();
 	if ($strLogin and $strPWD)
 	{
     $strQuery = "select * from tblUsers where vcUID = '$strLogin'";
@@ -121,6 +155,7 @@
       $iUserID = $Row['iUserID'];
       $iPrivlvl = $Row['iPrivLevel'];
       $strUPWD = $Row['vcPWD'];
+      $strTOTP = $Row['vcMFASecret'];
     }
     else
     {
@@ -128,38 +163,51 @@
       $iUserID = 0;
       $iPrivlvl = 0;
       $strUPWD = "";
+      $strTOTP = "";
     }
     $strEPWD = crypt($strPWD,$salt);
 //		print "Correct password:$strUPWD<br>\nYou entered:$strPWD which encrypts to $strEPWD using a salt of $salt<br>\n";
     if ($strUPWD==$strEPWD)
     {
-      //print "Login Successful<br>\n";
-      $_SESSION["auth_username"] = $Row['vcName'];
-      $_SESSION["auth_UID"] = $Row['vcUID'];
-      $_SESSION["UID"] = $iUserID;
-      $_SESSION["dtLogin"] = $dtNow;
-      $_SESSION["iPrivLevel"] = $iPrivlvl;
-      $_SESSION["LastActivity"] = time();
-      $_SESSION["LoginTime"] = $dtNow;
-      if ($Row['dtUpdated']=="")
+      if ($strTOTP == "")
       {
-        $strReturn = 'myprofile.php';
-      }
-
-      $strQuery = "update tblUsers set dtLastLogin = '$dtNow' where iUserID='$iUserID'";
-      //print "<p>$strQuery</p>";
-      if (!$dbh->query ($strQuery))
-      {
-        $strError = 'Database update during loginfailed. Error ('. $dbh->errno . ') ' . $dbh->error;
-        $strError .= $strQuery;
-        EmailText("$SupportEmail","Automatic Error Report",$strError,$fromEmail);
-        error_log ($strError);
+        require("AuthIncl.php");
       }
       else
       {
-        header("Location: " . $strReturn );
-        //print "<p class=\"Header1\">Welcome $Row[vcName] !!</p>";
-        //print "<p class=\"MainText\">You have level $iPrivlvl clerance. I need to take you back to $strReturn</p>\n";
+        if ($strCode == "")
+        {
+          require_once("header.php");
+          print "<form method=\"POST\">";
+          print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";
+          print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtPwd\" VALUE=\"$strPWD\">";
+          print "Please provide the code from your Authenticator app:";
+          print "<input type=\"text\" name=\"txtCode\" size=\"20\">";
+          print "<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
+          print "</form>";
+          require_once("footer.php");
+        }
+        else
+        {
+          if ($tfa->verifyCode($strTOTP, $strCode) === true)
+          {
+            require("AuthIncl.php");
+          }
+          else
+          {
+            require_once("header.php");
+            print "<p class=\"Attn\">Invalid token</p>";
+            print "<form method=\"POST\">";
+            print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";
+            print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtPwd\" VALUE=\"$strPWD\">";
+            print "Please provide the code from your Authenticator app:";
+            print "<input type=\"text\" name=\"txtCode\" size=\"20\">";
+            print "<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
+            print "</form>";
+            require_once("footer.php");
+
+          }
+        }
       }
     }
     else
