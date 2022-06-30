@@ -333,6 +333,7 @@ INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) 
 	('UserTimeout', '25', 'User Login Timeout (minutes)', 'int'),
 	('NewPWDLen', '15', 'Initial Random Password Length', 'int'),
 	('ShowPort', 'true', 'Show non standard port in header name', 'Boolean'),
+  ('ProductName', 'Siggi\'s PHP Demo', 'Site or Product name', 'text'),
   ('AllowReg', 'true', 'Allow Self Registraton', 'Boolean'),
 	('InitSetup', 'True', 'Initial Setup Mode is active. This should not exists past setup', 'Boolean');
 
@@ -501,7 +502,7 @@ INSERT INTO `tblmenu` (`iMenuID`, `vcTitle`, `vcLink`, `iReadPriv`, `iWritePriv`
 	(64, 'Review Site Admin', 'ReviewLinkAdmin.php', 300, 300, 'Review Site Admin', 7, 0, 0, 0, 0),
 	(65, 'Feedback Administration', 'ReviewCommentAdmin.php', 300, 300, 'Feedback Administration', 7, 0, 0, 0, 0),
 	(66, 'Reviews', 'Reviews.php', 300, 300, 'Reviews', 0, 0, 0, 0, 0),
-	(67, 'File Import', 'FileInv.php', 300, 300, 'File Import', 3, 0, 0, 0, 0),
+	(67, 'File Import', 'FileInv.php', 0, 300, 'File Import', 3, 0, 0, 0, 0),
 	(68, 'AKeyless Test', 'AKeylessTest.php', 300, 300, 'AKeyless Test', 0, 0, 0, 0, 0),
 	(69, 'AKeylessUIDTest.php', 'AKeylessUIDTest.php', 500, 300, 'AKeylessUIDTest.php', 0, 0, 0, 0, 0),
 	(70, 'auth.php', 'auth.php', 500, 300, 'auth.php', 0, 0, 0, 0, 0),

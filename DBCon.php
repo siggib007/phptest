@@ -84,151 +84,154 @@ catch (Exception $e)
 }
 if ($dbh->connect_errno)
 {
-    error_log( "Failed to connect to $DBServerName.$DefaultDB using $UID and password that starts with " . substr($PWD,0,3) . " Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);
-    error_log("Make sure database connections in DBCon.php are correct.");
-    $DBError="true";
+  error_log( "Failed to connect to $DBServerName.$DefaultDB using $UID and password that starts with " . substr($PWD,0,3) . " Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);
+  error_log("Make sure database connections in DBCon.php are correct.");
+  $DBError="true";
 }
 else
 {
-    // $dbh->set_charset("utf-8");
-    $strQuery = "SELECT * FROM tblconf";
-    if (!$Result = $dbh->query ($strQuery))
+  // $dbh->set_charset("utf-8");
+  $strQuery = "SELECT * FROM tblconf";
+  if (!$Result = $dbh->query ($strQuery))
+  {
+    error_log ('Failed to fetch Configuration data. Error ('. $dbh->errno . ') ' . $dbh->error);
+    error_log ($strQuery);
+    $DBError="true";
+  }
+  else
+  {
+    while ($Row = $Result->fetch_assoc())
     {
-            error_log ('Failed to fetch Configuration data. Error ('. $dbh->errno . ') ' . $dbh->error);
-            error_log ($strQuery);
-            $DBError="true";
+      $ConfArray[$Row['vcValueName']] = $Row['vcValue'];
+      switch ($Row['vcValueName'])
+      {
+        case "SupportEmail":
+            $SupportEmail = $Row['vcValue'];
+            break;
+        case "HeadKeyLen":
+            $HKeyLen = $Row['vcValue'];
+            break;
+        case "FootKeyLen":
+            $FKeyLen = $Row['vcValue'];
+            break;
+        case "ImgHeight":
+            $ImgHeight = $Row['vcValue'];
+            break;
+        case "Owner":
+            $Owner = $Row['vcValue'];
+            break;
+        case "Address1":
+            $Address1 = $Row['vcValue'];
+            break;
+        case "Address2":
+            $Address2 = $Row['vcValue'];
+            break;
+        case "Phone":
+            $Phone = $Row['vcValue'];
+            break;
+        case "ProfileNotify":
+            $ProfileNotify = $Row['vcValue'];
+            break;
+        case "Copyright":
+            $Copyright = $Row['vcValue'];
+            break;
+        case "Maintenance":
+            $Maintenance = $Row['vcValue'];
+            break;
+        case "EmailFromAddr":
+            $eFromAddr = $Row['vcValue'];
+            break;
+        case "EmailFromName":
+            $eFromName = $Row['vcValue'];
+            break;
+        case "ShowLinkURL":
+            $ShowLinkURL = $Row['vcValue'];
+            break;
+        case "SiteMessage":
+            $strSiteLabel = $Row['vcValue'];
+            break;
+        case "HeadAdd":
+            $HeadAdd = $Row['vcValue'];
+            break;
+        case "DefNumWeeks":
+            $DefNumWeeks = $Row['vcValue'];
+            break;
+        case "DefClassLen":
+            $DefClassLen = $Row['vcValue'];
+            break;
+        case "defClassPrice":
+            $DefClassPrice = $Row['vcValue'];
+            break;
+        case "ShowLast":
+            $ShowLastClass = $Row['vcValue'];
+            break;
+        case "ClassDur":
+            $ClassDuration = $Row['vcValue'];
+            break;
+        case "CTUnit":
+            $CTUnit = $Row['vcValue'];
+            break;
+        case "TimeFormat":
+            $strTimeFormat = $Row['vcValue'];
+            break;
+        case "DateFormat":
+            $strDateFormat = $Row['vcValue'];
+            break;
+        case "PDFBase":
+            $strPDFBaseName = $Row['vcValue'];
+            break;
+        case "DefMaxStudent":
+            $DefMaxStudent = $Row['vcValue'];
+            break;
+        case "minRegLevel":
+            $minRegLevel = $Row['vcValue'];
+            break;
+        case "SecureOpt":
+            $strSecOpt = $Row['vcValue'];
+            break;
+        case "NumAdminCol":
+            $iNumCol = $Row['vcValue'];
+            break;
+        case "ShowAdminSub":
+            $ShowAdminSub = $Row['vcValue'];
+            break;
+        case "UserTimeout":
+            $Timeout = $Row['vcValue'] * 60;
+            break;
+        case "NewPWDLen":
+            $PWDLength = $Row['vcValue'];
+            break;
+        case "ProductName":
+          $ProdName = $Row['vcValue'];
+          break;
+      }
     }
-    else
-    {
-        while ($Row = $Result->fetch_assoc())
-        {
-            $ConfArray[$Row['vcValueName']] = $Row['vcValue'];
-            switch ($Row['vcValueName'])
-            {
-                case "SupportEmail":
-                        $SupportEmail = $Row['vcValue'];
-                        break;
-                case "HeadKeyLen":
-                        $HKeyLen = $Row['vcValue'];
-                        break;
-                case "FootKeyLen":
-                        $FKeyLen = $Row['vcValue'];
-                        break;
-                case "ImgHeight":
-                        $ImgHeight = $Row['vcValue'];
-                        break;
-                case "Owner":
-                        $Owner = $Row['vcValue'];
-                        break;
-                case "Address1":
-                        $Address1 = $Row['vcValue'];
-                        break;
-                case "Address2":
-                        $Address2 = $Row['vcValue'];
-                        break;
-                case "Phone":
-                        $Phone = $Row['vcValue'];
-                        break;
-                case "ProfileNotify":
-                        $ProfileNotify = $Row['vcValue'];
-                        break;
-                case "Copyright":
-                        $Copyright = $Row['vcValue'];
-                        break;
-                case "Maintenance":
-                        $Maintenance = $Row['vcValue'];
-                        break;
-                case "EmailFromAddr":
-                        $eFromAddr = $Row['vcValue'];
-                        break;
-                case "EmailFromName":
-                        $eFromName = $Row['vcValue'];
-                        break;
-                case "ShowLinkURL":
-                        $ShowLinkURL = $Row['vcValue'];
-                        break;
-                case "SiteMessage":
-                        $strSiteLabel = $Row['vcValue'];
-                        break;
-                case "HeadAdd":
-                        $HeadAdd = $Row['vcValue'];
-                        break;
-                case "DefNumWeeks":
-                        $DefNumWeeks = $Row['vcValue'];
-                        break;
-                case "DefClassLen":
-                        $DefClassLen = $Row['vcValue'];
-                        break;
-                case "defClassPrice":
-                        $DefClassPrice = $Row['vcValue'];
-                        break;
-               case "ShowLast":
-                        $ShowLastClass = $Row['vcValue'];
-                        break;
-               case "ClassDur":
-                        $ClassDuration = $Row['vcValue'];
-                        break;
-               case "CTUnit":
-                        $CTUnit = $Row['vcValue'];
-                        break;
-               case "TimeFormat":
-                        $strTimeFormat = $Row['vcValue'];
-                        break;
-               case "DateFormat":
-                        $strDateFormat = $Row['vcValue'];
-                        break;
-               case "PDFBase":
-                        $strPDFBaseName = $Row['vcValue'];
-                        break;
-               case "DefMaxStudent":
-                        $DefMaxStudent = $Row['vcValue'];
-                        break;
-               case "minRegLevel":
-                        $minRegLevel = $Row['vcValue'];
-                        break;
-               case "SecureOpt":
-                        $strSecOpt = $Row['vcValue'];
-                        break;
-               case "NumAdminCol":
-                        $iNumCol = $Row['vcValue'];
-                        break;
-               case "ShowAdminSub":
-                        $ShowAdminSub = $Row['vcValue'];
-                        break;
-               case "UserTimeout":
-                        $Timeout = $Row['vcValue'] * 60;
-                        break;
-               case "NewPWDLen":
-                        $PWDLength = $Row['vcValue'];
-                        break;
-            }
-        }
-    }
-//     Log_Array($ConfArray,"Dumping ConfArray");
-    $FromEmail = "From:$eFromName <$eFromAddr>";
-    if (!isset($_SESSION))
-    {
-        session_start();
-    }
+  }
+//Log_Array($ConfArray,"Dumping ConfArray");
+  $FromEmail = "From:$eFromName <$eFromAddr>";
+  if (!isset($_SESSION))
+  {
+    session_start();
+  }
 
-    if (isset($_SERVER['HTTP_REFERER']))
-    {
-        $strReferer = $_SERVER['HTTP_REFERER'];
-    }
-    else
-    {
-        $strReferer = "";
-    }
-    if (isset($_SERVER['HTTPS']))
-    {
-        $strProto = "https://";
-    }
-    else
-    {
-        $strProto = "http://";
-    }
-    $strPageURL = $strProto . $strHost . $strURI;
-    $PostVarCount = count($_POST);
-    $dtNow = date("Y-m-d H:i:s");
+  if (isset($_SERVER['HTTP_REFERER']))
+  {
+    $strReferer = $_SERVER['HTTP_REFERER'];
+  }
+  else
+  {
+    $strReferer = "";
+  }
+  if (isset($_SERVER['HTTPS']))
+  {
+    $strProto = "https://";
+  }
+  else
+  {
+    $strProto = "http://";
+  }
+  $strPageURL = $strProto . $strHost . $strURI;
+  $PostVarCount = count($_POST);
+  $dtNow = date("Y-m-d H:i:s");
 }
 ?>
