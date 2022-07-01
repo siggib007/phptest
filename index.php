@@ -43,5 +43,7 @@
     $PageText = str_replace("\n\n","\n</p>\n<p class=MainText>\n",$PageText);
     print "<p class=MainText>\n$PageText</p>\n";
   }
+
+
   require("footer.php");
 ?>

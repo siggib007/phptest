@@ -335,6 +335,7 @@ INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) 
 	('ShowPort', 'true', 'Show non standard port in header name', 'Boolean'),
   ('ProductName', 'Siggi\'s PHP Demo', 'Site or Product name', 'text'),
   ('AllowReg', 'true', 'Allow Self Registraton', 'Boolean'),
+  ('RecoverCodeLen', '32', 'Length of Recovery Code', 'text'),
 	('InitSetup', 'True', 'Initial Setup Mode is active. This should not exists past setup', 'Boolean');
 
 -- Dumping structure for table PHPDemo.tblContactInfo
@@ -612,7 +613,8 @@ INSERT INTO `tblPageTexts` (`vcTextName`, `vcTextDescr`, `tPageTexts`) VALUES
   ('RegForm', 'Text that is displayed at top of the user form', 'Only Name and email address is required. For the name just put two or more words you would like this system to use as your name. The email address you provide will be used to send initial password as well as password resets to.'),
   ('AuthApp', 'Explanation of a TOTP Auth App', 'Please make sure you have a TOTP capable Authenticator app on your mobile. \r\nGoogle, Microsoft, LastPass, amongst others, all make compatible authenticators. \r\nThey are all called Authenticator in your app store. Authy is my personal favorite TOTP Authenticator. \r\nWhen I talk about app below I\'m referring to this authenticator app '),
   ('TestWarn', 'Warning on the Email Testing page', 'Doing so might allow hackers to send spam from your configured email address via your email server, severly damaging your email reputation.<br>\r\nOnly run this in a secure environment where you have absolute control over who has access.<br>\r\nFor example run this on your laptop and set your winodws firewall to block all inbound connections.'),
-	('Wemail', 'Welcome Email Intro', 'welcome welcome');
+  ('RecovCode', 'Text that explains Recovery code', 'Please copy the following recovery code and store it in your Password manger, in case something happens to your authenticator app.'),
+  ('Wemail', 'Welcome Email Intro', 'welcome welcome');
 
 -- Dumping structure for table PHPDemo.tblPageTypes
 CREATE TABLE IF NOT EXISTS `tblPageTypes` (
@@ -722,6 +724,7 @@ CREATE TABLE IF NOT EXISTS `tblUsers` (
   `dtLastLogin` datetime DEFAULT NULL,
   `iPrivLevel` int(11) NOT NULL DEFAULT '1',
   `vcMFASecret` varchar(50) DEFAULT NULL,
+  `vcRecovery` varchar(260) DEFAULT NULL,
   PRIMARY KEY (`iUserID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 

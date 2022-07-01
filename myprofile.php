@@ -33,6 +33,11 @@
     $btnSubmit = "";
   }
 
+  if ($btnSubmit =="Reset Recovery Code")
+  {
+    GenerateRecovery($iUserID);
+  }
+
   if ($btnSubmit =="Delete Account")
   {
     $iRegNum = trim($_POST['iUserID']);
@@ -180,7 +185,7 @@
     }
   }
 
-  if ($btnSubmit !="Delete Account")
+  if ($btnSubmit == "" or $btnSubmit == "Submit")
   {
     print "<p class=\"Header2\">General Info</p>\n\n";
     $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = $Priv;";
@@ -248,10 +253,8 @@
     print "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" value=\"Submit\" name=\"btnSubmit\"></td></tr>";
     print "</table></form>\n";
 
-    print "<table border=\"0\" width=\"900\" class=\"center\">\n";
-    print "<tr>";
-    print "<td colspan=2 align=\"center\" >";
-    print "<p class=\"Header2\"><a id=\"mfa\">MultiFactor Setup</a></p>\n";
+    print "<div class=\"MainTextCenter\">\n";
+    print "<p>&nbsp;</p>\n<p class=\"Header2\"><a id=\"mfa\">MultiFactor Setup</a></p>\n";
     print "<p class=\"Header3\">TOTP MFA (AKA Google Authenticator)</p>\n";
     if ($strTOTP == "")
     {
@@ -262,11 +265,14 @@
       print "Thank you for securing your account with TOTP MFA. <br>\n";
       print "To change your TOTP MFA setup click <a href=MFASetup.php>here</a><br>\n";
     }
-    print "</td>";
-    print "</tr>";
-    print "</table></form>\n";
+    print "<p class=\"Header3\">Reset Recovery Code</p>\n";
+    print "To reset your recovery code, click this button.<br>\n";
+    print "<form method=\"post\">\n";
+    print "<input type=\"submit\" value=\"Reset Recovery Code\" name=\"btnSubmit\">\n";
+    print "</form>\n";
+    print "</div>\n";
 
-    print "<p></p>\n<p class=\"Header2\">Account deletion</p>\n";
+    print "<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p class=\"Header2\">Account deletion</p>\n";
     print "<div class=\"MainTextCenter\">\n";
     print "<p>If you wish to completely delete your account you can do that here.</p>\n";
     print "<form method=\"post\">\n";

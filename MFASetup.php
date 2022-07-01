@@ -55,6 +55,7 @@
 
   print "<p class=\"Header1\">TOTP MFA Setup</p>\n";
   $AuthApp = $TextArray["AuthApp"];
+  $RecovCode = $TextArray["RecovCode"];
   if ($strUserEmail != "")
   {
     spl_autoload_register(
@@ -158,6 +159,7 @@
       {
         print "<p class=\"BlueNote\">Setup Completed Successfully</p>";
         unset($_SESSION["2FASecret"]);
+        GenerateRecovery($iUserID);
       }
       else
       {

@@ -135,6 +135,14 @@
 	{
     $strCode ="";
 	}
+  if (isset($_POST['cmbMFA']))
+	{
+    $strMFAType = CleanReg(trim($_POST['cmbMFA']));
+	}
+	else
+	{
+    $strMFAType ="na";
+	}
 
 	$dtNow = date("Y-m-d H:i:s");
 	$salt = substr($strLogin,0,4);
@@ -156,6 +164,7 @@
       $iPrivlvl = $Row['iPrivLevel'];
       $strUPWD = $Row['vcPWD'];
       $strTOTP = $Row['vcMFASecret'];
+      $strRHash = $Row['vcRecovery'];
     }
     else
     {
@@ -164,6 +173,7 @@
       $iPrivlvl = 0;
       $strUPWD = "";
       $strTOTP = "";
+      $strRHash = "";
     }
     $strEPWD = crypt($strPWD,$salt);
 //		print "Correct password:$strUPWD<br>\nYou entered:$strPWD which encrypts to $strEPWD using a salt of $salt<br>\n";
@@ -179,33 +189,71 @@
         {
           require_once("header.php");
           print "<form method=\"POST\">";
+          print "Select your MFA Type: ";
+          print "<select size=\"1\" name=\"cmbMFA\">\n";
+          print "<option value='totp'>TOTP Authenticator</option>\n";
+          print "<option value='recover'>Recovery Code</option>\n";
+          print "</select>";
           print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";
           print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtPwd\" VALUE=\"$strPWD\">";
-          print "Please provide the code from your Authenticator app:";
-          print "<input type=\"text\" name=\"txtCode\" size=\"20\">";
-          print "<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
+          print "&nbsp;&nbsp;Please provide your code: ";
+          print "<input type=\"text\" name=\"txtCode\" size=\"30\">";
+          print "&nbsp;&nbsp;<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
           print "</form>";
           require_once("footer.php");
         }
         else
         {
-          if ($tfa->verifyCode($strTOTP, $strCode) === true)
+          if ($strMFAType == "totp")
           {
-            require("AuthIncl.php");
+            if ($tfa->verifyCode($strTOTP, $strCode) === true)
+            {
+              require("AuthIncl.php");
+            }
+            else
+            {
+              require_once("header.php");
+              print "<p class=\"Attn\">Invalid token</p>";
+              print "<form method=\"POST\">";
+              print "Select your MFA Type: ";
+              print "<select size=\"1\" name=\"cmbMFA\">\n";
+              print "<option value='totp'>TOTP Authenticator</option>\n";
+              print "<option value='recover'>Recovery Code</option>\n";
+              print "</select>";
+              print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";
+              print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtPwd\" VALUE=\"$strPWD\">";
+              print "&nbsp;&nbsp;Please provide your code: ";
+              print "<input type=\"text\" name=\"txtCode\" size=\"30\">";
+              print "&nbsp;&nbsp;<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
+              print "</form>";
+              require_once("footer.php");
+            }
           }
-          else
+          if ($strMFAType == "recover")
           {
-            require_once("header.php");
-            print "<p class=\"Attn\">Invalid token</p>";
-            print "<form method=\"POST\">";
-            print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";
-            print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtPwd\" VALUE=\"$strPWD\">";
-            print "Please provide the code from your Authenticator app:";
-            print "<input type=\"text\" name=\"txtCode\" size=\"20\">";
-            print "<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
-            print "</form>";
-            require_once("footer.php");
-
+            $strCode = str_replace(' ','',$strCode);
+            if (password_verify($strCode, $strRHash))
+            {
+              require("AuthIncl.php");
+            }
+            else
+            {
+              require_once("header.php");
+              print "<p class=\"Attn\">Invalid token</p>";
+              print "<form method=\"POST\">";
+              print "Select your MFA Type: ";
+              print "<select size=\"1\" name=\"cmbMFA\">\n";
+              print "<option value='totp'>TOTP Authenticator</option>\n";
+              print "<option value='recover'>Recovery Code</option>\n";
+              print "</select>";
+              print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";
+              print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtPwd\" VALUE=\"$strPWD\">";
+              print "&nbsp;&nbsp;Please provide your code: ";
+              print "<input type=\"text\" name=\"txtCode\" size=\"30\">";
+              print "&nbsp;&nbsp;<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
+              print "</form>";
+              require_once("footer.php");
+            }
           }
         }
       }

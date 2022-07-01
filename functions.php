@@ -57,7 +57,7 @@ function UpdateSQL ($strQuery,$type)
   if ($dbh->query ($strQuery))
   {
     $NumAffected = $dbh->affected_rows;
-    print "<p class=\"MainText\">Database $type of $NumAffected record successful<br>\n";
+    // print "<p class=\"MainText\">Database $type of $NumAffected record successful<br>\n";
     return TRUE;
   }
   else
@@ -156,6 +156,7 @@ function CleanReg ($InVar)
   $InVar = str_replace("\\","",$InVar);
   $InVar = str_replace("=","",$InVar);
   $InVar = str_replace('"',"",$InVar);
+  $InVar = str_replace("'","",$InVar);
   return $InVar;
 }
 
@@ -610,6 +611,26 @@ function FetchDopplerStatic ($strProject,$strConfig)
     curl_close($curl);
     $arrResponse = json_decode($response, TRUE);
     return json_decode($response, TRUE);
+  }
+
+  function GenerateRecovery($iUserID)
+  {
+    if (isset($GLOBALS["ConfArray"]["RecoverCodeLen"]) )
+    {
+        $iCodeLen = $GLOBALS["ConfArray"]["RecoverCodeLen"];
+    }
+    else
+    {
+        $iCodeLen = 1;
+    }
+    $RecovCode = $GLOBALS["TextArray"]["RecovCode"];
+    $strRecoveryCode = chunk_split(bin2hex(random_bytes($iCodeLen/2)),4," ");
+    print "<p class=\"BlueAttn\">$RecovCode</p>";
+    print "<p class=\"BlueAttn\">$strRecoveryCode</p>";
+    $strCleanRecovery = str_replace(' ','',$strRecoveryCode);
+    $strECode = password_hash($strCleanRecovery, PASSWORD_DEFAULT);
+    $strQuery = "update tblUsers set vcRecovery = '$strECode' where iUserID = $iUserID;";
+    UpdateSQL ($strQuery, "update");
   }
 
 ?>

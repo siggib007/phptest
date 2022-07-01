@@ -9,14 +9,8 @@
     $LastIndex = $HowMany - 1;
     $FName = $strNameParts[0];
     $LName = $strNameParts[$LastIndex];
-    $strUID = strtolower(substr($FName,0,1).substr($LName,0,9));
-    $strUID = str_replace("'","",$strUID);
-    $strUID = str_replace("\\","",$strUID);
-    $strUID = str_replace("'","\'",$strUID);
-    $Password = str_replace("\\","",$Password);
-    $Password = str_replace("'","\'",$Password);
-    $strUID = str_replace("\\","",$strUID);
-    $Password = str_replace("\\","",$Password);
+    $strUID = CleanReg(strtolower(substr($FName,0,1).substr($LName,0,9)));
+    $Password = CleanReg($Password);
 
     $EmailCount = 0;
     $strQuery = "select count(*) iEmailCount from tblUsers where vcEmail = '$strEmail'";
