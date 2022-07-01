@@ -43,6 +43,11 @@
 		print "<b>Subject:</b> $strSubject <br>\n";
 		print "<b>Additional Email Headers:</b> $strAddHeader <br>\n";
 		print "<h3>Body:</h3>\n$strHTMLMsg<br>\n";
+    print "<h3>Sending via:</h3>\n";
+		print "<b>Host:</b>$GLOBALS[MailHost] <br>\n";
+		print "<b>Port:</b> $GLOBALS[MailHostPort] <br>\n";
+		print "<b>TLS:</b> $GLOBALS[UseSSL] <br>\n";
+
 		$response = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach,$arrAddHeader);
 		print "<h3>$response</h3>\n";
     }

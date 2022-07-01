@@ -611,6 +611,7 @@ INSERT INTO `tblPageTexts` (`vcTextName`, `vcTextDescr`, `tPageTexts`) VALUES
 	('SetupReg', 'Text for the initial setup registration page', 'Since this is the first time setup you need to create an adminstrative account'),
   ('RegForm', 'Text that is displayed at top of the user form', 'Only Name and email address is required. For the name just put two or more words you would like this system to use as your name. The email address you provide will be used to send initial password as well as password resets to.'),
   ('AuthApp', 'Explanation of a TOTP Auth App', 'Please make sure you have a TOTP capable Authenticator app on your mobile. \r\nGoogle, Microsoft, LastPass, amongst others, all make compatible authenticators. \r\nThey are all called Authenticator in your app store. Authy is my personal favorite TOTP Authenticator. \r\nWhen I talk about app below I\'m referring to this authenticator app '),
+  ('TestWarn', 'Warning on the Email Testing page', 'Doing so might allow hackers to send spam from your configured email address via your email server, severly damaging your email reputation.<br>\r\nOnly run this in a secure environment where you have absolute control over who has access.<br>\r\nFor example run this on your laptop and set your winodws firewall to block all inbound connections.'),
 	('Wemail', 'Welcome Email Intro', 'welcome welcome');
 
 -- Dumping structure for table PHPDemo.tblPageTypes
