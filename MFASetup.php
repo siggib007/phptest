@@ -69,7 +69,7 @@
       print "<p class=\"MainTextCenter\">$AuthApp</p>\n";
     }
 
-    $tfa = new TwoFactorAuth($ProdName);
+    $tfa = new TwoFactorAuth($HeadAdd . $ProdName);
     if (isset($_SESSION["2FASecret"]))
     {
       $MFASecret = $_SESSION["2FASecret"];
