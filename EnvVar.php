@@ -8,4 +8,8 @@ $MailHost = getenv("EMAILSERVER");
 $MailHostPort = getenv("EMAILPORT");
 $UseSSL = getenv("USESSL");
 $UseStartTLS = getenv("USESTARTTLS");
+$TwilioToken = getenv("TWILIO_KEY");
+$FromNumber = getenv("TWILIO_NUM");
+$TwilioSID = getenv("TWILIO_SID");
+
 ?>

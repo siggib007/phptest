@@ -12,6 +12,10 @@ MailHost     # SMTP Server FQDN
 MailHostPort # TCP port to use when connecting to SMTP server
 UseSSL       # Establish an encrypted connection with SMTP server
 UseStartTLS  # Switch to encrypted connection post connection
+$TwilioToken # Twilio API Token for SMS sending
+$FromNumber  # What the SMS From should be
+$TwilioSID   # The SMS Sender Account SID
+
 
 Decide where and how secure you want to keep and access environment variables and secrets
 by including (aka requiring) the appropriate file

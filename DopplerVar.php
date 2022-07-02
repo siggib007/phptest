@@ -12,6 +12,9 @@ if (array_key_exists("secrets",$arrSecretValues))
   $MailHostPort = $arrSecretValues["secrets"]["EMAILPORT"]["computed"];
   $UseSSL = $arrSecretValues["secrets"]["USESSL"]["computed"];
   $UseStartTLS = $arrSecretValues["secrets"]["USESTARTTLS"]["computed"];
+  $TwilioToken = $arrSecretValues["secrets"]["TWILIO_KEY"]["computed"];
+  $FromNumber = $arrSecretValues["secrets"]["TWILIO_NUM"]["computed"];
+  $TwilioSID = $arrSecretValues["secrets"]["TWILIO_SID"]["computed"];
 }
 else
 {

@@ -10,6 +10,10 @@ $arrname[] = "MYSQL_HOST";
 $arrname[] = "MYSQL_DB";
 $arrname[] = "MYSQL_USER";
 $arrname[] = "MYSQL_PASSWORD";
+$arrname[] = "TWILIO_KEY";
+$arrname[] = "TWILIO_NUM";
+$arrname[] = "TWILIO_SID";
+
 $arrSecretValues = FetchKeylessStatic($arrname);
 if (array_key_exists("error",$arrSecretValues))
 {
@@ -28,5 +32,8 @@ else
   $MailHostPort = $arrSecretValues["EMAILPORT"];
   $UseSSL = $arrSecretValues["USESSL"];
   $UseStartTLS = $arrSecretValues["USESTARTTLS"];
+  $TwilioSID = $arrSecretValues["TWILIO_SID"];
+  $FromNumber = $arrSecretValues["TWILIO_NUM"];
+  $TwilioToken = $arrSecretValues["TWILIO_KEY"];
 }
 ?>

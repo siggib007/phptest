@@ -618,33 +618,12 @@ function SendTwilioSMS ($msg,$number)
 {
   # $msg is a simple string with the message you wish to send
   # $number is the phone number to send it to
-  # Returns success/failure
-  # Utilizes Doppler for API Key and other info
+  # Returns an array with first element true/false
+  #    second element the actual response from the API
 
-  $arrSecretValues = FetchDopplerStatic($GLOBALS["DopplerProj"],$GLOBALS["DopplerConf"]);
-  if (array_key_exists("secrets",$arrSecretValues))
-  {
-    $TwilioToken = $arrSecretValues["secrets"]["TWILIO_KEY"]["computed"];
-    $FromNumber = $arrSecretValues["secrets"]["TWILIO_NUM"]["computed"];
-    $TwilioSID = $arrSecretValues["secrets"]["TWILIO_SID"]["computed"];
-  }
-  else
-  {
-    if (array_key_exists("messages",$arrSecretValues))
-    {
-      $AccessKey = getenv("DOPPLERKEY");
-      $strMsg = "There was an issue fetching the secrets from $DopplerProj - $DopplerConf. Key starts with '" . substr($AccessKey,0,12) ."'";
-      foreach ($arrSecretValues["messages"] as $msg)
-      {
-        $strMsg .= "$msg. ";
-      }
-      return($strMsg);
-    }
-    else
-    {
-      return("Unexpected reponse from FetchDopplerStatic" . json_encode($arrSecretValues));
-    }
-  }
+  $TwilioToken = $GLOBALS["TwilioToken"];
+  $FromNumber = $GLOBALS["FromNumber"];
+  $TwilioSID = $GLOBALS["TwilioSID"];
 
   $APIEndpoint = "https://api.twilio.com/";
   $Service = "2010-04-01/Accounts/$TwilioSID/Messages.json";
@@ -666,9 +645,18 @@ function SendTwilioSMS ($msg,$number)
   curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
   curl_setopt($curl,CURLOPT_POSTFIELDS,http_build_query($Param));
   $response = curl_exec($curl);
+  $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+  // print "HTTP Response code is $httpcode<br>\n";
   curl_close($curl);
   $arrResponse = json_decode($response, TRUE);
-  return json_decode($response, TRUE);
+  if ($arrResponse["status"]=="queued")
+  {
+    return [TRUE,$response];
+  }
+  else
+  {
+    return [FALSE,$response];
+  }
 }
 
 function GenerateRecovery($iUserID)
