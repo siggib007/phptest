@@ -141,9 +141,9 @@
             $i += 1;
           }
 
-          if ($strlen($Password) < $MinPWDLen)
+          if (strlen($Password) < $MinPWDLen)
           {
-            print "<p>Passwords is too short, please supply a password that is at least $MinPWDLen long.</p>\n";
+            print "<p>Passwords is too short, please supply a password that is at least $MinPWDLen char long.</p>\n";
           }
           else
           {
@@ -175,7 +175,11 @@
             }
             if ($strQuery)
             {
-              UpdateSQL($strQuery, "update");
+              if(UpdateSQL($strQuery, "update"))
+              {
+                print "<p>Update successful!!</p>";
+                $bChangePWD = 0;
+              }
             }
           }
         }
@@ -203,6 +207,11 @@
 
     require("UserDBVar.php");
     print "<div class=\"MainTextCenter\">\n";
+    if ($bChangePWD == 1)
+    {
+      print "<p class=\"Error\">You are required to change your password. Please provide new password and hit submit.</p>\n";
+    }
+
     if ($dtUpdated=="")
     {
       print "<p class=\"Error\">This account has not been verified. Please verify the information, " .

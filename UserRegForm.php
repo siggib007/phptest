@@ -3,7 +3,7 @@
     $RegCol2 = 500;
     $iNumCol = 3;
     $Preamble = $TextArray["RegForm"];
-    print "<p class=\"BlueAttn\">$Preamble</p>\n";
+    print "<p class=\"MainTextCenter\">$Preamble</p>\n";
     print "<table border=\"0\" width=\"900\" class=\"center\">\n";
     print "<tr>\n<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">Name: </td>\n";
     print "<td width=\"$RegCol2\"><input type=\"text\" name=\"txtName\" size=\"50\" value=\"$strName\">\n";

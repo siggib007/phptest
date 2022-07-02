@@ -27,6 +27,7 @@ $strPagePath = substr($strURI, 0,$iLastSlash+1);
 $strPageNameParts = explode('/',$strURI);
 $FirstPart = "/$strPageNameParts[1]/";
 $iSubOfID = 0;
+$bChangePWD = 0;
 if ($FirstPart != $ROOTPATH)
 {
   $ROOTPATH = "/";
@@ -173,7 +174,7 @@ if (isset($_SESSION["LastActivity"] ) )
 if (isset($_SESSION["UID"] ) )
 {
   $iUserID = $_SESSION["UID"];
-  $strQuery = "SELECT dtLastLogin, iPrivLevel FROM tblUsers WHERE iUserID=$iUserID LIMIT 1;";
+  $strQuery = "SELECT dtLastLogin, iPrivLevel, bChangePWD FROM tblUsers WHERE iUserID=$iUserID LIMIT 1;";
   if (!$Result = $dbh->query ($strQuery))
   {
     error_log ('Failed to fetch user data. Error ('. $dbh->errno . ') ' . $dbh->error);
@@ -181,9 +182,19 @@ if (isset($_SESSION["UID"] ) )
     ShowErrHead();
   }
   $Row = $Result->fetch_assoc();
-
-  $dtLastLogin = $Row['dtLastLogin'];
-  $dbiPrivLevel = $Row['iPrivLevel'];
+  $rowcount=mysqli_num_rows($Result);
+  if ($rowcount > 0)
+  {
+    $dtLastLogin = $Row['dtLastLogin'];
+    $dbiPrivLevel = $Row['iPrivLevel'];
+    $bChangePWD = $Row['bChangePWD'];
+  }
+  else
+  {
+    $dtLastLogin = "";
+    $dbiPrivLevel = "";
+    $bChangePWD = 0;
+  }
   if (($_SESSION["iPrivLevel"] != $dbiPrivLevel) or ($_SESSION["LoginTime"] != $dtLastLogin)or ($strPageName == "InitialRegister1st.php"))
   {
     require("KillSession.php");
@@ -221,6 +232,11 @@ else
   $Priv = $_SESSION["iPrivLevel"];
   $UsersName = $_SESSION["auth_username"];
   $vcUID = $_SESSION["auth_UID"];
+}
+
+if ($bChangePWD == 1 and $strPageName != "myprofile.php")
+{
+  header("Location: myprofile.php" );
 }
 
 if ($PrivReq > 0)

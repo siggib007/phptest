@@ -71,7 +71,7 @@
     }
     if (!$bSuccess)
     {
-        print "<p>$RegHeader</p>\n";
+        print "<p class=\"MainTextCenter\">$RegHeader</p>\n";
         print "<form method=\"POST\">\n";
         require("UserRegForm.php");
         print "<tr>\n<td colspan=\"2\" align=\"center\">$RegFoot</td>\n</tr>\n";
