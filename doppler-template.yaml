@@ -8,15 +8,15 @@ projects:
     secrets:
       dev:
         MYSQL_HOST: "mysql"
-        MYSQL_USER: "root"
-        MYSQL_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-        MYSQL_DB: "${MYSQL_DATABASE}"
+        MYSQL_USER: "scriptuser"
+        MYSQL_PASSWORD: "scriptuserpwd"
+        MYSQL_DB: "PHPDemo"
         MYSQL_DATABASE: "test"
         MYSQL_ROOT_PASSWORD: "ChangeRootPwd"
-        EMAILPORT: ${shared.dev.EMAILPORT}
-        EMAILPWD: ${shared.dev.EMAILPWD}
-        EMAILSERVER: ${shared.dev.EMAILSERVER}
-        EMAILUSER: ${shared.dev.EMAILUSER}
+        EMAILPORT: "465"
+        EMAILPWD: "EmailPassword"
+        EMAILSERVER: "smtp.example.com"
+        EMAILUSER: "SMTPUser"
         USESSL: "True"
         USESTARTTLS: "False"
         DOPPLERKEY: "setTheKey"
