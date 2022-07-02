@@ -1,0 +1,8 @@
+akeyless create-secret -n EMAILPWD -v MyEmailPwd -m "Password for your SMTP User account"
+akeyless create-secret -n EMAILSERVER -v smtp.mailtrap.io -m "The FQDN of your SMTP server"
+akeyless create-secret -n EMAILUSER -v emailUser -m "Username for your SMTP server"
+akeyless create-secret -n MYSQL_HOST -v localhost -m "Hostname for your Database server"
+akeyless create-secret -n MYSQL_PASSWORD -v DBpassword -m "Password for the Database User"
+akeyless create-secret -n MYSQL_USER -v myscript -m "Username for the Database Server"
+akeyless create-secret -n USESSL -v false -m "Use Full TLS for communicating with the SMTP server"
+akeyless create-secret -n USESTARTTLS -v true -m "Establish connection to SMTP server insecurely, then swith to TLS"
