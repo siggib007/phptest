@@ -583,55 +583,112 @@ function FetchKeylessStatic ($arrNames)
 }
 
 function FetchDopplerStatic ($strProject,$strConfig)
+{
+  # $strProject is a simple string with the name of the Doppler Project holding your secret
+  # $strConfig is a simple string with the name of the configuration to use
+  # Returns an associated array with top level key of success, indicating if the fetch was successful or not
+  # If success = true, all secrets will be under a top level key of secrets
+  # with the secret name as key and the secret as the value
+  # If success = false, there will a array of messages under top level key of messages with error messages
+  # Requires DopplerKEY as environment variables
+  $AccessKey = getenv("DOPPLERKEY");
+  $APIEndpoint = "https://api.doppler.com";
+  $Service = "/v3/configs/config/secrets";
+  $method = "GET";
+
+  $Param = array();
+  $Param['project'] = $strProject;
+  $Param['config'] = $strConfig;
+
+  $url = $APIEndpoint.$Service . '?' . http_build_query($Param);
+  $curl = curl_init();
+  curl_setopt($curl, CURLOPT_USERPWD, "$AccessKey:");
+  curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+  curl_setopt($curl, CURLOPT_URL, $url);
+  curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json'));
+  curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+  $response = curl_exec($curl);
+  curl_close($curl);
+  $arrResponse = json_decode($response, TRUE);
+  return json_decode($response, TRUE);
+}
+
+function SendTwilioSMS ($msg,$number)
+{
+  # $msg is a simple string with the message you wish to send
+  # $number is the phone number to send it to
+  # Returns success/failure
+  # Utilizes Doppler for API Key and other info
+
+  $arrSecretValues = FetchDopplerStatic($GLOBALS["DopplerProj"],$GLOBALS["DopplerConf"]);
+  if (array_key_exists("secrets",$arrSecretValues))
   {
-    # $strProject is a simple string with the name of the Doppler Project holding your secret
-    # $strConfig is a simple string with the name of the configuration to use
-    # Returns an associated array with top level key of success, indicating if the fetch was successful or not
-    # If success = true, all secrets will be under a top level key of secrets
-    # with the secret name as key and the secret as the value
-    # If success = false, there will a array of messages under top level key of messages with error messages
-    # Requires DopplerKEY as environment variables
-    $AccessKey = getenv("DOPPLERKEY");
-    $APIEndpoint = "https://api.doppler.com";
-    $Service = "/v3/configs/config/secrets";
-    $method = "GET";
-
-    $Param = array();
-    $Param['project'] = $strProject;
-    $Param['config'] = $strConfig;
-
-    $url = $APIEndpoint.$Service . '?' . http_build_query($Param);
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_USERPWD, "$AccessKey:");
-    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json'));
-    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    $arrResponse = json_decode($response, TRUE);
-    return json_decode($response, TRUE);
+    $TwilioToken = $arrSecretValues["secrets"]["TWILIO_KEY"]["computed"];
+    $FromNumber = $arrSecretValues["secrets"]["TWILIO_NUM"]["computed"];
+    $TwilioSID = $arrSecretValues["secrets"]["TWILIO_SID"]["computed"];
   }
-
-  function GenerateRecovery($iUserID)
+  else
   {
-    if (isset($GLOBALS["ConfArray"]["RecoverCodeLen"]) )
+    if (array_key_exists("messages",$arrSecretValues))
     {
-        $iCodeLen = $GLOBALS["ConfArray"]["RecoverCodeLen"];
+      $AccessKey = getenv("DOPPLERKEY");
+      $strMsg = "There was an issue fetching the secrets from $DopplerProj - $DopplerConf. Key starts with '" . substr($AccessKey,0,12) ."'";
+      foreach ($arrSecretValues["messages"] as $msg)
+      {
+        $strMsg .= "$msg. ";
+      }
+      return($strMsg);
     }
     else
     {
-        $iCodeLen = 1;
+      return("Unexpected reponse from FetchDopplerStatic" . json_encode($arrSecretValues));
     }
-    $RecovCode = $GLOBALS["TextArray"]["RecovCode"];
-    $strRecoveryCode = chunk_split(bin2hex(random_bytes($iCodeLen/2)),4," ");
-    print "<p class=\"BlueAttn\">$RecovCode</p>";
-    print "<p class=\"BlueAttn\">$strRecoveryCode</p>";
-    $strCleanRecovery = str_replace(' ','',$strRecoveryCode);
-    $strECode = password_hash($strCleanRecovery, PASSWORD_DEFAULT);
-    $strQuery = "update tblUsers set vcRecovery = '$strECode' where iUserID = $iUserID;";
-    UpdateSQL ($strQuery, "update");
   }
+
+  $APIEndpoint = "https://api.twilio.com/";
+  $Service = "2010-04-01/Accounts/$TwilioSID/Messages.json";
+  $method = "POST";
+
+  $Param = array();
+  $Param['From'] = $FromNumber;
+  $Param['Body'] = $msg;
+  $Param['To'] = $number;
+
+  $url = $APIEndpoint.$Service;
+  $curl = curl_init();
+  curl_setopt($curl, CURLOPT_USERPWD, "$TwilioSID:$TwilioToken");
+  curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+  curl_setopt($curl, CURLOPT_URL, $url);
+  curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($curl, CURLOPT_ENCODING, '');
+  curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json','Content-Type: application/x-www-form-urlencoded'));
+  curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+  curl_setopt($curl,CURLOPT_POSTFIELDS,http_build_query($Param));
+  $response = curl_exec($curl);
+  curl_close($curl);
+  $arrResponse = json_decode($response, TRUE);
+  return json_decode($response, TRUE);
+}
+
+function GenerateRecovery($iUserID)
+{
+  if (isset($GLOBALS["ConfArray"]["RecoverCodeLen"]) )
+  {
+      $iCodeLen = $GLOBALS["ConfArray"]["RecoverCodeLen"];
+  }
+  else
+  {
+      $iCodeLen = 1;
+  }
+  $RecovCode = $GLOBALS["TextArray"]["RecovCode"];
+  $strRecoveryCode = chunk_split(bin2hex(random_bytes($iCodeLen/2)),4," ");
+  print "<p class=\"BlueAttn\">$RecovCode</p>";
+  print "<p class=\"BlueAttn\">$strRecoveryCode</p>";
+  $strCleanRecovery = str_replace(' ','',$strRecoveryCode);
+  $strECode = password_hash($strCleanRecovery, PASSWORD_DEFAULT);
+  $strQuery = "update tblUsers set vcRecovery = '$strECode' where iUserID = $iUserID;";
+  UpdateSQL ($strQuery, "update");
+}
 
 ?>
