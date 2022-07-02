@@ -112,7 +112,7 @@
         CleanReg($strUID);
         CleanReg($strOUID);
         CleanReg($Password);
-        cleanreg($PWDConf);
+        Cleanreg($PWDConf);
         if ($Password !='' or $strOUID != $strUID)
         {
           $strQuery = "select count(*) iRowCount from tblUsers where vcUID = '$strUID' and iUserID <> $iUserID";
@@ -141,44 +141,42 @@
             $i += 1;
           }
 
-          if ($strUID2 == $strUID)
+          if ($strlen($Password) < $MinPWDLen)
           {
-            $salt = substr($strUID , 0, 4) ;
-            $PWD = crypt($Password , $salt);
+            print "<p>Passwords is too short, please supply a password that is at least $MinPWDLen long.</p>\n";
           }
           else
           {
-            $salt = substr($strOUID , 0, 4) ;
-            $PWD = crypt($Password , $salt);
-          }
-          $strQuery="";
-          if ($Password == $PWDConf and $strUID == $strUID2 and $Password != '')
-          {
-            $strQuery = "UPDATE tblUsers SET vcUID = '$strUID', vcPWD = '$PWD' WHERE iUserID = '$iUserID'";
-          }
-          if ($Password =='' and $strOUID != $strUID and $strUID == $strUID2)
-          {
-            print "<p>Please provide password to change your user name.</p>";
-          }
-          if ($Password != $PWDConf and $strUID == $strUID2)
-          {
-            print "<p>Passwords do not match so password and username was not changed.</p>\n";
-          }
-          if ($Password == $PWDConf and $strUID != $strUID2)
-          {
-            print "<p>Requested username is already in use could not be changed, however the password will been changed. " .
-                  "To change the username use a different username that is not in use. For example $strUID2 is available.</p>\n";
-            $strQuery = "UPDATE tblUsers SET vcPWD = '$PWD' WHERE iUserID = '$iUserID'";
-          }
-          if ($Password != $PWDConf and $strUID != $strUID2)
-          {
-            print "<p>Passwords do not match so password was not changed. Requested username is already in use could not be changed. " .
-                  "To change the username Try again and use a different username that is not in use. " .
-                  "For example $strUID2 is available. When changing the password make sure you type the same one twice.</p>\n";
-          }
-          if ($strQuery)
-          {
-            UpdateSQL($strQuery, "update");
+            $PWD = password_hash($Password, PASSWORD_DEFAULT);
+            $strQuery="";
+            if ($Password == $PWDConf and $strUID == $strUID2 and $Password != '')
+            {
+              $strQuery = "UPDATE tblUsers SET vcUID = '$strUID', vcPWD = '$PWD', bChangePWD = 0 WHERE iUserID = '$iUserID'";
+            }
+            if ($Password =='' and $strOUID != $strUID and $strUID == $strUID2)
+            {
+              print "<p>Please provide password to change your user name.</p>";
+            }
+            if ($Password != $PWDConf and $strUID == $strUID2)
+            {
+              print "<p>Passwords do not match so password and username was not changed.</p>\n";
+            }
+            if ($Password == $PWDConf and $strUID != $strUID2)
+            {
+              print "<p>Requested username is already in use could not be changed, however the password will been changed. " .
+                    "To change the username use a different username that is not in use. For example $strUID2 is available.</p>\n";
+              $strQuery = "UPDATE tblUsers SET vcPWD = '$PWD', bChangePWD = 0 WHERE iUserID = '$iUserID'";
+            }
+            if ($Password != $PWDConf and $strUID != $strUID2)
+            {
+              print "<p>Passwords do not match so password was not changed. Requested username is already in use could not be changed. " .
+                    "To change the username Try again and use a different username that is not in use. " .
+                    "For example $strUID2 is available. When changing the password make sure you type the same one twice.</p>\n";
+            }
+            if ($strQuery)
+            {
+              UpdateSQL($strQuery, "update");
+            }
           }
         }
       }

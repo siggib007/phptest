@@ -331,11 +331,12 @@ INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) 
 	('NumAdminCol', '5', 'Number of columns of administrative options', 'int'),
 	('ShowAdminSub', 'True', 'Show Administrative sub menu', 'Boolean'),
 	('UserTimeout', '25', 'User Login Timeout (minutes)', 'int'),
-	('NewPWDLen', '15', 'Initial Random Password Length', 'int'),
+	('NewPWDLen', '16', 'Initial Random Password Length, must be even number', 'int'),
 	('ShowPort', 'true', 'Show non standard port in header name', 'Boolean'),
   ('ProductName', 'Siggi\'s PHP Demo', 'Site or Product name', 'text'),
   ('AllowReg', 'true', 'Allow Self Registraton', 'Boolean'),
-  ('RecoverCodeLen', '32', 'Length of Recovery Code', 'text'),
+  ('RecoverCodeLen', '32', 'Length of Recovery Code, must be even, ideally multiple of 4', 'text'),
+  ('MinPWDLen', '12', 'Minimum length of any password', 'int'),
 	('InitSetup', 'True', 'Initial Setup Mode is active. This should not exists past setup', 'Boolean');
 
 -- Dumping structure for table PHPDemo.tblContactInfo
@@ -614,6 +615,7 @@ INSERT INTO `tblPageTexts` (`vcTextName`, `vcTextDescr`, `tPageTexts`) VALUES
   ('AuthApp', 'Explanation of a TOTP Auth App', 'Please make sure you have a TOTP capable Authenticator app on your mobile. \r\nGoogle, Microsoft, LastPass, amongst others, all make compatible authenticators. \r\nThey are all called Authenticator in your app store. Authy is my personal favorite TOTP Authenticator. \r\nWhen I talk about app below I\'m referring to this authenticator app '),
   ('TestWarn', 'Warning on the Email Testing page', 'Doing so might allow hackers to send spam from your configured email address via your email server, severly damaging your email reputation.<br>\r\nOnly run this in a secure environment where you have absolute control over who has access.<br>\r\nFor example run this on your laptop and set your winodws firewall to block all inbound connections.'),
   ('RecovCode', 'Text that explains Recovery code', 'Please copy the following recovery code and store it in your Password manger, in case something happens to your authenticator app.'),
+  ('RecoverAck', 'Message to display during password recovery', 'If the email you submitted is registered in our system, your password has been reset and sent to that email. \r\nIf you don\'t get an email reach out $SupportEmail for further help'),
   ('Wemail', 'Welcome Email Intro', 'welcome welcome');
 
 -- Dumping structure for table PHPDemo.tblPageTypes
@@ -725,6 +727,7 @@ CREATE TABLE IF NOT EXISTS `tblUsers` (
   `iPrivLevel` int(11) NOT NULL DEFAULT '1',
   `vcMFASecret` varchar(50) DEFAULT NULL,
   `vcRecovery` varchar(260) DEFAULT NULL,
+  `bChangePWD` BIT DEFAULT NULL,
   PRIMARY KEY (`iUserID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 

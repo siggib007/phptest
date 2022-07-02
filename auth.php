@@ -145,7 +145,6 @@
 	}
 
 	$dtNow = date("Y-m-d H:i:s");
-	$salt = substr($strLogin,0,4);
   $tfa = new TwoFactorAuth();
 	if ($strLogin and $strPWD)
 	{
@@ -175,9 +174,8 @@
       $strTOTP = "";
       $strRHash = "";
     }
-    $strEPWD = crypt($strPWD,$salt);
-//		print "Correct password:$strUPWD<br>\nYou entered:$strPWD which encrypts to $strEPWD using a salt of $salt<br>\n";
-    if ($strUPWD==$strEPWD)
+
+    if (password_verify($strPWD, $strUPWD))
     {
       if ($strTOTP == "")
       {

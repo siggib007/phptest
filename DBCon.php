@@ -201,7 +201,10 @@ else
         case "NewPWDLen":
             $PWDLength = $Row['vcValue'];
             break;
-        case "ProductName":
+        case "MinPWDLen":
+            $MinPWDLen = $Row['vcValue'];
+            break;
+          case "ProductName":
           $ProdName = $Row['vcValue'];
           break;
       }

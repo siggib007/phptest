@@ -157,6 +157,7 @@ function CleanReg ($InVar)
   $InVar = str_replace("=","",$InVar);
   $InVar = str_replace('"',"",$InVar);
   $InVar = str_replace("'","",$InVar);
+  $InVar = str_replace(";","",$InVar);
   return $InVar;
 }
 

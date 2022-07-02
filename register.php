@@ -36,10 +36,6 @@
     $strUserID = "";
     $strCell = "";
     $bSuccess = FALSE;
-    if (!$bSuccess)
-    {
-
-    }
     if (isset($GLOBALS["ConfArray"]["minRegLevel"]) )
     {
         $iLevel = $GLOBALS["ConfArray"]["minRegLevel"];
