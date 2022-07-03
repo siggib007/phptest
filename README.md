@@ -37,10 +37,18 @@ If you would rather deploy this manually to PHP server and a mySQL or MariaDB se
    `SetEnv DOPPLERKEY "topsecret key"`
 5. If you want to use AKEYLESS system there is a shell script file aKeylessImport.txt that will create all the secrets needed, assuming you have their CLI installed. You would then adjust these values as necessary. I recommend against having password and API authentication keys in any sort of shell scripting or import file, rather manually update those on the CLI or in the GUI later.
 
-If you want to deploy this to a shared hosting provider where you can't create environment variables but you want to use Doppler, AKEYLESS or other system that require and API key, just create a php file that isn't tracked by git or any other system and has extra strict file access permissions on it and place the following content in it. If you want to use AKEYLESS or some other system, just adjust accordingly.
+If you want to deploy this to a shared hosting provider where you can't create environment variables but you want to use Doppler, AKEYLESS or other system that require and API key, just create a php file that isn't tracked by git or any other system and has extra strict file access permissions on it and place the following content in it. 
 
 `<?php
 putenv("DOPPLERKEY=dp.st.dh.xyzabc......");
+require("DopplerVar.php");
+?>`
+
+If you want to use AKEYLESS
+
+`<?php
+putenv("KEYLESSID=p-x2ujypx28t3y");
+putenv("KEYLESSKEY=QOWl4aybzb9SllNtJuQihkqU+sw91FFaZvZpiH+0WLY=");
 require("DopplerVar.php");
 ?>`
 
