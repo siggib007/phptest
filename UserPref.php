@@ -1,9 +1,10 @@
 <?php
-  $strQuery = "SELECT t.*,v.vcValue,v.iUserID ".
+ print "<p>&nbsp;</p>\n<p class=\"Header2\"><a id=\"mfa\">Account Preferences</a></p>\n";
+ $btnValue = "";
+ $strQuery = "SELECT t.*,v.vcValue,v.iUserID ".
   "FROM tblUsrPrefTypes t LEFT JOIN tblUsrPrefValues v ON t.iID = v.iTypeID ".
-  "WHERE v.iUserID = $iUserID OR v.iUserID IS NULL;";
+  "WHERE v.iUserID = $iUserID OR v.iUserID IS NULL ORDER BY iSortOrder;";
 
-  print "<table>\n";
   if (!$Result = $dbh->query ($strQuery))
   {
     error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
@@ -13,36 +14,33 @@
   }
   while ($Row = $Result->fetch_assoc())
   {
-    $Key = $Row['vcCode'];
+    $Key = $Row['iID'];
     $Value = $Row['vcValue'];
     $ValueDescr = $Row['vcLabel'];
     $ValueType = $Row['vcType'];
     print "<form method=\"POST\">\n";
-    print "<tr valign=\"top\">\n";
-    print "<td class=\"lblright\"><input type=\"hidden\" value=\"$Key\" name=\"txtValueName\">$ValueDescr: </td>\n";
-    print "<td>";
+    print "<input type=\"hidden\" value=\"$Key\" name=\"txtKey\">";
+    print "<input type=\"hidden\" value=\"$ValueDescr\" name=\"txtLabel\">";
+    print "<p>$ValueDescr: ";
     switch ($ValueType)
     {
       case "Boolean":
-        if ($Value=="True")
+        if (strtolower($Value)=="true")
         {
-          $strChecked = "checked";
+          $btnValue = "Enabled";
         }
         else
         {
-          $strChecked = "";
+          $btnValue = "Disabled";
         }
-        print "<input type=\"checkbox\" name=\"chkValue\" $strChecked>";
         break;
       case "int":
       case "text":
-        print "<input type=\"text\" value=\"$Value\" name=\"txtValue\" size=\"50\" >";
+        print "<input type=\"text\" value=\"$Value\" name=\"txtValue\" size=\"30\" >";
+        $btnValue = "Save";
         break;
       }
-      print "</td>\n";
-      print "<td><input type=\"Submit\" value=\"Save\" name=\"btnSubmit\"></td>";
-      print "</tr>\n";
+      print "<input type=\"Submit\" value=\"$btnValue\" name=\"btnSubmit\"></p>\n";
       print "</form>\n";
   }
-  print "</table>\n";
 ?>

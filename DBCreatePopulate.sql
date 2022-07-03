@@ -16,6 +16,7 @@
 
 
 -- Dumping database structure for PHPDemo
+DROP DATABASE IF EXISTS `PHPDemo`;
 CREATE DATABASE IF NOT EXISTS `PHPDemo` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
 USE `PHPDemo`;
 
@@ -303,13 +304,25 @@ INSERT INTO `tblAdminCategories` (`iCatID`, `vcCatName`) VALUES
 	(7, 'Other');
 
 -- Dumping structure for table tblUsrPrefTypes
-CREATE TABLE `tblUsrPrefTypes` (
-	`iID` INT(11) NOT NULL AUTO_INCREMENT,
-	`vcCode` VARCHAR(15) NULL DEFAULT NULL,
-	`vcLabel` VARCHAR(50) NULL DEFAULT NULL,
-	`vcType` VARCHAR(10) NULL DEFAULT NULL,
-	PRIMARY KEY (`iID`) USING BTREE
-);
+CREATE TABLE IF NOT EXISTS `tblUsrPrefTypes` (
+  `iID` int(11) NOT NULL AUTO_INCREMENT,
+  `iSortOrder` int(11) NOT NULL,
+  `vcCode` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `vcLabel` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `vcType` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`iID`)
+) ;
+
+-- Dumping data for table PHPDemo.tblUsrPrefTypes: ~8 rows (approximately)
+INSERT INTO `tblUsrPrefTypes` (`iID`, `iSortOrder`, `vcCode`, `vcLabel`, `vcType`) VALUES
+	(1, 1, 'EnableSMS', 'Enable Sending SMS Messages', 'Boolean'),
+	(2, 2, 'SMS2FA', 'Enable SMS as a MFA', 'Boolean'),
+	(3, 3, 'Email2FA', 'Enable email as a MFA', 'Boolean'),
+	(4, 4, 'EmlOnLogin', 'Receive email notification on each login', 'Boolean'),
+	(5, 5, 'SMSonLogin', 'Receive email notification on each login', 'Boolean'),
+	(6, 6, 'SMSonRec', 'Receive SMS when Recovery Code is used', 'Boolean'),
+	(7, 7, 'emlOnRec', 'Receive an email when recovery code is used', 'Boolean'),
+	(8, 8, 'pronoun', 'Preferred Pronouns', 'text');
 
 -- Dumping structure for table tblUsrPrefValues
 CREATE TABLE `tblUsrPrefValues`
