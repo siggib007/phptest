@@ -185,9 +185,10 @@
         }
       }
     }
+    $btnSubmit = "";
   }
 
-  if ($btnSubmit == "" or $btnSubmit == "Submit")
+  if ($btnSubmit == "")
   {
     print "<p class=\"Header2\">General Info</p>\n\n";
     $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = $Priv;";
@@ -261,6 +262,9 @@
     print "</table></form>\n";
 
     print "<div class=\"MainTextCenter\">\n";
+
+    require("UserPref.php");
+
     print "<p>&nbsp;</p>\n<p class=\"Header2\"><a id=\"mfa\">MultiFactor Setup</a></p>\n";
     print "<p class=\"Header3\">TOTP MFA (AKA Google Authenticator)</p>\n";
     if ($strTOTP == "")
