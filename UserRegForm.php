@@ -17,32 +17,40 @@
     print "<tr>\n<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">City:</td>\n";
     print "<td><input type=\"text\" name=\"txtCity\" size=\"50\" value=\"$strCity\"> </td>\n</tr>\n";
     print "<tr>\n";
-    print "<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">State:</td>\n";
-    print "<td>";
-    $strQuery = "select * from US_States;";
-    if (!$Result2 = $dbh->query ($strQuery))
+    if (strtolower($bUSOnly) == "true")
     {
-        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-        exit(2);
+      print "<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">State:</td>\n";
+      print "<td>";
+      $strQuery = "select * from US_States;";
+      if (!$Result2 = $dbh->query ($strQuery))
+      {
+          error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
+          error_log ($strQuery);
+          print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
+          exit(2);
+      }
+      print "<select size=\"1\" name=\"cmbState\">\n";
+      print "<option>Please Select State</option>\n";
+      print "<option>N/A</option>\n";
+      while ($Row2 = $Result2->fetch_assoc())
+      {
+          if ($Row2['vcStateAbr'] == $strState)
+          {
+                  print "<option selected value=\"{$Row2['vcStateAbr']}\">{$Row2['vcStateName']}</option>\n";
+          }
+          else
+          {
+                  print "<option value=\"{$Row2['vcStateAbr']}\">{$Row2['vcStateName']}</option>\n";
+          }
+      }
+      print "</select>";
+      print "</td>\n";
     }
-    print "<select size=\"1\" name=\"cmbState\">\n";
-    print "<option>Please Select State</option>\n";
-    print "<option>N/A</option>\n";
-    while ($Row2 = $Result2->fetch_assoc())
+    else
     {
-        if ($Row2['vcStateAbr'] == $strState)
-        {
-                print "<option selected value=\"{$Row2['vcStateAbr']}\">{$Row2['vcStateName']}</option>\n";
-        }
-        else
-        {
-                print "<option value=\"{$Row2['vcStateAbr']}\">{$Row2['vcStateName']}</option>\n";
-        }
+      print "<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">State/Province/Region:</td>\n";
+      print "<td> <input type=\"text\" name=\"cmbState\" size=\"10\" value=\"$strState\"></td>\n";
     }
-    print "</select>";
-    print "</td>\n";
     print "</tr>\n";
     print "<tr>\n";
     print "<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">Zip:</td>\n";
@@ -79,7 +87,7 @@
     print "</td>\n";
     print "</tr>\n";
     print "<tr>\n";
-    print "<td align=\"right\" class=\"lbl\">Cell Phone Number: </td>\n";
+    print "<td align=\"right\" class=\"lbl\">Cell Phone Number, internation format please: </td>\n";
     print "<td><input type=\"text\" name=\"txtCell\" size=\"15\" value=\"$strCell\"> </td>\n";
     print "</tr>\n";
     print "<tr>\n<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">Email address: </td>\n";

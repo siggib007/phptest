@@ -53,6 +53,26 @@
     $strEmail = CleanReg($strEmail);
     $strOEmail = CleanReg($strOEmail);
     $strCell = CleanReg($strCell);
+    if (strtolower($bUSOnly) == "true")
+    {
+      $strTemp = format_phone_us($strCell);
+      if (substr($strTemp, 0,2) != "+1")
+      {
+        print "<p class=\"Error\">$strCell $strTemp. Please leave empty rather than put invalid number.</p>";
+      }
+      else
+      {
+        $strCell = $strTemp;
+      }
+    }
+    else
+    {
+      $strTemp = ValidateIntlPhoneNumber($strCell);
+      if ($strTemp != "")
+      {
+        print "<p class=\"Error\">$strCell $strTemp</p>";
+      }
+    }
     if($bSpam)
     {
         print "<p class=\"Error\">Your update has been flagged as spam as invalid or missing required data was detected in one or more input fields. ";

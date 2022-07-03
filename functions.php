@@ -365,6 +365,48 @@ function codeToMessage($code)
     return $message;
 }
 
+function ValidateIntlPhoneNumber($phone)
+{
+  $strMsg = "";
+  if ($phone == "")
+  {
+    return "";
+  }
+  $NumLen = strlen(preg_replace("/[^0-9]/", "", $phone));
+  if ($NumLen == 0)
+  {
+    return "Cell is not empty, yet it contains no digits. Please leave empty if you don't want to provide your number";
+  }
+  if ($NumLen < 7)
+  {
+    $strMsg .= "That number only has $NumLen digits, seems awfully short for a valid number please double check.<br>\n "
+              . "Please leave empty if you don't want to provide your number<br>\n";
+  }
+  if ($NumLen > 15)
+  {
+    $strMsg .= "That number has $NumLen digits, seems awfully long for a valid number please double check. <br>\n"
+              . "Please leave empty if you don't want to provide your number<br>\n";
+  }
+  if (substr($phone, 0,1) != "+")
+  {
+    $strMsg .= "Please format your phone number using the internation format of +123-555-1234-5678.<br>\n"
+               . "Where 123 is the country code, 555 is the area code (where applicable) and the rest is the local number.<br>\n "
+               . "Seperators are optional and can be whatever you want. Just start with a +<br>\n";
+  }
+  if (substr($phone, 0,1) == "0")
+  {
+    $strMsg .= "Please format your phone number using the internation format of +123-555-1234-5678<br>\n"
+               . "Where 123 is the country code, 555 is the area code (where applicable) and the rest is the local number.<br>\n"
+               . "Seperators are optional and can be whatever you want. Just start with a +<br>\n"
+               . "Please leave off all leading zeros and any international call prefixes, such as 00 or 011, etc.<br>\n";
+  }
+  if ($NumLen < 10 && substr($phone, 0,1) != "+")
+  {
+    $strMsg .= "That number only has $NumLen digits, did you forget the country code? ";
+  }
+  return $strMsg;
+}
+
 function format_phone_us($phone)
 {
   // note: strip out everything but numbers
@@ -372,20 +414,16 @@ function format_phone_us($phone)
   $length = strlen($phone);
   switch($length)
   {
-    case 0:
-        return 'notphone';
     case 7:
-        return preg_replace("/([0-9]{3})([0-9]{4})/", "$1-$2", $phone);
-        break;
-    case 10:
-        return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "($1) $2-$3", $phone);
+        return "Area code is required";
         break;
     case 11:
         $phone=  substr($phone, 1);
-        return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "($1) $2-$3", $phone);
+    case 10:
+        return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "+1 ($1) $2-$3", $phone);
         break;
     default:
-        return $phone;
+        return "not a valid US phone number";
         break;
   }
 }

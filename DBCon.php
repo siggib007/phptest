@@ -204,10 +204,13 @@ else
         case "MinPWDLen":
             $MinPWDLen = $Row['vcValue'];
             break;
-          case "ProductName":
+        case "ProductName":
           $ProdName = $Row['vcValue'];
           break;
-      }
+        case "USOnly":
+          $bUSOnly = $Row['vcValue'];
+          break;
+        }
     }
   }
 //Log_Array($ConfArray,"Dumping ConfArray");
