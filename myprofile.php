@@ -16,6 +16,7 @@
   require_once("header.php");
 
   $strUserID = $_SESSION["UID"];
+  require("UserDBVar.php");
 
   if ($strReferer != $strPageURL and $PostVarCount > 0)
   {
@@ -120,7 +121,7 @@
     {
       $strValue = "";
     }
-    $strQuery = "update tblUsrPrefValues set vcValue = $strValue where iUserID = $iUserID and iTypeID = $strKey ;";
+    $strQuery = "update tblUsrPrefValues set vcValue = '$strValue' where iUserID = $iUserID and iTypeID = $strKey ;";
     if(UpdateSQL ($strQuery, "update"))
     {
       print "<p class=\"BlueAttn\">Update for $strLabel successful</p>";
@@ -437,7 +438,6 @@
       $PrivName = $Priv;
     }
 
-    require("UserDBVar.php");
     print "<div class=\"MainTextCenter\">\n";
     if ($bChangePWD == 1)
     {
