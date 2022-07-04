@@ -46,38 +46,47 @@
 
   if (isset($iUserID))
   {
+    // $temp = json_encode(SendUserSMS("test",$iUserID));
+    // print "Test Results: $temp<br>";
     $arrUserPrefs = array();
     $strQuery = "SELECT t.*,v.vcValue,v.iUserID ".
                 "FROM tblUsrPrefTypes t LEFT JOIN tblUsrPrefValues v ON t.iID = v.iTypeID ".
                 "WHERE v.iUserID = $iUserID OR v.iUserID IS NULL;";
 
-    if (!$Result = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    // $jsonstr = json_encode($QueryData);
+    // print "<pre>$jsonstr</pre>\n";
+
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    while ($Row = $Result->fetch_assoc())
-    {
-      if (is_null($Row["iUserID"]))
+      foreach($QueryData[1] as $Row)
       {
-        print $Row["vcCode"] ." has NOT been set<br>\n";
-        $strQuery = "INSERT INTO tblUsrPrefValues (iTypeID, iUserID) VALUES ($Row[iID],$iUserID );";
-        if(UpdateSQL ($strQuery, "insert"))
+        // var_dump($Row);
+        // print "<br>";
+        if (is_null($Row["iUserID"]))
         {
-          print $Row["vcCode"] ." has now been set to ''<br>\n";
+          print $Row["vcCode"] ." has NOT been set<br>\n";
+          $strQuery = "INSERT INTO tblUsrPrefValues (iTypeID, iUserID) VALUES ($Row[iID],$iUserID );";
+          if(UpdateSQL ($strQuery, "insert"))
+          {
+            print $Row["vcCode"] ." has now been set to ''<br>\n";
+          }
+          else
+          {
+            print "Failed to set " . $Row["vcCode"];
+          }
         }
         else
         {
-          print "Failed to set " . $Row["vcCode"];
+          print $Row["vcCode"] ." has been set to '$Row[vcValue]'<br>\n";
         }
+        $arrUserPrefs[] = $Row;
       }
-      else
-      {
-        print $Row["vcCode"] ." has been set to '$Row[vcValue]'<br>\n";
-      }
-      $arrUserPrefs[] = $Row;
+    }
+    else
+    {
+      // var_dump($QueryData);
+      print "Rowcount: $QueryData[0] Msg:$QueryData[1]";
     }
   }
   else

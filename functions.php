@@ -47,7 +47,40 @@ function ShowErrHead()
   exit;
 }
 
-function UpdateSQL ($strQuery,$type)
+function QuerySQL($strQuery)
+{
+  $dbh = $GLOBALS['dbh'];
+  $arrReturn = array();
+  $x = stripos($strQuery,"from");
+  $y = stripos($strQuery,"where");
+  $strFrom = substr($strQuery,$x,$y-$x);
+  try
+  {
+    $Result = $dbh->query($strQuery);
+  }
+  catch (Throwable $e)
+  {
+    error_log("Fatal error while attemting to execute a SQL query. ". $e->getMessage());
+    error_log ($strQuery);
+    $errMsg = "Fatal error when executing the query";
+    return [-1,$errMsg];
+  }
+  if (!$Result)
+  {
+    error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
+    error_log ($strQuery);
+    $errMsg = "Failed to fetch data $strFrom";
+    return [-1,$errMsg];
+  }
+  $rowcount=mysqli_num_rows($Result);
+  while ($Row = $Result->fetch_assoc())
+  {
+    $arrReturn[] = $Row;
+  }
+  return [$rowcount,$arrReturn];
+}
+
+function UpdateSQL($strQuery,$type)
 {
   $DefaultDB = $GLOBALS['DefaultDB'];
   $dbh = $GLOBALS['dbh'];
@@ -89,7 +122,7 @@ function UpdateSQL ($strQuery,$type)
   }
 }
 
-function CallSP ($strQuery)
+function CallSP($strQuery)
 {
   $DefaultDB = $GLOBALS['DefaultDB'];
   $dbh = $GLOBALS['dbh'];
@@ -124,7 +157,7 @@ function CallSP ($strQuery)
   }
 }
 
-function CallSPNoOut ($strQuery)
+function CallSPNoOut($strQuery)
 {
   $dbh = $GLOBALS['dbh'];
 
@@ -142,7 +175,7 @@ function CallSPNoOut ($strQuery)
   }
 }
 
-function CleanSQLInput ($InVar)
+function CleanSQLInput($InVar)
 {
   $InVar = str_replace("\\","",$InVar);
   $InVar = str_replace("'","\'",$InVar);
@@ -150,7 +183,7 @@ function CleanSQLInput ($InVar)
   return $InVar;
 }
 
-function CleanReg ($InVar)
+function CleanReg($InVar)
 {
   $InVar = strip_tags($InVar);
   $InVar = str_replace("\\","",$InVar);
@@ -161,7 +194,7 @@ function CleanReg ($InVar)
   return $InVar;
 }
 
-function SpamDetect ($InVar)
+function SpamDetect($InVar)
 {
   $dbh = $GLOBALS['dbh'];
   $SupportEmail = $GLOBALS['SupportEmail'];
@@ -199,7 +232,7 @@ function QuarterYear($date)
   return "Q$QNum $YearNum";
 }
 
-function Log_BackTrace ($BackTrace, $msg)
+function Log_BackTrace($BackTrace, $msg)
 {
   error_log("");
   error_log("$msg starting debug backtrace");
@@ -226,7 +259,7 @@ function Log_BackTrace ($BackTrace, $msg)
   error_log("$msg ending debug backtrace");
 }
 
-function Log_Session ($msg)
+function Log_Session($msg)
 {
   $Session=$_SESSION;
   error_log("");
@@ -249,7 +282,7 @@ function Log_Session ($msg)
   error_log("$msg ending dump of SESSION array");
 }
 
-function Log_Array ($array, $msg)
+function Log_Array($array, $msg)
 {
   error_log("");
   error_log("$msg start dump of array");
@@ -428,7 +461,7 @@ function format_phone_us($phone)
   }
 }
 
-function StripHTML ($content)
+function StripHTML($content)
 {
   $content = str_replace("<th>","|",$content);
   $content = str_replace("</th>","",$content);
@@ -446,7 +479,7 @@ function StripHTML ($content)
   return trim($content);
 }
 
-function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName = "", $strAttach = "", $strAddHeader = "", $strFile2Attach = "")
+function SendHTMLAttach($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName = "", $strAttach = "", $strAddHeader = "", $strFile2Attach = "")
 {
 
   require_once("PHPMailer/Exception.php");
@@ -568,7 +601,7 @@ function EmailText($to,$subject,$message,$from)
   }
 }
 
-function FetchKeylessStatic ($arrNames)
+function FetchKeylessStatic($arrNames)
 {
   # $arrNames is an array of the secret names to be fetched
   # Returns an associated array with the secret name as key and the secret as the value
@@ -620,7 +653,7 @@ function FetchKeylessStatic ($arrNames)
   return json_decode($response, TRUE);
 }
 
-function FetchDopplerStatic ($strProject,$strConfig)
+function FetchDopplerStatic($strProject,$strConfig)
 {
   # $strProject is a simple string with the name of the Doppler Project holding your secret
   # $strConfig is a simple string with the name of the configuration to use
@@ -652,7 +685,58 @@ function FetchDopplerStatic ($strProject,$strConfig)
   return json_decode($response, TRUE);
 }
 
-function SendTwilioSMS ($msg,$number)
+function SendUserSMS($msg,$iUserID)
+{
+  $strQuery = "SELECT vcValue FROM tblUsrPrefValues WHERE iUserID = $iUserID AND iTypeID=1;";
+  $QueryData = QuerySQL($strQuery);
+  if($QueryData[0] > 0)
+  {
+    if (strtolower($QueryData[1][0]["vcValue"]) == "true")
+    {
+      $strQuery = "SELECT vcCell FROM tblUsers WHERE iUserID = $iUserID;";
+      $QueryData = QuerySQL($strQuery);
+      if($QueryData[0] > 0)
+      {
+        $response = SendTwilioSMS($msg,$QueryData[1][0]["vcCell"]);
+        if ($response[0])
+        {
+          return "Message successfully queued for sending";
+        }
+        else
+        {
+          $arrResponse = json_decode($response[1], TRUE);
+          $errmsg = "";
+          if (array_key_exists("message",$arrResponse))
+          {
+            $errmsg .= $arrResponse["message"];
+          }
+          if (array_key_exists("more_info",$arrResponse))
+          {
+            $errmsg .= " For more information see " . $arrResponse["more_info"];
+          }
+          return $errmsg;
+        }
+
+      }
+      else
+      {
+        error_log("Error in SendUserSMS when fetching cell num. ".json_encode($QueryData));
+        return "Failure, please check logs";
+      }
+    }
+    else
+    {
+      return "Not permitted to send SMS";
+    }
+  }
+  else
+  {
+    error_log("Error in SendUserSMS when fetching permission. ".json_encode($QueryData));
+    return "Failure, please check logs";
+  }
+}
+
+function SendTwilioSMS($msg,$number)
 {
   # $msg is a simple string with the message you wish to send
   # $number is the phone number to send it to
