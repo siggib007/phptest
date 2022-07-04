@@ -687,6 +687,15 @@ function FetchDopplerStatic($strProject,$strConfig)
 
 function SendUserSMS($msg,$iUserID)
 {
+  # SendUserSMS is a function that looks up users cell number
+  # validates that the user has consented to receiving texts
+  # then uses SendTwilioSMS to send the message via Twilio Service
+  # $msg is a simple string with the message you wish to send
+  # $iUserID is the ID number of the user to send it to
+  # Returns a string indicating success or failure
+  #    queued: Success
+  #    failure/Not permitted: Unable to send
+
   $strQuery = "SELECT vcValue FROM tblUsrPrefValues WHERE iUserID = $iUserID AND iTypeID=1;";
   $QueryData = QuerySQL($strQuery);
   if($QueryData[0] > 0)
@@ -700,7 +709,7 @@ function SendUserSMS($msg,$iUserID)
         $response = SendTwilioSMS($msg,$QueryData[1][0]["vcCell"]);
         if ($response[0])
         {
-          return "Message successfully queued for sending";
+          return "queued";
         }
         else
         {
@@ -721,23 +730,24 @@ function SendUserSMS($msg,$iUserID)
       else
       {
         error_log("Error in SendUserSMS when fetching cell num. ".json_encode($QueryData));
-        return "Failure, please check logs";
+        return "Failure";
       }
     }
     else
     {
-      return "Not permitted to send SMS";
+      return "Not permitted";
     }
   }
   else
   {
     error_log("Error in SendUserSMS when fetching permission. ".json_encode($QueryData));
-    return "Failure, please check logs";
+    return "Failure";
   }
 }
 
 function SendTwilioSMS($msg,$number)
 {
+  # SendTwilioSMS is a function that send SMS message via Twilio Service
   # $msg is a simple string with the message you wish to send
   # $number is the phone number to send it to
   # Returns an array with first element true/false
