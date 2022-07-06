@@ -160,6 +160,7 @@
       $strUPWD = $Row['vcPWD'];
       $strTOTP = $Row['vcMFASecret'];
       $strRHash = $Row['vcRecovery'];
+      $strLastUpdated = $Row['dtUpdated'];
     }
     else
     {
@@ -169,6 +170,7 @@
       $strUPWD = "";
       $strTOTP = "";
       $strRHash = "";
+      $strLastUpdated = "";
     }
 
     if (password_verify($strPWD, $strUPWD))

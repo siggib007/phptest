@@ -20,16 +20,16 @@
       $iTypeID = $Row['iTypeID'];
       $strValue = $Row['vcValue'];
       $strEmail = $Row['vcEmail'];
-      $DataSet[$iTypeID]=array("value"=>$strValue,"email");
+      $DataSet[$iTypeID]=array("value"=>$strValue,"email"=>$strEmail);
     }
   }
-  if(count($DataSet > 0))
+  if(count($DataSet) > 0)
   {
     if(array_key_exists("4",$DataSet)) # Receive email notification on each login is defined
     {
       if (strtolower($DataSet["4"]["value"]) == "true")
       {
-        EmailText($DataSet["4"]["email"],"Successful Login Notification","Your account on $ProdName was successfully logged into",$fromEmail);
+        EmailText($DataSet["4"]["email"],"Successful Login Notification","Your account on $ProdName was successfully logged into",$FromEmail);
       }
     }
     if(array_key_exists("5",$DataSet)) # Receive SMS notification on each login is defined
@@ -41,7 +41,7 @@
     }
   }
 
-  if($Row['dtUpdated']=="")
+  if($strLastUpdated=="")
   {
     $strReturn = 'myprofile.php';
   }
@@ -51,7 +51,7 @@
   {
     $strError = 'Database update during loginfailed. Error ('. $dbh->errno . ') ' . $dbh->error;
     $strError .= $strQuery;
-    EmailText("$SupportEmail","Automatic Error Report",$strError,$fromEmail);
+    EmailText("$SupportEmail","Automatic Error Report",$strError,$FromEmail);
     error_log ($strError);
   }
   else

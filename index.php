@@ -62,14 +62,5 @@
     print "<p class=MainText>\n$PageText</p>\n";
   }
 
-  if (isset($iUserID))
-  {
-  }
-  else
-  {
-    print "Not logged in";
-  }
-
-
   require("footer.php");
 ?>
