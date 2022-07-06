@@ -7,13 +7,46 @@
   $_SESSION["iPrivLevel"] = $iPrivlvl;
   $_SESSION["LastActivity"] = time();
   $_SESSION["LoginTime"] = $dtNow;
-  if ($Row['dtUpdated']=="")
+
+  $strQuery = "SELECT v.iTypeID, v.vcValue, u.vcEmail " .
+              "FROM tblUsrPrefValues v JOIN tblUsers u ON v.iUserID = u.iUserID " .
+              "WHERE v.iUserID = $iUserID AND v.iTypeID IN (4,5);";
+  $QueryData = QuerySQL($strQuery);
+  $DataSet = array();
+  if($QueryData[0] > 0)
+  {
+    foreach($QueryData[1] as $Row)
+    {
+      $iTypeID = $Row['iTypeID'];
+      $strValue = $Row['vcValue'];
+      $strEmail = $Row['vcEmail'];
+      $DataSet[$iTypeID]=array("value"=>$strValue,"email");
+    }
+  }
+  if(count($DataSet > 0))
+  {
+    if(array_key_exists("4",$DataSet)) # Receive email notification on each login is defined
+    {
+      if (strtolower($DataSet["4"]["value"]) == "true")
+      {
+        EmailText($DataSet["4"]["email"],"Successful Login Notification","Your account on $ProdName was successfully logged into",$fromEmail);
+      }
+    }
+    if(array_key_exists("5",$DataSet)) # Receive SMS notification on each login is defined
+    {
+      if (strtolower($DataSet["5"]["value"]) == "true")
+      {
+        SendUserSMS("Your account on $ProdName was successfully logged into",$iUserID);
+      }
+    }
+  }
+
+  if($Row['dtUpdated']=="")
   {
     $strReturn = 'myprofile.php';
   }
 
   $strQuery = "update tblUsers set dtLastLogin = '$dtNow' where iUserID='$iUserID'";
-  //print "<p>$strQuery</p>";
   if (!$dbh->query ($strQuery))
   {
     $strError = 'Database update during loginfailed. Error ('. $dbh->errno . ') ' . $dbh->error;
@@ -24,7 +57,5 @@
   else
   {
     header("Location: " . $strReturn );
-    //print "<p class=\"Header1\">Welcome $Row[vcName] !!</p>";
-    //print "<p class=\"MainText\">You have level $iPrivlvl clerance. I need to take you back to $strReturn</p>\n";
   }
 ?>

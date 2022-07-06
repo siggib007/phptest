@@ -16,17 +16,25 @@
 
   require("header.php");
   $strQuery = "SELECT * FROM tblContent WHERE iMenuID = '$iMenuID' and dtTimeStamp = (select max(dtTimeStamp) from tblContent where iMenuID = '$iMenuID');";
-  if (!$Result = $dbh->query ($strQuery))
+  $QueryData = QuerySQL($strQuery);
+
+  if($QueryData[0] > 0)
   {
-    error_log ('Failed to fetch Content data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
-    print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-    exit(2);
+    foreach($QueryData[1] as $Row)
+    {
+      $PageHeader = $Row['vcPageHeader'];
+      $PageText = $Row['tPageText'];
+      $bCRLF = $Row['bLineBreak'];
+    }
   }
-  $Row = $Result->fetch_assoc();
-  $PageHeader = $Row['vcPageHeader'];
-  $PageText = $Row['tPageText'];
-  $bCRLF = $Row['bLineBreak'];
+  else
+  {
+    error_log("Rowcount: $QueryData[0] Msg:$QueryData[1]");
+    $PageHeader = "Error occured";
+    $PageText = "Failed to fetch the pagetext from the database";
+    $bCRLF = "";
+  }
+
   print "<p class=Header1>$PageHeader</p>";
   if (substr($PageText,0,1)=="<")
   {
@@ -41,53 +49,21 @@
     $PageText = str_replace("\r\n","\n",$PageText);
     $PageText = str_replace("\r","\n",$PageText);
     $PageText = str_replace("\n\n","\n</p>\n<p class=MainText>\n",$PageText);
+    // $varpos = stripos($PageText,"$");
+    // if ($varpos !== False)
+    // {
+    //   $varEnd = stripos($PageText," ",$varpos);
+    //   if (!is_numeric($a[$varpos+1]))
+    //   {
+    //     $varName = substr($a,$varpos,$varend-$varpos);
+    //     $PageText = str_replace($varName,"$varName",$PageText);
+    //   }
+    // }
     print "<p class=MainText>\n$PageText</p>\n";
   }
 
   if (isset($iUserID))
   {
-    // $temp = json_encode(SendUserSMS("test",$iUserID));
-    // print "Test Results: $temp<br>";
-    $arrUserPrefs = array();
-    $strQuery = "SELECT t.*,v.vcValue,v.iUserID ".
-                "FROM tblUsrPrefTypes t LEFT JOIN tblUsrPrefValues v ON t.iID = v.iTypeID ".
-                "WHERE v.iUserID = $iUserID OR v.iUserID IS NULL;";
-
-    $QueryData = QuerySQL($strQuery);
-    // $jsonstr = json_encode($QueryData);
-    // print "<pre>$jsonstr</pre>\n";
-
-    if($QueryData[0] > 0)
-    {
-      foreach($QueryData[1] as $Row)
-      {
-        // var_dump($Row);
-        // print "<br>";
-        if (is_null($Row["iUserID"]))
-        {
-          print $Row["vcCode"] ." has NOT been set<br>\n";
-          $strQuery = "INSERT INTO tblUsrPrefValues (iTypeID, iUserID) VALUES ($Row[iID],$iUserID );";
-          if(UpdateSQL ($strQuery, "insert"))
-          {
-            print $Row["vcCode"] ." has now been set to ''<br>\n";
-          }
-          else
-          {
-            print "Failed to set " . $Row["vcCode"];
-          }
-        }
-        else
-        {
-          print $Row["vcCode"] ." has been set to '$Row[vcValue]'<br>\n";
-        }
-        $arrUserPrefs[] = $Row;
-      }
-    }
-    else
-    {
-      // var_dump($QueryData);
-      print "Rowcount: $QueryData[0] Msg:$QueryData[1]";
-    }
   }
   else
   {

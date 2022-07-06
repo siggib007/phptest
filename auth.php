@@ -100,16 +100,12 @@
 	{
     $strReturn = 'index.php';
 	}
-	//error_log ("returned page determined to be $strReturn");
 	if (isset($_SESSION["ReturnPage"]))
 	{
     $strReturn = $_SESSION["ReturnPage"];
     unset($_SESSION["ReturnPage"]);
-    //error_log("Got return page from session as: $strReturn");
 	}
 
-	//print "strReferer: $strReferPage<br>\nstrScriptName: $strPageName<br>\nstrReturn: $strReturn<br>\n";
-  //Log_Session("starting login analysis in auth.php");
 	if (isset($_POST['txtLogin']))
 	{
     $strLogin = CleanReg(trim($_POST['txtLogin']));
