@@ -44,9 +44,12 @@
               "WHERE v.iUserID = $iUserID OR v.iUserID IS NULL;";
 
   $QueryData = QuerySQL($strQuery);
+  error_log("checking on prefs and populating. Rowcount = $QueryData[0] ");
+  error_log($strQuery);
 
-  if($QueryData[0] = 0)
+  if($QueryData[0] == 0)
   {
+    error_log("Count was zero inserting #1");
     $strQuery = "INSERT INTO tblUsrPrefValues (iTypeID, iUserID) VALUES (1,$iUserID );";
     UpdateSQL ($strQuery, "insert");
 
