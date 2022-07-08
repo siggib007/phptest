@@ -17,6 +17,7 @@ To set this up using Docker and fetching secrets to Doppler run the following co
 Run the following commands from your terminal. FYI I'm doing this on a Windows 10 box and Docker Desktop for Windows. 
 
 1. git clone https://github.com/siggib007/phptest.git phpdemo
+2. cd phpdemo
 2. doppler import
 3. Adjust the secrets as necessary for your environment, the doppler key is a service key you generate on the access tab inside the appropriate config. 
 4. In ExtVars.php make sure line 34 and 35, matches what you are using for project and config in Doppler. The Template uses phpdemo, while the code might be uses phpdev depending on what I was using for my testing when I last checked the code in. Also adjust next line accordingly
