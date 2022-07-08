@@ -168,6 +168,7 @@
     {
       print "<p class=\"Error\">Invalid code, please try again</p>\n";
     }
+    unset($_SESSION["ConfCode"]);
     $btnSubmit = "";
   }
 

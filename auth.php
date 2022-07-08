@@ -197,8 +197,30 @@
             }
             else
             {
+              print "<p class=\"Attn\">Invalid code</p>";
               require_once("MFAOptions.php");
             }
+          }
+          if ($strMFAType == "smsemail")
+          {
+            if (isset($_SESSION["ConfCode"]))
+            {
+              $ConfCode = $_SESSION["ConfCode"];
+            }
+            else
+            {
+              $ConfCode = "";
+            }
+            if ($strCode == $ConfCode)
+            {
+              require("AuthIncl.php");
+            }
+            else
+            {
+              print "<p class=\"Attn\">Invalid code</p>";
+              require_once("MFAOptions.php");
+            }
+            unset($_SESSION["ConfCode"]);
           }
           if ($strMFAType == "recover")
           {
@@ -213,6 +235,7 @@
             }
             else
             {
+              print "<p class=\"Attn\">Invalid token</p>";
               require_once("MFAOptions.php");
             }
           }

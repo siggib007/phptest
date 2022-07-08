@@ -6,6 +6,7 @@
     $strQuery = "SELECT iTypeID, vcValue FROM tblUsrPrefValues WHERE iUserID = $iUserID AND iTypeID IN (2,3);";
     $QueryData = QuerySQL($strQuery);
     $ConfCode = bin2hex(random_bytes(4));
+    $_SESSION["ConfCode"]=$ConfCode;
     $strMsg = "Your confirmation code is: $ConfCode";
 
     if($QueryData[0] > 0)
