@@ -45,6 +45,17 @@
 
   $QueryData = QuerySQL($strQuery);
 
+  if($QueryData[0] = 0)
+  {
+    $strQuery = "INSERT INTO tblUsrPrefValues (iTypeID, iUserID) VALUES (1,$iUserID );";
+    UpdateSQL ($strQuery, "insert");
+
+    $strQuery = "SELECT t.*,v.vcValue,v.iUserID ".
+    "FROM tblUsrPrefTypes t LEFT JOIN tblUsrPrefValues v ON t.iID = v.iTypeID ".
+    "WHERE v.iUserID = $iUserID OR v.iUserID IS NULL;";
+    $QueryData = QuerySQL($strQuery);
+  }
+
   if($QueryData[0] > 0)
   {
     foreach($QueryData[1] as $Row)
