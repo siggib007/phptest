@@ -811,4 +811,93 @@ function GenerateRecovery($iUserID)
   UpdateSQL ($strQuery, "update");
 }
 
+function LoadMFAOptions($iUserID)
+{
+  $bMFA_active = False;
+  $bSMSemail = False;
+  $strTOTP = "";
+  $arrOptions = array();
+  $strQuery = "SELECT vcMFASecret FROM tblUsers WHERE iUserID = $iUserID;";
+  $QueryData = QuerySQL($strQuery);
+
+  if($QueryData[0] > 0)
+  {
+    foreach($QueryData[1] as $Row)
+    {
+      $strTOTP = $Row['vcMFASecret'];
+    }
+  }
+  if ($strTOTP != "")
+  {
+    $bMFA_active = True;
+    $arrOptions["totp"] = "TOTP MFA Authenticator";
+  }
+  $strQuery = "SELECT vcValue FROM tblUsrPrefValues WHERE iUserID = $iUserID AND iTypeID IN (2,3);";
+  $QueryData = QuerySQL($strQuery);
+
+  if($QueryData[0] > 0)
+  {
+    foreach($QueryData[1] as $Row)
+    {
+      if (strtolower($Row['vcValue']) == "true")
+      {
+        $bSMSemail = True;
+      }
+    }
+  }
+  if ($bSMSemail)
+  {
+    $bMFA_active = True;
+    $arrOptions["smsemail"] = "SMS or Email MFA";
+  }
+  if ($bMFA_active)
+  {
+    $arrOptions["recover"] = "Recovery Code";
+  }
+  $_SESSION["bMFA_active"] = $bMFA_active;
+  $_SESSION["MFAOptions"] = $arrOptions;
+  return $arrOptions;
+}
+
+function NotifyActivity ($strActivity,$arrTypes)
+{
+  $FromEmail = $GLOBALS["FromEmail"];
+  $ProdName = $GLOBALS["ProdName"];
+  $iUserID = $GLOBALS["iUserID"];
+  $strTypeList = implode(",",array_values($arrTypes));
+
+  $strQuery = "SELECT v.iTypeID, v.vcValue, u.vcEmail " .
+              "FROM tblUsrPrefValues v JOIN tblUsers u ON v.iUserID = u.iUserID " .
+              "WHERE v.iUserID = $iUserID AND v.iTypeID IN ($strTypeList);";
+  $QueryData = QuerySQL($strQuery);
+  $DataSet = array();
+  if($QueryData[0] > 0)
+  {
+    foreach($QueryData[1] as $Row)
+    {
+      $iTypeID = $Row['iTypeID'];
+      $strValue = $Row['vcValue'];
+      $strEmail = $Row['vcEmail'];
+      $DataSet[$iTypeID]=array("value"=>$strValue,"email"=>$strEmail);
+    }
+  }
+  if(count($DataSet) > 0)
+  {
+    if(array_key_exists($arrTypes["email"],$DataSet)) # Receive email notification on each login is defined
+    {
+      if (strtolower($DataSet[$arrTypes["email"]]["value"]) == "true")
+      {
+        EmailText($DataSet[$arrTypes["email"]]["email"],"Successful $strActivity Notification","Your account on $ProdName had a successfully $strActivity",$FromEmail);
+      }
+    }
+    if(array_key_exists($arrTypes["SMS"],$DataSet)) # Receive SMS notification on each login is defined
+    {
+      if (strtolower($DataSet[$arrTypes["SMS"]]["value"]) == "true")
+      {
+        SendUserSMS("Your account on $ProdName had a successfully $strActivity",$iUserID);
+      }
+    }
+  }
+}
+
 ?>

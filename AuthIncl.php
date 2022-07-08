@@ -8,38 +8,10 @@
   $_SESSION["LastActivity"] = time();
   $_SESSION["LoginTime"] = $dtNow;
 
-  $strQuery = "SELECT v.iTypeID, v.vcValue, u.vcEmail " .
-              "FROM tblUsrPrefValues v JOIN tblUsers u ON v.iUserID = u.iUserID " .
-              "WHERE v.iUserID = $iUserID AND v.iTypeID IN (4,5);";
-  $QueryData = QuerySQL($strQuery);
-  $DataSet = array();
-  if($QueryData[0] > 0)
-  {
-    foreach($QueryData[1] as $Row)
-    {
-      $iTypeID = $Row['iTypeID'];
-      $strValue = $Row['vcValue'];
-      $strEmail = $Row['vcEmail'];
-      $DataSet[$iTypeID]=array("value"=>$strValue,"email"=>$strEmail);
-    }
-  }
-  if(count($DataSet) > 0)
-  {
-    if(array_key_exists("4",$DataSet)) # Receive email notification on each login is defined
-    {
-      if (strtolower($DataSet["4"]["value"]) == "true")
-      {
-        EmailText($DataSet["4"]["email"],"Successful Login Notification","Your account on $ProdName was successfully logged into",$FromEmail);
-      }
-    }
-    if(array_key_exists("5",$DataSet)) # Receive SMS notification on each login is defined
-    {
-      if (strtolower($DataSet["5"]["value"]) == "true")
-      {
-        SendUserSMS("Your account on $ProdName was successfully logged into",$iUserID);
-      }
-    }
-  }
+  $strActivity = "Login";
+  $arrTypes = array("SMS"=>"4","email"=>"5");
+
+  NotifyActivity ($strActivity,$arrTypes);
 
   if($strLastUpdated=="")
   {

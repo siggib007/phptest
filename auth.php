@@ -139,7 +139,6 @@
 	{
     $strMFAType ="na";
 	}
-
 	$dtNow = date("Y-m-d H:i:s");
   $tfa = new TwoFactorAuth();
 	if ($strLogin and $strPWD)
@@ -161,6 +160,7 @@
       $strTOTP = $Row['vcMFASecret'];
       $strRHash = $Row['vcRecovery'];
       $strLastUpdated = $Row['dtUpdated'];
+      $strEmail = $Row['vcEmail'];
     }
     else
     {
@@ -171,11 +171,13 @@
       $strTOTP = "";
       $strRHash = "";
       $strLastUpdated = "";
+      $strEmail = "";
     }
+    $arrMFAOptions = LoadMFAOptions($iUserID);
 
     if (password_verify($strPWD, $strUPWD))
     {
-      if ($strTOTP == "")
+      if (!$_SESSION["bMFA_active"])
       {
         require("AuthIncl.php");
       }
@@ -183,20 +185,7 @@
       {
         if ($strCode == "")
         {
-          require_once("header.php");
-          print "<form method=\"POST\">";
-          print "Select your MFA Type: ";
-          print "<select size=\"1\" name=\"cmbMFA\">\n";
-          print "<option value='totp'>TOTP Authenticator</option>\n";
-          print "<option value='recover'>Recovery Code</option>\n";
-          print "</select>";
-          print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";
-          print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtPwd\" VALUE=\"$strPWD\">";
-          print "&nbsp;&nbsp;Please provide your code: ";
-          print "<input type=\"text\" name=\"txtCode\" size=\"30\">";
-          print "&nbsp;&nbsp;<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
-          print "</form>";
-          require_once("footer.php");
+          require_once("MFAOptions.php");
         }
         else
         {
@@ -208,25 +197,15 @@
             }
             else
             {
-              require_once("header.php");
-              print "<p class=\"Attn\">Invalid token</p>";
-              print "<form method=\"POST\">";
-              print "Select your MFA Type: ";
-              print "<select size=\"1\" name=\"cmbMFA\">\n";
-              print "<option value='totp'>TOTP Authenticator</option>\n";
-              print "<option value='recover'>Recovery Code</option>\n";
-              print "</select>";
-              print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";
-              print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtPwd\" VALUE=\"$strPWD\">";
-              print "&nbsp;&nbsp;Please provide your code: ";
-              print "<input type=\"text\" name=\"txtCode\" size=\"30\">";
-              print "&nbsp;&nbsp;<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
-              print "</form>";
-              require_once("footer.php");
+              require_once("MFAOptions.php");
             }
           }
           if ($strMFAType == "recover")
           {
+            $strActivity = "Recovery Code usage";
+            $arrTypes = array("SMS"=>"6","email"=>"7");
+            NotifyActivity ($strActivity,$arrTypes);
+
             $strCode = str_replace(' ','',$strCode);
             if (password_verify($strCode, $strRHash))
             {
@@ -234,21 +213,7 @@
             }
             else
             {
-              require_once("header.php");
-              print "<p class=\"Attn\">Invalid token</p>";
-              print "<form method=\"POST\">";
-              print "Select your MFA Type: ";
-              print "<select size=\"1\" name=\"cmbMFA\">\n";
-              print "<option value='totp'>TOTP Authenticator</option>\n";
-              print "<option value='recover'>Recovery Code</option>\n";
-              print "</select>";
-              print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";
-              print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtPwd\" VALUE=\"$strPWD\">";
-              print "&nbsp;&nbsp;Please provide your code: ";
-              print "<input type=\"text\" name=\"txtCode\" size=\"30\">";
-              print "&nbsp;&nbsp;<input type=\"submit\" value=\"Submit\" name=\"btnLogin\">";
-              print "</form>";
-              require_once("footer.php");
+              require_once("MFAOptions.php");
             }
           }
         }
@@ -272,7 +237,6 @@
     {
         print "<p class=\"Attn\">You provided your password but not your username. Please provide both</p>";
     }
-    //Log_Session("including header.php in auth.php");
     require_once("header.php");
     if (isset($_SESSION["Reason"]))
     {
@@ -281,8 +245,5 @@
     }
     require_once("LoginIncl.php");
     require_once("footer.php");
-    //print "strReferer: $strReferer<br>\nstrScriptName: $strScriptName<br>\n";
-    //Log_BackTrace (debug_backtrace(),"at end of auth.php");
-    //Log_Session("at end of auth.php");
 	}
 ?>
