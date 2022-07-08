@@ -192,7 +192,7 @@
     }
     $bSMSOK = True;
 
-    if ($strKey == 1)
+    if ($strKey == 1 and $strCell != "")
     {
       $ConfCode = bin2hex(random_bytes(4));
       $response = SendTwilioSMS("Your confirmation code is: $ConfCode",$strCell);
@@ -210,7 +210,7 @@
       }
       else
       {
-        print "A failure occured:<br>\n";
+        print "<p class=\"Error\">A failure occured:</p>\n";
         $arrResponse = json_decode($response[1], TRUE);
         $errmsg = "";
         if (array_key_exists("message",$arrResponse))
@@ -221,6 +221,13 @@
         $bSMSOK = False;
         $btnSubmit = "";
       }
+    }
+
+    if ($strKey == 1 and $strCell == "")
+    {
+      print "<p class=\"Error\">You have to provide your cell number before you can enable SMS Notifications</p>\n";
+      $btnSubmit = "";
+      $bSMSOK = False;
     }
 
     if (stripos($strLabel,"sms")!== false and $strKey != 1)
@@ -337,6 +344,31 @@
       require("UserUpdate.php");
       if ($iUserID)
       {
+        if ($strCell == "")
+        {
+          $arrTypeIDs = array();
+          $strQuery = "SELECT iID FROM tblUsrPrefTypes WHERE vcCode LIKE '%sms%';";
+          if (!$Result = $dbh->query ($strQuery))
+          {
+            error_log ('Failed to fetch user data from tblUsrPrefValues. Error ('. $dbh->errno . ') ' . $dbh->error);
+            error_log ($strQuery);
+            exit(2);
+          }
+          while ($Row = $Result->fetch_assoc())
+          {
+            $arrTypeIDs[] = $Row['iID'];
+          }
+          $strTypeList = implode(",",$arrTypeIDs);
+          $strQuery = "update tblUsrPrefValues set vcValue = 'False' where iUserID = $iUserID and iTypeID IN ($strTypeList) ;";
+          if(UpdateSQL ($strQuery, "update"))
+          {
+            print "<p class=\"BlueAttn\">Disabling all SMS functions successful</p>";
+          }
+          else
+          {
+            print "<p class=\"BlueAttn\">Disabling all SMS functions failed</p>";
+          }
+        }
         $strUID = substr(trim($_POST['txtUID']),0,19);
         $strOUID = substr(trim($_POST['txtOUID']),0,19);
         $Password = trim($_POST['txtPWD']);
