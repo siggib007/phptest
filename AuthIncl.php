@@ -9,7 +9,7 @@
   $_SESSION["LoginTime"] = $dtNow;
 
   $strActivity = "Login";
-  $arrTypes = array("SMS"=>"4","email"=>"5");
+  $arrTypes = array("SMS"=>"5","email"=>"4");
 
   NotifyActivity ($strActivity,$arrTypes);
 

@@ -421,6 +421,7 @@
     $btnSubmit = "";
   }
 
+  $arrMFAOptions = LoadMFAOptions($iUserID);
   if ($btnSubmit == "")
   {
     print "<p class=\"Header2\">General Info</p>\n\n";
@@ -497,8 +498,8 @@
 
     require("UserPref.php");
 
-    print "<p>&nbsp;</p>\n<p class=\"Header2\"><a id=\"mfa\">MultiFactor Setup</a></p>\n";
-    print "<p class=\"Header3\">TOTP MFA (AKA Google Authenticator)</p>\n";
+    print "<p>&nbsp;</p>\n<p class=\"Header2\"><a id=\"mfa\">TOTP MultiFactor Authentication (MFA) Setup</a></p>\n";
+    print "<p class=\"Header3\"> AKA Google Authenticator</p>\n";
     if ($strTOTP == "")
     {
       print "To Setup TOTP MFA click <a href=MFASetup.php>here</a><br>\n";
@@ -508,13 +509,15 @@
       print "Thank you for securing your account with TOTP MFA. <br>\n";
       print "To change your TOTP MFA setup click <a href=MFASetup.php>here</a><br>\n";
     }
-    print "<p class=\"Header3\">Reset Recovery Code</p>\n";
-    print "To reset your recovery code, click this button.<br>\n";
-    print "<form method=\"post\">\n";
-    print "<input type=\"submit\" value=\"Reset Recovery Code\" name=\"btnSubmit\">\n";
-    print "</form>\n";
-    print "</div>\n";
-
+    if ($_SESSION["bMFA_active"])
+    {
+      print "<p>&nbsp;</p>\n<p class=\"Header2\">Reset Recovery Code</p>\n";
+      print "To reset your recovery code, click this button.<br>\n";
+      print "<form method=\"post\">\n";
+      print "<input type=\"submit\" value=\"Reset Recovery Code\" name=\"btnSubmit\">\n";
+      print "</form>\n";
+      print "</div>\n";
+    }
     print "<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p class=\"Header2\">Account deletion</p>\n";
     print "<div class=\"MainTextCenter\">\n";
     print "<p>If you wish to completely delete your account you can do that here.</p>\n";

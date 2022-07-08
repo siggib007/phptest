@@ -25,12 +25,23 @@
     }
 
   }
+  elseif ($_SESSION["bSMSemail"])
+  {
+    print "<p class=BlueAttn>To use SMS or email MFA, change the dropdown and hit submit, the value field will be ignored.</p>";
+  }
   print "<form method=\"POST\">";
   print "Select your MFA Type: ";
   print "<select size=\"1\" name=\"cmbMFA\">\n";
   foreach($arrMFAOptions as $key => $value)
   {
-    print "<option value=$key>$value</option>\n";
+    if ($key == $strMFAType)
+    {
+      print "<option value=$key selected>$value</option>\n";
+    }
+    else
+    {
+      print "<option value=$key>$value</option>\n";
+    }
   }
   print "</select>";
   print "<INPUT TYPE=\"HIDDEN\" NAME=\"txtLogin\" VALUE=\"$strLogin\">";

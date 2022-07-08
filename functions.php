@@ -856,6 +856,7 @@ function LoadMFAOptions($iUserID)
   }
   $_SESSION["bMFA_active"] = $bMFA_active;
   $_SESSION["MFAOptions"] = $arrOptions;
+  $_SESSION["bSMSemail"] = $bSMSemail;
   return $arrOptions;
 }
 
