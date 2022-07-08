@@ -221,6 +221,7 @@
               require_once("MFAOptions.php");
             }
             unset($_SESSION["ConfCode"]);
+            unset($ConfCode);
           }
           if ($strMFAType == "recover")
           {
