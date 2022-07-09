@@ -90,6 +90,7 @@ function UpdateSQL($strQuery,$type)
   if ($dbh->query ($strQuery))
   {
     $NumAffected = $dbh->affected_rows;
+    // print "<p class=\"MainText\">Query: $strQuery<br>\n";
     // print "<p class=\"MainText\">Database $type of $NumAffected record successful<br>\n";
     return TRUE;
   }
@@ -131,7 +132,7 @@ function CallSP($strQuery)
 
   if ($dbh->query ($strQuery))
   {
-    print "Database update successful<br>\n";
+    // print "Database update successful<br>\n";
     return TRUE;
   }
   else

@@ -8,7 +8,10 @@
                          "vcAddr2 = '$strAddr2', vcCity = '$strCity', vcState = '$strState', vcZip = '$strZip', " .
                          "vcCountry = '$strCountry', iPrivLevel = $iLevel, dtUpdated = '$dtNow', vcCell='$strCell' "  .
                          " where iUserID='$strUserID'";
-        UpdateSQL ($strQuery,"update");
+        if (UpdateSQL ($strQuery,"update"))
+        {
+          $dtUpdated = $dtNow;
+        }
 
 	if ($strEmail <> $strOEmail)
         {

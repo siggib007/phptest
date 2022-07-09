@@ -362,7 +362,7 @@
           $strQuery = "update tblUsrPrefValues set vcValue = 'False' where iUserID = $iUserID and iTypeID IN ($strTypeList) ;";
           if(UpdateSQL ($strQuery, "update"))
           {
-            print "<p class=\"BlueAttn\">Disabling all SMS functions successful</p>";
+            print "<p class=\"BlueAttn\">Since you haven't provided a cell phone, all SMS functionality has been disabled</p>";
           }
           else
           {
@@ -442,7 +442,7 @@
             {
               if(UpdateSQL($strQuery, "update"))
               {
-                print "<p>Update successful!!</p>";
+                print "<p class=\"BlueAttn\">Update successful!!</p>";
                 $bChangePWD = 0;
               }
             }
@@ -456,7 +456,6 @@
   $arrMFAOptions = LoadMFAOptions($iUserID);
   if ($btnSubmit == "")
   {
-    print "<p class=\"Header2\">General Info</p>\n\n";
     $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = $Priv;";
     if (!$Result = $dbh->query ($strQuery))
     {
@@ -481,13 +480,14 @@
     if ($dtUpdated=="")
     {
       print "<p class=\"Error\">This account has not been verified. Please verify the information, " .
-            "make any needed changes, then submit to verify your information.</p>\n";
+      "make any needed changes, then submit to verify your information.</p>\n";
     }
     if ($strTOTP == "")
     {
       print "<p class=\"BlueNote\">You do not have MFA setup, to increase the security of your account " .
-            "please setup a MFA option at the bottom of this page <a href=#mfa>here</a></p>\n";
+      "please setup a MFA option at the bottom of this page <a href=#mfa>here</a></p>\n";
     }
+    print "<p class=\"Header2\">General Info</p>\n\n";
     print "<p>RegistrationID: $iUserID" ;
     $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = $iPrivLevel;";
     if (!$PrivResult = $dbh->query ($strQuery))

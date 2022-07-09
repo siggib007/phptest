@@ -76,7 +76,7 @@
         if ($dbh->query ($strQuery))
         {
             $NumAffected = $dbh->affected_rows;
-            print "Database insert of $NumAffected record successful<br>\n";
+            // print "Database insert of $NumAffected record successful<br>\n";
             EmailText($ProfileNotify, "New user registration notification",$strNotification, $FromEmail);
             $toEmail = "\"$strName\" <$strEmail>";
             $StrMsg = str_replace("\\'","'",$StrMsg);

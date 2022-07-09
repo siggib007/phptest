@@ -2,7 +2,7 @@
  print "<p>&nbsp;</p>\n<p class=\"Header2\"><a id=\"mfa\">Account Preferences</a></p>\n";
  $btnValue = "";
  $strQuery = "SELECT t.*,v.vcValue,v.iUserID ".
-  "FROM tblUsrPrefTypes t LEFT JOIN tblUsrPrefValues v ON t.iID = v.iTypeID ".
+  "FROM tblUsrPrefTypes t JOIN tblUsrPrefValues v ON t.iID = v.iTypeID ".
   "WHERE v.iUserID = $iUserID OR v.iUserID IS NULL ORDER BY iSortOrder;";
 
   if (!$Result = $dbh->query ($strQuery))

@@ -39,36 +39,29 @@
     $strTOTP = "";
   }
   $arrUserPrefs = array();
-  $strQuery = "SELECT t.*,v.vcValue,v.iUserID ".
-              "FROM tblUsrPrefTypes t LEFT JOIN tblUsrPrefValues v ON t.iID = v.iTypeID ".
-              "WHERE v.iUserID = $iUserID OR v.iUserID IS NULL;";
+  $strQuery = "SELECT iID, vcLabel FROM tblUsrPrefTypes";
 
   $QueryData = QuerySQL($strQuery);
-  error_log("checking on prefs and populating. Rowcount = $QueryData[0] ");
-  error_log($strQuery);
+  $arrTypes = $QueryData[1];
 
-  if($QueryData[0] == 0)
+  $strQuery = "SELECT iTypeID, vcValue FROM tblUsrPrefValues WHERE iUserID = $iUserID;";
+  $QueryData = QuerySQL($strQuery);
+  $arrValues = $QueryData[1];
+
+  foreach ($arrTypes as $Types)
   {
-    error_log("Count was zero inserting #1");
-    $strQuery = "INSERT INTO tblUsrPrefValues (iTypeID, iUserID) VALUES (1,$iUserID );";
-    UpdateSQL ($strQuery, "insert");
-
-    $strQuery = "SELECT t.*,v.vcValue,v.iUserID ".
-    "FROM tblUsrPrefTypes t LEFT JOIN tblUsrPrefValues v ON t.iID = v.iTypeID ".
-    "WHERE v.iUserID = $iUserID OR v.iUserID IS NULL;";
-    $QueryData = QuerySQL($strQuery);
-  }
-
-  if($QueryData[0] > 0)
-  {
-    foreach($QueryData[1] as $Row)
+    $bFound = False;
+    foreach ($arrValues as $Values)
     {
-      if (is_null($Row["iUserID"]))
+      if ($Types["iID"] == $Values["iTypeID"])
       {
-        $strQuery = "INSERT INTO tblUsrPrefValues (iTypeID, iUserID) VALUES ($Row[iID],$iUserID );";
-        UpdateSQL ($strQuery, "insert");
+        $bFound = True;
       }
-      $arrUserPrefs[] = $Row;
+    }
+    if (!$bFound)
+    {
+      $strQuery = "INSERT INTO tblUsrPrefValues (iTypeID, iUserID) VALUES ($Types[iID],$iUserID );";
+      UpdateSQL ($strQuery, "insert");
     }
   }
 ?>
