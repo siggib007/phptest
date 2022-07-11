@@ -9,3 +9,5 @@ secret.php
 .bzr/
 *.bak
 !img/PHPDemoBanner.png
+lib/
+ReviewMedia/
