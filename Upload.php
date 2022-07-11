@@ -69,36 +69,26 @@
         {
             if (isset($_FILES['Docfile']))
             {
-                $FileList = "";
-                $SizeTotal = 0;
-                for ($i = 0; $i < $FilesVarCount; $i++)
-                {
-                    $DocFileName = $_FILES['Docfile']['name'][$i];
-                    $DocBaseName = basename($DocFileName);
-                    $newPath = $DocRoot . $DocBaseName;
-                    $tmpFile = $_FILES['Docfile']['tmp_name'][$i];
-                    $Error = $_FILES['Docfile']['error'][$i];
-                    $Size =  $_FILES['Docfile']['size'][$i];
-                    $SizeUnit = with_unit($Size);
-                    if ($Error == UPLOAD_ERR_OK)
-                    {
-                        if (move_uploaded_file($tmpFile, $newPath))
-                        {
-                            print "<div class=\"MainText\">File $DocBaseName uploaded successfully<br></div>";
-                            $FileList .= "$DocBaseName, Size: $SizeUnit<br>\n";
-                            $SizeTotal += $Size;
-                        }
-                        else
-                        {
-                            print "<p class=\"Error\">Couldn't move file to $newPath</p>";
-                        }
-                    }
-                    else
-                    {
-                        $ErrMsg = codeToMessage($Error);
-                        print "<p class=\"Error\">Error \"$ErrMsg\" while uploading $DocFileName</p>\n";
-                    }
-                }
+              $arrRet = FileUpload($_FILES['Docfile'],$DocRoot);
+              $FileList = $arrRet["Files"];
+              $SizeTotal = $arrRet["size"];
+              $arrErrors = $arrRet["err"];
+              $arrMsg = $arrRet["msg"];
+            }
+            else
+            {
+              $FileList = "";
+              $SizeTotal = 0;
+              $arrErrors = array();
+              $arrMsg = array();
+            }
+            foreach ($arrErrors as $strErr)
+            {
+              print $strErr;
+            }
+            foreach ($arrMsg as $strMsg)
+            {
+              print $strMsg;
             }
             print "<p class=\"MainText\">$ConfirmationMsg. <br>\n";
             print $FileList;

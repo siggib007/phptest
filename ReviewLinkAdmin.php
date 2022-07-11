@@ -23,39 +23,23 @@
 	{
 		$iSiteID = CleanSQLInput(substr(trim($_POST['iSiteID']),0,9));
 		$strSiteName = CleanSQLInput(substr(trim($_POST['txtSiteName']),0,99));
-		$strDescr = CleanSQLInput($_POST['txtDescr']);
+		$strSiteURL = CleanSQLInput(substr(trim($_POST['txtSiteURL']),0,99));
 		$strLogoURL= CleanSQLInput(substr(trim($_POST['txtLogoURL']),0,99));
     $strImgPath="";
 
     if (isset($_FILES['fPict']))
     {
-      if ($_FILES['fPict']['name']!="")
+      $arrRet = FileUpload($_FILES['fPict'],$DocRoot);
+      error_log(json_encode($arrRet));
+      foreach ($arrRet["err"] as $strErr)
       {
-        $tmpFile = $_FILES['fPict']['tmp_name'];
-        $Error = $_FILES['fPict']['error'];
-        $DocFileName = $_FILES['fPict']['name'];
-        $DocBaseName = str_replace(" ","_",basename($DocFileName));
-        $newPath = $DocRoot . $DocBaseName;
-        if ($Error == UPLOAD_ERR_OK)
-        {
-          if (move_uploaded_file($tmpFile, $newPath))
-          {
-            $strImgPath = $newPath;
-            print "<div class=\"MainText\">";
-            print "File $DocBaseName uploaded successfully<br>";
-            print "</div>\n";
-          }
-          else
-          {
-            print "<p class=\"Error\">Couldn't move file to $newPath</p>";
-          }
-        }
-        else
-        {
-          $ErrMsg = codeToMessage($Error);
-          print "<p class=\"Error\">Error \"$ErrMsg\" while uploading $DocFileName</p>\n";
-        }
+        print $strErr;
       }
+      foreach ($arrRet["msg"] as $strMsg)
+      {
+        print $strMsg;
+      }
+      $strImgPath = $arrRet["FileList"][0];
     }
 
     if ($strImgPath == '')
@@ -64,8 +48,8 @@
     }
 
 		$strQuery = "update tblReviewSiteURL set vcSiteName = '$strSiteName', "
-              . "vcImgPath = '$strImgPath' where iSiteID = $iSiteID;";
-		UpdateSQL ($strQuery,"update");
+              . "vcImgPath = '$strImgPath', vcSiteURL = '$strSiteURL' where iSiteID = $iSiteID;";
+    UpdateSQL ($strQuery,"update");
 	}
 
 	if ($btnSubmit == 'Delete')
@@ -83,39 +67,20 @@
 		$strLogoURL= CleanSQLInput(substr(trim($_POST['txtLogoURL']),0,99));
     $strImgPath="";
 
+    error_log(json_encode($_FILES));
     if (isset($_FILES['fPict']))
     {
-      if ($_FILES['fPict']['name']!="")
+      $arrRet = FileUpload($_FILES['fPict'],$DocRoot);
+      error_log(json_encode($arrRet));
+      foreach ($$arrRet["err"] as $strErr)
       {
-        $tmpFile = $_FILES['fPict']['tmp_name'];
-        $Error = $_FILES['fPict']['error'];
-        $DocFileName = $_FILES['fPict']['name'];
-        $DocBaseName = basename($DocFileName);
-        $newPath = $DocRoot . $DocBaseName;
-        if ($Error == UPLOAD_ERR_OK)
-        {
-          if (move_uploaded_file($tmpFile, $newPath))
-          {
-            $strImgPath = $newPath;
-            print "<div class=\"MainText\">";
-            print "File $DocBaseName uploaded successfully<br>";
-            print "</div>\n";
-          }
-          else
-          {
-            print "<p class=\"Error\">Couldn't save file to $newPath</p>";
-          }
-        }
-        else
-        {
-          $ErrMsg = codeToMessage($Error);
-          print "<p class=\"Error\">Error \"$ErrMsg\" while uploading $DocFileName</p>\n";
-        }
+        print $strErr;
       }
-      else
+      foreach ($arrRet["msg"] as $strMsg)
       {
-        $strImgPath = $strLogoURL;
+        print $strMsg;
       }
+      $strImgPath = $arrRet["FileList"][0];
     }
     else
     {

@@ -20,10 +20,10 @@ while ($Row = $Result->fetch_assoc())
   $vcSiteURL = $Row['vcSiteURL'];
   $vcMMURL = $Row['vcImgPath'];
   print "<td class=\"ReviewLinks\">";
-  print "<a href=\"$vcSiteURL\">";
+  print "<a href=\"$vcSiteURL\" target=\"_blank\">";
   if ($vcMMURL!='')
   {
-    print "<img style=\"border:0;\" src=\"$vcMMURL\" alt=\"$vcSiteName\">\n";
+    print "<img style=\"border:0;\" src=\"$vcMMURL\" alt=\"$vcSiteName\" height=75>\n";
   }
   else
   {

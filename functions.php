@@ -902,4 +902,88 @@ function NotifyActivity ($strActivity,$arrTypes)
   }
 }
 
+function FileUpload($arrFiles,$DocRoot)
+{
+  if (!is_dir($DocRoot))
+  {
+      mkdir($DocRoot);
+  }
+  if (is_array($arrFiles['name']))
+  {
+    $FileList = "";
+    $SizeTotal = 0;
+    $arrMsg = array();
+    $arrError = array();
+    $arrFilesList = array();
+    $FilesVarCount = count($arrFiles['name']);
+    for ($i = 0; $i < $FilesVarCount; $i++)
+    {
+      $DocFileName = $arrFiles['name'][$i];
+      $DocBaseName = basename($DocFileName);
+      $newPath = $DocRoot . $DocBaseName;
+      $tmpFile = $arrFiles['tmp_name'][$i];
+      $Error = $arrFiles['error'][$i];
+      $Size =  $arrFiles['size'][$i];
+      $SizeUnit = with_unit($Size);
+      error_log("tmpfile: $tmpFile  -  newpath: $newPath  - Error: $Error");
+      if ($Error == UPLOAD_ERR_OK)
+      {
+        if (move_uploaded_file($tmpFile, $newPath))
+        {
+          $arrMsg[] = "<div class=\"MainText\">File $DocBaseName uploaded successfully<br></div>";
+          $FileList .= "$DocBaseName, Size: $SizeUnit<br>\n";
+          $SizeTotal += $Size;
+          $arrFilesList[] = $newPath;
+        }
+        else
+        {
+          $arrError[] = "<p class=\"Error\">Couldn't move file to $newPath</p>";
+        }
+      }
+      else
+      {
+        $ErrMsg = codeToMessage($Error);
+        $arrError[] =  "<p class=\"Error\">Error \"$ErrMsg\" while uploading $DocFileName</p>\n";
+      }
+    }
+  }
+  else
+  {
+    $FileList = "";
+    $SizeTotal = 0;
+    $arrMsg = array();
+    $arrError = array();
+    $arrFilesList = array();
+    $DocFileName = $arrFiles['name'];
+    $DocBaseName = basename($DocFileName);
+    $newPath = $DocRoot . $DocBaseName;
+    $tmpFile = $arrFiles['tmp_name'];
+    $Error = $arrFiles['error'];
+    $Size =  $arrFiles['size'];
+    $SizeUnit = with_unit($Size);
+    error_log("tmpfile: $tmpFile  -  newpath: $newPath  - Error: $Error");
+
+    if ($Error == UPLOAD_ERR_OK)
+    {
+      if (move_uploaded_file($tmpFile, $newPath))
+      {
+        $arrMsg[] = "<div class=\"MainText\">File $DocBaseName uploaded successfully<br></div>";
+        $FileList .= "$DocBaseName, Size: $SizeUnit<br>\n";
+        $arrFilesList[] = $newPath;
+        $SizeTotal += $Size;
+      }
+      else
+      {
+        $arrError[] = "<p class=\"Error\">Couldn't move file to $newPath</p>";
+      }
+    }
+    else
+    {
+      $ErrMsg = codeToMessage($Error);
+      $arrError[] =  "<p class=\"Error\">Error \"$ErrMsg\" while uploading $DocFileName</p>\n";
+    }
+
+  }
+  return array("msg"=>$arrMsg,"err"=>$arrError,"Files"=>$FileList,"size"=>$SizeTotal,"FileList"=>$arrFilesList);
+}
 ?>

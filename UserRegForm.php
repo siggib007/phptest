@@ -9,7 +9,7 @@
     print "<td width=\"$RegCol2\"><input type=\"text\" name=\"txtName\" size=\"50\" value=\"$strName\">\n";
     print "<span class=\"Attn\">Required</span>\n";
     print "<input type=\"hidden\" name=\"iUserID\" size=\"5\" value=\"$strUserID\"></td>\n</tr>\n";
-    print "<tr>\n<td colspan=2 align=center class=\"lbl\">Mailing Address</td>\n</tr>\n";
+    print "<tr>\n<td colspan=2 align=center class=\"lbl\">Postal Address</td>\n</tr>\n";
     print "<tr>\n<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">Street: </td>\n";
     print "<td><input type=\"text\" name=\"txtAddr1\" size=\"50\" value=\"$strAddr1\"></td>\n</tr>\n";
     print "<tr>\n<td width=\"$RegCol1\" align=\"right\" class=\"lbl\">Street2: </td>\n";
