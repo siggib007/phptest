@@ -30,6 +30,55 @@
   {
     $btnSubmit = "";
   }
+
+  if ($btnSubmit == 'Reset' or $btnSubmit == 'Cancel')
+  {
+    unset($_SESSION["2FASecret"]);
+    print "<p class=\"MainTextCenter\">TOTP MFA Setup has been cancelled.</p>";
+  }
+
+  if ($btnSubmit == 'Delete')
+  {
+    $strQuery = "update tblUsers set vcMFASecret = '' where iUserID = $iUserID;";
+    if(UpdateSQL ($strQuery, "update"))
+    {
+      print "<p class=\"BlueNote\">TOTP MFA Successfully removed</p>";
+      unset($_SESSION["2FASecret"]);
+    }
+    else
+    {
+      print "<p class=\"Error\">Failed to update database</p>";
+    }
+  }
+
+  if ($btnSubmit == 'Submit')
+  {
+    $MFASecret = CleanReg(substr(trim($_POST['txtSecret'],0,20)));
+    $_SESSION["2FASecret"] = $MFASecret;
+    print "<p class=\"MainTextCenter\">Validating your TOTP MFA</p>";
+    $iUserCode = intval($_POST['txtCode']);
+    if ($tfa->verifyCode($MFASecret, strval($iUserCode)) === true)
+    {
+      print "<p class=\"BlueNote\">OK</p>";
+      $strQuery = "update tblUsers set vcMFASecret = '$MFASecret' where iUserID = $iUserID;";
+      if(UpdateSQL ($strQuery, "update"))
+      {
+        print "<p class=\"BlueNote\">Setup Completed Successfully</p>";
+        unset($_SESSION["2FASecret"]);
+        GenerateRecovery($iUserID);
+      }
+      else
+      {
+        print "<p class=\"Error\">Failed to update database</p>";
+      }
+    }
+    else
+    {
+      print "<p class=\"Error\">FAIL</p>";
+    }
+  }
+
+
   $strQuery = "select * from tblUsers where iUserID = $iUserID;";
   if (!$Result = $dbh->query ($strQuery))
   {
@@ -89,7 +138,6 @@
         print "</div>\n";
       }
       $MFASecret = $tfa->createSecret();
-      $_SESSION["2FASecret"] = $MFASecret;
       $btnSubmit = "x";
       $strDispSecret = chunk_split($MFASecret,4," ");
       print "<div class=\"MainTextCenter\">\n";
@@ -99,6 +147,7 @@
       print "<form method=\"POST\">\n";
       print "<p>Enter your code:\n";
       print "<input type=\"text\" name=\"txtCode\" size=\"10\">\n";
+      print "<input type=\"hidden\" value=\"$MFASecret\" name=\"txtSecret\">";
       print "<input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\">\n";
       print "<input type=\"Submit\" value=\"Cancel\" name=\"btnSubmit\">\n";
       print "</p>\n";
@@ -125,51 +174,6 @@
     print "</p>\n";
     print "</form>\n";
     print "</div>\n";
-  }
-
-  if ($btnSubmit == 'Reset' or $btnSubmit == 'Cancel')
-  {
-    unset($_SESSION["2FASecret"]);
-    print "<p class=\"MainTextCenter\">TOTP MFA Setup has been cancelled.</p>";
-  }
-
-  if ($btnSubmit == 'Delete')
-  {
-    $strQuery = "update tblUsers set vcMFASecret = '' where iUserID = $iUserID;";
-    if(UpdateSQL ($strQuery, "update"))
-    {
-      print "<p class=\"BlueNote\">TOTP MFA Successfully removed</p>";
-      unset($_SESSION["2FASecret"]);
-    }
-    else
-    {
-      print "<p class=\"Error\">Failed to update database</p>";
-    }
-  }
-
-  if ($btnSubmit == 'Submit')
-  {
-    print "<p class=\"MainTextCenter\">Validating your TOTP MFA</p>";
-    $iUserCode = intval($_POST['txtCode']);
-    if ($tfa->verifyCode($MFASecret, strval($iUserCode)) === true)
-    {
-      print "<p class=\"BlueNote\">OK</p>";
-      $strQuery = "update tblUsers set vcMFASecret = '$MFASecret' where iUserID = $iUserID;";
-      if(UpdateSQL ($strQuery, "update"))
-      {
-        print "<p class=\"BlueNote\">Setup Completed Successfully</p>";
-        unset($_SESSION["2FASecret"]);
-        GenerateRecovery($iUserID);
-      }
-      else
-      {
-        print "<p class=\"Error\">Failed to update database</p>";
-      }
-    }
-    else
-    {
-      print "<p class=\"Error\">FAIL</p>";
-    }
   }
 
   require("footer.php");

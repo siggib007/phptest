@@ -304,7 +304,6 @@ else
 {
   $Priv = $_SESSION["iPrivLevel"];
   print "<td class=\"Welcome\" width=\"85%\">Welcome $_SESSION[auth_username]</td>\n";
-  print "<td class=\"Profile\"><a class=\"Profile\" href=\"" . $ROOTPATH . "myprofile.php\">My Profile</a></td>\n";
   print "<td class=\"Profile\"><a class=\"Profile\" href=\"" . $ROOTPATH . "logout.php\">Logout</a></td>\n";
 }
 print "</tr>\n</table>\n";
