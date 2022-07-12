@@ -925,7 +925,6 @@ function FileUpload($arrFiles,$DocRoot)
       $Error = $arrFiles['error'][$i];
       $Size =  $arrFiles['size'][$i];
       $SizeUnit = with_unit($Size);
-      error_log("tmpfile: $tmpFile  -  newpath: $newPath  - Error: $Error");
       if ($Error == UPLOAD_ERR_OK)
       {
         if (move_uploaded_file($tmpFile, $newPath))
