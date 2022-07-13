@@ -18,6 +18,21 @@
 
   $arrMFAOptions = LoadMFAOptions($iUserID);
 
+  if ($strReferer != $strPageURL and $PostVarCount > 0)
+  {
+    print "<p class=\"Error\">Invalid operation, very Bad Reference!!!</p> ";
+    exit;
+  }
+
+  if (isset($_POST['btnSubmit']))
+  {
+    $btnSubmit = $_POST['btnSubmit'];
+  }
+  else
+  {
+    $btnSubmit = "";
+  }
+
   if ($btnSubmit =="Reset Recovery Code")
   {
     GenerateRecovery($iUserID);
@@ -81,23 +96,26 @@
 
   print "<div class=\"MainTextCenter\">\n";
 
-  if ($_SESSION["bMFA_active"])
+  if ($btnSubmit == "")
   {
-    print "<p>&nbsp;</p>\n<p class=\"Header2\">Reset Recovery Code</p>\n";
-    print "To reset your recovery code, click this button.<br>\n";
+    if ($_SESSION["bMFA_active"])
+    {
+      print "<p>&nbsp;</p>\n<p class=\"Header2\">Reset Recovery Code</p>\n";
+      print "To reset your recovery code, click this button.<br>\n";
+      print "<form method=\"post\">\n";
+      print "<input type=\"submit\" value=\"Reset Recovery Code\" name=\"btnSubmit\">\n";
+      print "</form>\n";
+      print "</div>\n";
+    }
+    print "<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p class=\"Header2\">Account deletion</p>\n";
+    print "<div class=\"MainTextCenter\">\n";
+    print "<p>If you wish to completely delete your account you can do that here.</p>\n";
     print "<form method=\"post\">\n";
-    print "<input type=\"submit\" value=\"Reset Recovery Code\" name=\"btnSubmit\">\n";
+    print "<input type=\"submit\" value=\"Delete Account\" name=\"btnSubmit\">\n";
+    print "<input type=\"hidden\" name=\"BeenSubmitted\" value=\"false\">\n";
+    print "<input type=\"hidden\" name=\"iUserID\" size=\"5\" value=\"$iUserID\">\n";
     print "</form>\n";
     print "</div>\n";
   }
-  print "<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p class=\"Header2\">Account deletion</p>\n";
-  print "<div class=\"MainTextCenter\">\n";
-  print "<p>If you wish to completely delete your account you can do that here.</p>\n";
-  print "<form method=\"post\">\n";
-  print "<input type=\"submit\" value=\"Delete Account\" name=\"btnSubmit\">\n";
-  print "<input type=\"hidden\" name=\"BeenSubmitted\" value=\"false\">\n";
-  print "<input type=\"hidden\" name=\"iUserID\" size=\"5\" value=\"$iUserID\">\n";
-  print "</form>\n";
-  print "</div>\n";
   require("footer.php");
 ?>

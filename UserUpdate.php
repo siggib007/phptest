@@ -2,7 +2,7 @@
     $dtNow = date("Y-m-d H:i:s");
     $uuid = uniqid(mt_rand(), true);
     $strURL = $strURL . "EmailUpdate.php?$uuid";
-    $strUserID = intval(trim($_POST['UserID']));
+    // $strUserID = intval(trim($_POST['UserID']));
     if ($strUserID)
     {
         $strQuery = "update tblUsers set vcName = '$strName', vcAddr1 = '$strAddr1', " .
@@ -64,7 +64,7 @@
     }
     else
     {
-        print "Can't update without a user ID. Contact $SupportEmail if you have any questions.";
+        printErr("Can't update without a user ID. Contact $SupportEmail if you have any questions.");
         EmailText("$SupportEmail","Automatic Error Report","Failed to update registration for $strName due to missing userid" ,
                             $FromEmail);
     }

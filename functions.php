@@ -47,6 +47,16 @@ function ShowErrHead()
   exit;
 }
 
+function printErr($strMsg)
+{
+  print "<p class=\"Error\">$strMsg</p>\n";
+}
+
+function printNote($strMsg)
+{
+  print "<p class=\"BlueNote\">$strMsg</p>\n";
+}
+
 function QuerySQL($strQuery)
 {
   $dbh = $GLOBALS['dbh'];

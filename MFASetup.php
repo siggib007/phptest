@@ -16,6 +16,13 @@
 
   require("header.php");
   use RobThree\Auth\TwoFactorAuth;
+  spl_autoload_register(
+    function ($className)
+    {
+      include_once str_replace(array('RobThree\\Auth', '\\'), array(__DIR__.'/RobThree2FA', '/'), $className) . '.php';
+    }
+  );
+  $tfa = new TwoFactorAuth($HeadAdd . $ProdName);
 
   if (!isset($iUserID))
   {
@@ -31,6 +38,7 @@
     $btnSubmit = "";
   }
 
+  error_log("button: $btnSubmit");
   if ($btnSubmit == 'Reset' or $btnSubmit == 'Cancel')
   {
     unset($_SESSION["2FASecret"]);
@@ -53,7 +61,8 @@
 
   if ($btnSubmit == 'Submit')
   {
-    $MFASecret = CleanReg(substr(trim($_POST['txtSecret'],0,20)));
+    error_log("validating code");
+    $MFASecret = CleanReg(substr(trim($_POST['txtSecret']),0,20));
     $_SESSION["2FASecret"] = $MFASecret;
     print "<p class=\"MainTextCenter\">Validating your TOTP MFA</p>";
     $iUserCode = intval($_POST['txtCode']);
@@ -102,78 +111,71 @@
     $strUserName = "";
   }
 
-  print "<p class=\"Header1\">TOTP MFA Setup</p>\n";
-  $AuthApp = $TextArray["AuthApp"];
-  $RecovCode = $TextArray["RecovCode"];
-  if ($strUserEmail != "")
+  if ($btnSubmit == "")
   {
-    spl_autoload_register(
-      function ($className)
-      {
-        include_once str_replace(array('RobThree\\Auth', '\\'), array(__DIR__.'/RobThree2FA', '/'), $className) . '.php';
-      }
-    );
-    print "<p class=\"Header2\">Setting up TOTP MFA (AKA Google Auth) for $strUserName</p>\n";
-    if ($btnSubmit == "")
+    print "<p class=\"Header1\">TOTP MFA Setup</p>\n";
+    $AuthApp = $TextArray["AuthApp"];
+    $RecovCode = $TextArray["RecovCode"];
+    if ($strUserEmail != "")
     {
+      print "<p class=\"Header2\">Setting up TOTP MFA (AKA Google Auth) for $strUserName</p>\n";
       print "<p class=\"MainTextCenter\">$AuthApp</p>\n";
-    }
 
-    $tfa = new TwoFactorAuth($HeadAdd . $ProdName);
-    if (isset($_SESSION["2FASecret"]))
-    {
-      $MFASecret = $_SESSION["2FASecret"];
-    }
-    else
-    {
-      if ($strCurrSecret != "")
+      if (isset($_SESSION["2FASecret"]))
       {
-        print "<p class=\"BlueNote\">If you complete this setup your existing TOTP MFA will be replaced. Hit cancel if you want to keep your existing setup!!</p>\n";
+        $MFASecret = $_SESSION["2FASecret"];
+      }
+      else
+      {
+        if ($strCurrSecret != "")
+        {
+          print "<p class=\"BlueNote\">If you complete this setup your existing TOTP MFA will be replaced. Hit cancel if you want to keep your existing setup!!</p>\n";
+          print "<div class=\"MainTextCenter\">\n";
+          print "<form method=\"POST\">\n";
+          print "<p>To remove your TOTP MFA setup, click the delete button:\n";
+          print "<input type=\"Submit\" value=\"Delete\" name=\"btnSubmit\">\n";
+          print "</p>\n";
+          print "</form>\n";
+          print "</div>\n";
+        }
+        $MFASecret = $tfa->createSecret();
+        $btnSubmit = "x";
+        $strDispSecret = chunk_split($MFASecret,4," ");
         print "<div class=\"MainTextCenter\">\n";
+        print "<p>Please enter the following code in your app:$strDispSecret</p>\n";
+        $QRcode = $tfa->getQRCodeImageAsDataUri($strUserEmail, $MFASecret);
+        print "<p>Or scan this QR code:<br>\n <img src=\"$QRcode\"></p>\n";
         print "<form method=\"POST\">\n";
-        print "<p>To remove your TOTP MFA setup, click the delete button:\n";
-        print "<input type=\"Submit\" value=\"Delete\" name=\"btnSubmit\">\n";
+        print "<p>Enter your code:\n";
+        print "<input type=\"text\" name=\"txtCode\" size=\"10\">\n";
+        print "<input type=\"hidden\" value=\"$MFASecret\" name=\"txtSecret\">";
+        print "<input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\">\n";
+        print "<input type=\"Submit\" value=\"Cancel\" name=\"btnSubmit\">\n";
         print "</p>\n";
         print "</form>\n";
         print "</div>\n";
       }
-      $MFASecret = $tfa->createSecret();
-      $btnSubmit = "x";
-      $strDispSecret = chunk_split($MFASecret,4," ");
+    }
+    else
+    {
+      print "<p class=\"Error\">Seems your info couldn't be found in the database, this is not right. You need to tell $SupportEmail about this</p>";
+      unset($_SESSION["2FASecret"]);
+    }
+
+    if (isset($_SESSION["2FASecret"]) and $btnSubmit == '')
+    {
       print "<div class=\"MainTextCenter\">\n";
-      print "<p>Please enter the following code in your app:$strDispSecret</p>\n";
-      $QRcode = $tfa->getQRCodeImageAsDataUri($strUserEmail, $MFASecret);
-      print "<p>Or scan this QR code:<br>\n <img src=\"$QRcode\"></p>\n";
+      print "<p>It seems your TOTP MFA setup is not validated. Please Enter the code from your Authenticator"
+            . " app to validate and complete the setup, or cancel the setup</p>";
       print "<form method=\"POST\">\n";
       print "<p>Enter your code:\n";
       print "<input type=\"text\" name=\"txtCode\" size=\"10\">\n";
-      print "<input type=\"hidden\" value=\"$MFASecret\" name=\"txtSecret\">";
       print "<input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\">\n";
       print "<input type=\"Submit\" value=\"Cancel\" name=\"btnSubmit\">\n";
       print "</p>\n";
       print "</form>\n";
       print "</div>\n";
     }
-  }
-  else
-  {
-    print "<p class=\"Error\">Seems your info couldn't be found in the database, this is not right. You need to tell $SupportEmail about this</p>";
-    unset($_SESSION["2FASecret"]);
-  }
-
-  if (isset($_SESSION["2FASecret"]) and $btnSubmit == '')
-  {
-    print "<div class=\"MainTextCenter\">\n";
-    print "<p>It seems your TOTP MFA setup is not validated. Please Enter the code from your Authenticator"
-          . " app to validate and complete the setup, or cancel the setup</p>";
-    print "<form method=\"POST\">\n";
-    print "<p>Enter your code:\n";
-    print "<input type=\"text\" name=\"txtCode\" size=\"10\">\n";
-    print "<input type=\"Submit\" value=\"Submit\" name=\"btnSubmit\">\n";
-    print "<input type=\"Submit\" value=\"Cancel\" name=\"btnSubmit\">\n";
-    print "</p>\n";
-    print "</form>\n";
-    print "</div>\n";
   }
 
   require("footer.php");

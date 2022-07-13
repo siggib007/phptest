@@ -15,6 +15,20 @@
   //along with this program.  If not, see <http://www.gnu.org/licenses/>
 
   require("header.php");
+  if ($strReferer != $strPageURL and $PostVarCount > 0)
+  {
+    print "<p class=\"Error\">Invalid operation, very Bad Reference!!!</p> ";
+    exit;
+  }
+
+  if (isset($_POST['btnSubmit']))
+  {
+    $btnSubmit = $_POST['btnSubmit'];
+  }
+  else
+  {
+    $btnSubmit = "";
+  }
 
   if ($btnSubmit =="Validate")
   {
@@ -111,6 +125,11 @@
       print "<p class=\"Error\">You have to provide your cell number before you can enable SMS Notifications</p>\n";
       $btnSubmit = "";
       $bSMSOK = False;
+    }
+    if (stripos($strLabel,"mfa")!== false)
+    {
+      printNote("Make sure you have a recovery code for MFA failures.<br>\nIf you need a new recovery code, ".
+                "head over to the <a href=UserProfileOther.php>Other tab</a> to reset your recovery code and get a new one.");
     }
 
     if (stripos($strLabel,"sms")!== false and $strKey != 1)

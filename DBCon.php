@@ -250,7 +250,7 @@ else
   }
   while ($Row = $Result->fetch_assoc())
   {
-    $TextArray[$Row['vcTextName']] = $Row['tPageTexts'];
+    $TextArray[$Row['vcTextName']] = str_replace("\n","<br>\n",$Row['tPageTexts']);
   }
 
 }
