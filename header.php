@@ -234,9 +234,9 @@ else
   $vcUID = $_SESSION["auth_UID"];
 }
 
-if ($bChangePWD == 1 and $strPageName != "myprofile.php")
+if ($bChangePWD == 1 and $strPageName != "UserProfileGen.php")
 {
-  header("Location: myprofile.php" );
+  header("Location: UserProfileGen.php" );
 }
 
 if ($PrivReq > 0)

@@ -33,12 +33,21 @@
   print "<p class=\"MainTextCenter\">\n";
   print "RegistrationID: $strUserID<br>\n";
   print "{$Row['vcName']}<br>\n";
-  print "{$Row['vcAddr1']}<br>\n";
-  print "{$Row['vcAddr2']}<br>\n";
-  print "{$Row['vcCity']}, {$Row['vcState']} {$Row['vcZip']}<br>\n";
+  if ($Row['vcAddr1'] != "")
+  {
+    print "{$Row['vcAddr1']}<br>\n";
+  }
+  if ($Row['vcAddr2'] != "")
+  {
+    print "{$Row['vcAddr2']}<br>\n";
+  }
+  if ($Row['vcCity'] != "")
+  {
+    print "{$Row['vcCity']}, {$Row['vcState']} {$Row['vcZip']}<br>\n";
+  }
   print "{$Row['vcCountry']}<br>\n";
   print "{$Row['vcEmail']}<br>\n";
-  print "{$Row['vcPhone']}<br>\n";
+  print "{$Row['vcCell']}<br>\n";
 
   $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = {$Row['iPrivLevel']};";
   if (!$PrivResult = $dbh->query ($strQuery))

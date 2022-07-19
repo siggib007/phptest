@@ -1,23 +1,6 @@
--- --------------------------------------------------------
--- Host:                         localhost
--- Server version:               5.7.38 - MySQL Community Server (GPL)
--- Server OS:                    Linux
--- HeidiSQL Version:             12.0.0.6525
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
 -- Dumping database structure for PHPDemo
 DROP DATABASE IF EXISTS `PHPDemo`;
-CREATE DATABASE IF NOT EXISTS `PHPDemo` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
+CREATE DATABASE IF NOT EXISTS `PHPDemo`;
 USE `PHPDemo`;
 
 -- Dumping structure for table CountryCodes
@@ -29,7 +12,6 @@ CREATE TABLE IF NOT EXISTS `CountryCodes` (
 );
 
 -- Dumping data for table CountryCodes: 242 rows
-/*!40000 ALTER TABLE `CountryCodes` DISABLE KEYS */;
 INSERT INTO `CountryCodes` (`iCountryID`, `vcCountryCode`, `vcCountryName`) VALUES
 	(1, 'AF', 'AFGHANISTAN'),
 	(2, 'AX', 'ÅLAND ISLANDS'),
@@ -273,7 +255,6 @@ INSERT INTO `CountryCodes` (`iCountryID`, `vcCountryCode`, `vcCountryName`) VALU
 	(240, 'CD', 'Zaire (CONGO, THE DEMOCRATIC REPUBLIC OF THE)'),
 	(241, 'ZM', 'ZAMBIA'),
 	(242, 'ZW', 'ZIMBABWE');
-/*!40000 ALTER TABLE `CountryCodes` ENABLE KEYS */;
 
 -- Dumping structure for procedure spMovePos
 DELIMITER //
@@ -355,6 +336,7 @@ INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) 
 	('ProfileNotify', 'notify@example.com', 'Profile Notify Email', 'text'),
 	('ShowLinkURL', 'False', 'Show URL for Links', 'Boolean'),
 	('SiteMessage', '', 'Site Message', 'text'),
+	('USOnly',	'False',	'When checked users are limited to US address & phone number',	'Boolean'),
 	('HeadAdd', '[dev]', 'Header Name addition', 'text'),
 	('Maintenance', 'False', 'Maintenance', 'Boolean'),
 	('TimeFormat', 'h:i A', 'Display Time Format [<a href="http://www.php.net/manual/en/function.date.php" target="_blank">help</a>]', 'text'),
@@ -414,7 +396,7 @@ CREATE TABLE IF NOT EXISTS `tblContent` (
 
 -- Dumping data for table tblContent: ~1 rows (approximately)
 INSERT INTO `tblContent` (`iRevID`, `iMenuID`, `dtTimeStamp`, `vcPageHeader`, `tPageText`, `bLineBreak`) VALUES
-	(1, 1, '2022-06-19 18:51:18', 'Demo', '<p class=BlueAttn>This is just a demo site, nothing to see here!!!!</p>', 0);
+	(1, 1, '2022-06-19 18:51:18', 'Demo', '<p class=BlueAttn>This is just a demo site, nothing to see here!!!!</p><p class=MainTextCenter>See my Github page at <a href=https://github.com/siggib007/phptest target=_blank>https://github.com/siggib007/phptest</a> for more details about this demo and how to stand up your own</p>', 0);
 
 -- Dumping structure for table tblemailupdate
 CREATE TABLE IF NOT EXISTS `tblemailupdate` (
@@ -447,10 +429,8 @@ CREATE TABLE IF NOT EXISTS `tblFeedback` (
 );
 
 -- Dumping data for table tblFeedback: 1 rows
-/*!40000 ALTER TABLE `tblFeedback` DISABLE KEYS */;
 INSERT INTO `tblFeedback` (`iFeedbackID`, `vcFeedbackName`, `tFeedbackDescr`, `vcImgPath`) VALUES
 	(1, 'test feedback', 'Here would be some glowing remarks about this wonderful site.', '');
-/*!40000 ALTER TABLE `tblFeedback` ENABLE KEYS */;
 
 -- Dumping structure for table tbllinkcategory
 CREATE TABLE IF NOT EXISTS `tbllinkcategory` (
@@ -493,8 +473,8 @@ CREATE TABLE IF NOT EXISTS `tblmenu` (
   `bdel` tinyint(4) NOT NULL DEFAULT '0',
   `bSecure` tinyint(4) NOT NULL,
   PRIMARY KEY (`iMenuID`),
-  KEY `bAdmin` (`bAdmin`),
-  CONSTRAINT `tblmenu_ibfk_1` FOREIGN KEY (`bAdmin`) REFERENCES `tblAdminCategories` (`iCatID`)
+	UNIQUE KEY `vcLink` (`vcLink`),
+  KEY `bAdmin` (`bAdmin`)
 );
 
 -- Dumping data for table tblmenu: ~61 rows (approximately)
@@ -557,7 +537,12 @@ INSERT INTO `tblmenu` (`iMenuID`, `vcTitle`, `vcLink`, `iReadPriv`, `iWritePriv`
 	(94, 'UserRegForm.php', 'UserRegForm.php', 500, 300, 'UserRegForm.php', 0, 0, 0, 0, 0),
 	(95, 'UserUpdate.php', 'UserUpdate.php', 500, 300, 'UserUpdate.php', 0, 0, 0, 0, 0),
 	(96, 'validate.php', 'validate.php', 500, 300, 'validate.php', 0, 0, 0, 0, 0),
-	(97, 'InitialRegister1st.php', 'InitialRegister1st.php', 0, 0, 'InitialRegister1st.php', 0, 0, 0, 0, 0);
+	(97, 'InitialRegister1st.php', 'InitialRegister1st.php', 0, 0, 'InitialRegister1st.php', 0, 0, 0, 0, 0),
+	(106,	'MFA Setup',	'MFASetup.php',	1,	1,	'MFA Setup',	0,	0,	0,	0,	1),
+	(115,	'User Preference',	'UserPref.php',	1,	1,	'Preferences',	0,	0,	0,	0,	0),
+	(118,	'General Info',	'UserProfileGen.php',	1,	1,	'General Info',	0,	0,	0,	0,	1),
+	(119,	'Other',	'UserProfileOther.php',	1,	1,	'Other',	0,	0,	0,	0,	0);
+	
 
 -- Dumping structure for table tblmenutype
 CREATE TABLE IF NOT EXISTS `tblmenutype` (
@@ -584,8 +569,12 @@ INSERT INTO `tblmenutype` (`iTypeID`, `iMenuID`, `vcMenuType`, `iMenuOrder`, `iS
 	(35, 49, 'head', 8, 0),
 	(36, 60, 'head', 9, 0),
 	(37, 63, 'head', 16, 0),
-	(38, 66, 'head', 13, 0);
-
+	(38, 66, 'head', 13, 0),
+	(39, 115,	'head',	21,	11),
+	(40, 106,	'head',	19,	11),
+	(41, 119,	'head',	23,	11),
+	(42, 118,	'head',	18,	11),
+	(43, 11,	'head',	17,	0);
 -- Dumping structure for table tblPageMeta
 CREATE TABLE IF NOT EXISTS `tblPageMeta` (
   `iMetaID` int(11) NOT NULL AUTO_INCREMENT,
@@ -625,6 +614,7 @@ CREATE TABLE IF NOT EXISTS `tblPageTable` (
 -- Dumping data for table tblPageTable: ~0 rows (approximately)
 
 -- Dumping structure for table tblPageTexts
+DROP TABLE if EXISTS tblPageTexts;
 CREATE TABLE IF NOT EXISTS `tblPageTexts` (
   `vcTextName` varchar(10) NOT NULL,
   `vcTextDescr` varchar(100) NOT NULL,
@@ -634,15 +624,15 @@ CREATE TABLE IF NOT EXISTS `tblPageTexts` (
 
 -- Dumping data for table tblPageTexts: ~4 rows (approximately)
 INSERT INTO `tblPageTexts` (`vcTextName`, `vcTextDescr`, `tPageTexts`) VALUES
-	('RegFoot', 'Text for Bottom of the registration page', 'I tried to warn you, but did you listen?? Doesn\'t look that way. Oh well you might as well go ahead and submitt now. Just know that this is all on you and you agree to everything and accept responsibility for everything even things that aren\'t your fault or responsibilites.'),
-	('RegHead', 'Text to display at head of registration page', 'This form is to sign up for an account on this useless demo site. Trust me signing up here will lead to nothing but trouble. If you insist go ahead and fill it out but don\'t say I didn\'t warn you.'),
-	('SetupReg', 'Text for the initial setup registration page', 'Since this is the first time setup you need to create an adminstrative account'),
-  ('RegForm', 'Only Name and email address is required.<br>\r\nFor the name just put two or more words you would like this system to use as your name.<br>\r\nThe email address you provide will be used to send initial password as well as password resets to.'),
-  ('AuthApp', 'Explanation of a TOTP Auth App', 'Please make sure you have a TOTP capable Authenticator app on your mobile. \r\nGoogle, Microsoft, LastPass, amongst others, all make compatible authenticators. \r\nThey are all called Authenticator in your app store. Authy is my personal favorite TOTP Authenticator. \r\nWhen I talk about app below I\'m referring to this authenticator app '),
-  ('TestWarn', 'Warning on the Email Testing page', 'Doing so might allow hackers to send spam from your configured email address via your email server, severly damaging your email reputation.<br>\r\nOnly run this in a secure environment where you have absolute control over who has access.<br>\r\nFor example run this on your laptop and set your winodws firewall to block all inbound connections.'),
-  ('RecovCode', 'Text that explains Recovery code', 'Please copy the following recovery code and store it in your Password manger, in case something happens to your authenticator app.'),
-  ('RecoverAck', 'Message to display during password recovery', 'If the email you submitted is registered in our system, your password has been reset and sent to that email. \r\nIf you don\'t get an email reach out to our support for further help'),
-  ('Wemail', 'Welcome Email Intro', 'welcome welcome');
+('RegFoot', 'Text for Bottom of the registration page', 'I tried to warn you, but did you listen?? Doesn\'t look that way. Oh well you might as well go ahead and submitt now. Just know that this is all on you and you agree to everything and accept responsibility for everything even things that aren\'t your fault or responsibilites.'),
+('RegHead', 'Text to display at head of registration page', 'This form is to sign up for an account on this useless demo site. Trust me signing up here will lead to nothing but trouble. If you insist go ahead and fill it out but don\'t say I didn\'t warn you.'),
+('SetupReg', 'Text for the initial setup registration page', 'Since this is the first time setup you need to create an adminstrative account'),
+('RegForm', 'Registration Form Explanation', 'Only Name and email address is required.<br>\r\nFor the name just put two or more words you would like this system to use as your name.<br>\r\nThe email address you provide will be used to send initial password as well as password resets to.'),
+('AuthApp', 'Explanation of a TOTP Auth App', 'Please make sure you have a TOTP capable Authenticator app on your mobile. \r\nGoogle, Microsoft, LastPass, amongst others, all make compatible authenticators. \r\nThey are all called Authenticator in your app store. Authy is my personal favorite TOTP Authenticator. \r\nWhen I talk about app below I\'m referring to this authenticator app '),
+('TestWarn', 'Warning on the Email Testing page', 'Doing so might allow hackers to send spam from your configured email address via your email server, severly damaging your email reputation.<br>\r\nOnly run this in a secure environment where you have absolute control over who has access.<br>\r\nFor example run this on your laptop and set your winodws firewall to block all inbound connections.'),
+('RecovCode', 'Text that explains Recovery code', 'Please copy the following recovery code and store it in your Password manger, in case something happens to your authenticator app.'),
+('RecoverAck', 'Message to display during password recovery', 'If the email you submitted is registered in our system, your password has been reset and sent to that email. \r\nIf you don\'t get an email reach out to our support for further help'),
+('Wemail', 'Welcome Email Intro', 'welcome welcome');
 
 -- Dumping structure for table tblPageTypes
 CREATE TABLE IF NOT EXISTS `tblPageTypes` (
@@ -681,12 +671,10 @@ CREATE TABLE IF NOT EXISTS `tblReviewSiteURL` (
 );
 
 -- Dumping data for table tblReviewSiteURL: 3 rows
-/*!40000 ALTER TABLE `tblReviewSiteURL` DISABLE KEYS */;
 INSERT INTO `tblReviewSiteURL` (`iSiteID`, `vcSiteName`, `vcSiteURL`, `vcImgPath`) VALUES
-	(1, 'Speed test', 'http://www.speedtest.net/ ', 'http://www.speedtest.net/images/link120x60.gif'),
+	(1, 'Speed test', 'https://www.speedtest.net/ ', 'http://www.speedtest.net/images/link120x60.gif'),
 	(2, 'google Plus', 'https://plus.google.com/ ', 'http://ssl.gstatic.com/images/icons/gplus-64.png'),
-	(3, 'Siggi\'s Testing', 'www.supergeek.us ', '');
-/*!40000 ALTER TABLE `tblReviewSiteURL` ENABLE KEYS */;
+	(3, 'Siggi\'s Testing', 'https://www.supergeek.us ', '');
 
 -- Dumping structure for table tblSecureOption
 CREATE TABLE IF NOT EXISTS `tblSecureOption` (
@@ -764,7 +752,6 @@ CREATE TABLE IF NOT EXISTS `US_States` (
 );
 
 -- Dumping data for table US_States: 65 rows
-/*!40000 ALTER TABLE `US_States` DISABLE KEYS */;
 INSERT INTO `US_States` (`iStateID`, `vcStateAbr`, `vcStateName`) VALUES
 	(1, 'AL', 'ALABAMA'),
 	(2, 'AK', 'ALASKA'),
@@ -831,7 +818,6 @@ INSERT INTO `US_States` (`iStateID`, `vcStateAbr`, `vcStateName`) VALUES
 	(63, 'WV', 'WEST VIRGINIA'),
 	(64, 'WI', 'WISCONSIN'),
 	(65, 'WY', 'WYOMING');
-/*!40000 ALTER TABLE `US_States` ENABLE KEYS */;
 
 CREATE VIEW `vwAdminCat` AS select `m`.`vcTitle` AS `vcTitle`,`m`.`vcLink` AS `vcLink`,`m`.`bNewWindow` AS `bNewWindow`,`m`.`iReadPriv` AS `iReadPriv`,`c`.`vcCatName` AS `vcCatName`,`c`.`iCatID` AS `iCatID` from (`tblmenu` `m` join `tblAdminCategories` `c` on((`m`.`bAdmin` = `c`.`iCatID`))) order by `c`.`vcCatName`,`m`.`vcTitle`;
 CREATE VIEW `vwemailupdate` AS select `e`.`iChangeID` AS `iChangeID`,`u`.`vcName` AS `vcName`,`e`.`vcGUID` AS `vcGUID`,`e`.`vcNewEmail` AS `vcNewEmail`,`e`.`vcReqIPAdd` AS `vcReqIPAdd`,`e`.`dtTimeStamp` AS `dtTimeStamp` from (`tblemailupdate` `e` join `tblUsers` `u` on((`e`.`iClientID` = `u`.`iUserID`))) order by `e`.`dtTimeStamp` desc;
@@ -839,9 +825,3 @@ CREATE VIEW `vwlinks` AS select `tbllinks`.`vcLink` AS `vcLink`,`tbllinks`.`vcNa
 CREATE VIEW `vwmenuitem` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`tblmenu`.`vcLink` AS `vcLink`,`tblmenu`.`iReadPriv` AS `iReadPriv`,`tblmenu`.`iWritePriv` AS `iWritePriv`,`tblmenu`.`bNewWindow` AS `bNewWindow`,`tblmenutype`.`vcMenuType` AS `vcMenuType`,`tblmenutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenutype`.`iSubOfMenu` AS `iSubOfMenu` from (`tblmenu` join `tblmenutype` on((`tblmenu`.`iMenuID` = `tblmenutype`.`iMenuID`))) order by `tblmenutype`.`vcMenuType`,`tblmenutype`.`iMenuOrder`,`tblmenutype`.`iSubOfMenu`;
 CREATE VIEW `vwmenupriv` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`readpriv`.`vcPrivName` AS `ReadPriv`,`writepriv`.`vcPrivName` AS `WritePriv`,`tblmenu`.`vcHeader` AS `vcHeader`,`tblmenu`.`bAdmin` AS `bAdmin`,`tblmenu`.`bSecure` AS `bSecure`,`menutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenu`.`bNewWindow` AS `bNewWindow` from (((`tblmenu` join `tblprivlevels` `readpriv` on((`tblmenu`.`iReadPriv` = `readpriv`.`iPrivLevel`))) join `tblprivlevels` `writepriv` on((`tblmenu`.`iWritePriv` = `writepriv`.`iPrivLevel`))) left join `tblmenutype` `menutype` on((`tblmenu`.`iMenuID` = `menutype`.`iMenuID`)));
 CREATE VIEW `vwPrivLevels` AS select `tblprivlevels`.`iPrivLevel` AS `iOrder`,`tblprivlevels`.`iPrivLevel` AS `vcType`,`tblprivlevels`.`vcPrivName` AS `vcText` from `tblprivlevels` where (`tblprivlevels`.`iPrivLevel` > 0);
-
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
