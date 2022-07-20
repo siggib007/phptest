@@ -111,77 +111,85 @@
         $strOUID = substr(trim($_POST['txtOUID']),0,19);
         $Password = trim($_POST['txtPWD']);
         $PWDConf = trim($_POST['txtPWDConf']);
-        $strUID = str_replace("'","",$strUID);
-        CleanReg($strUID);
-        CleanReg($strOUID);
-        CleanReg($Password);
-        Cleanreg($PWDConf);
-        if ($Password !='' or $strOUID != $strUID)
+        $strCleanUID = preg_replace('/[^a-z0-9]*/i', '', $strUID);
+        if ($strCleanUID != $strUID)
         {
-          $strQuery = "select count(*) iRowCount from tblUsers where vcUID = '$strUID' and iUserID <> $iUserID";
-          if (!$Result = $dbh->query ($strQuery))
+          print "<p class=\"Error\">New Username contains illegal characters, only a-z and 0-9 are allowed in usernames. ".
+                "Nothing was changed, please specify a valid username if you want to change it</p>\n";
+        }
+        else 
+        {
+          CleanReg($strUID);
+          CleanReg($strOUID);
+          CleanReg($Password);
+          Cleanreg($PWDConf);
+          if ($Password !='' or $strOUID != $strUID)
           {
-            error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-            error_log ($strQuery);
-            exit(2);
-          }
-          $Row = $Result->fetch_assoc();
-          $RowCount = $Row['iRowCount'];
-          $i = 1;
-          $strUID2 = $strUID;
-          while ($RowCount>0)
-          {
-            $strUID2 = $strUID.$i;
-            $strQuery = "select count(*) iRowCount from tblUsers where vcUID = '$strUID2' and iUserID <> $iUserID";
-            if (!$Result2 = $dbh->query ($strQuery))
+            $strQuery = "select count(*) iRowCount from tblUsers where vcUID = '$strUID' and iUserID <> $iUserID";
+            if (!$Result = $dbh->query ($strQuery))
             {
-              error_log ('Failed to data. Error ('. $dbh->errno . ') ' . $dbh->error);
+              error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
               error_log ($strQuery);
               exit(2);
             }
-            $Row2 = $Result2->fetch_assoc();
-            $RowCount = $Row2['iRowCount'];
-            $i += 1;
-          }
-
-          if (strlen($Password) < $MinPWDLen)
-          {
-            print "<p class=\"Error\">Passwords is too short, please supply a password that is at least $MinPWDLen char long.</p>\n";
-          }
-          else
-          {
-            $PWD = password_hash($Password, PASSWORD_DEFAULT);
-            $strQuery="";
-            if ($Password == $PWDConf and $strUID == $strUID2 and $Password != '')
+            $Row = $Result->fetch_assoc();
+            $RowCount = $Row['iRowCount'];
+            $i = 1;
+            $strUID2 = $strUID;
+            while ($RowCount>0)
             {
-              $strQuery = "UPDATE tblUsers SET vcUID = '$strUID', vcPWD = '$PWD', bChangePWD = 0 WHERE iUserID = '$iUserID'";
-            }
-            if ($Password =='' and $strOUID != $strUID and $strUID == $strUID2)
-            {
-              print "<p class=\"Error\">Please provide password to change your user name.</p>";
-            }
-            if ($Password != $PWDConf and $strUID == $strUID2)
-            {
-              print "<p class=\"Error\">Passwords do not match so password and username was not changed.</p>\n";
-            }
-            if ($Password == $PWDConf and $strUID != $strUID2)
-            {
-              print "<p class=\"Error\">Requested username is already in use could not be changed, however the password will been changed. " .
-                    "To change the username use a different username that is not in use. For example $strUID2 is available.</p>\n";
-              $strQuery = "UPDATE tblUsers SET vcPWD = '$PWD', bChangePWD = 0 WHERE iUserID = '$iUserID'";
-            }
-            if ($Password != $PWDConf and $strUID != $strUID2)
-            {
-              print "<p class=\"Error\">Passwords do not match so password was not changed. Requested username is already in use could not be changed. " .
-                    "To change the username Try again and use a different username that is not in use. " .
-                    "For example $strUID2 is available. When changing the password make sure you type the same one twice.</p>\n";
-            }
-            if ($strQuery)
-            {
-              if(UpdateSQL($strQuery, "update"))
+              $strUID2 = $strUID.$i;
+              $strQuery = "select count(*) iRowCount from tblUsers where vcUID = '$strUID2' and iUserID <> $iUserID";
+              if (!$Result2 = $dbh->query ($strQuery))
               {
-                print "<p class=\"BlueAttn\">Update successful!!</p>";
-                $bChangePWD = 0;
+                error_log ('Failed to data. Error ('. $dbh->errno . ') ' . $dbh->error);
+                error_log ($strQuery);
+                exit(2);
+              }
+              $Row2 = $Result2->fetch_assoc();
+              $RowCount = $Row2['iRowCount'];
+              $i += 1;
+            }
+
+            if (strlen($Password) < $MinPWDLen)
+            {
+              print "<p class=\"Error\">Passwords is too short, please supply a password that is at least $MinPWDLen char long.</p>\n";
+            }
+            else
+            {
+              $PWD = password_hash($Password, PASSWORD_DEFAULT);
+              $strQuery="";
+              if ($Password == $PWDConf and $strUID == $strUID2 and $Password != '')
+              {
+                $strQuery = "UPDATE tblUsers SET vcUID = '$strUID', vcPWD = '$PWD', bChangePWD = 0 WHERE iUserID = '$iUserID'";
+              }
+              if ($Password =='' and $strOUID != $strUID and $strUID == $strUID2)
+              {
+                print "<p class=\"Error\">Please provide password to change your user name.</p>";
+              }
+              if ($Password != $PWDConf and $strUID == $strUID2)
+              {
+                print "<p class=\"Error\">Passwords do not match so password and username was not changed.</p>\n";
+              }
+              if ($Password == $PWDConf and $strUID != $strUID2)
+              {
+                print "<p class=\"Error\">Requested username is already in use could not be changed, however the password will been changed. " .
+                      "To change the username use a different username that is not in use. For example $strUID2 is available.</p>\n";
+                $strQuery = "UPDATE tblUsers SET vcPWD = '$PWD', bChangePWD = 0 WHERE iUserID = '$iUserID'";
+              }
+              if ($Password != $PWDConf and $strUID != $strUID2)
+              {
+                print "<p class=\"Error\">Passwords do not match so password was not changed. Requested username is already in use could not be changed. " .
+                      "To change the username Try again and use a different username that is not in use. " .
+                      "For example $strUID2 is available. When changing the password make sure you type the same one twice.</p>\n";
+              }
+              if ($strQuery)
+              {
+                if(UpdateSQL($strQuery, "update"))
+                {
+                  print "<p class=\"BlueAttn\">Update successful!!</p>";
+                  $bChangePWD = 0;
+                }
               }
             }
           }
@@ -249,6 +257,7 @@
     print "<td colspan=2 align=\"center\" >";
     print "<p class=\"Header2\">Username and password</p>\n\n";
     print "You can change your username and password here,<br>\n";
+    print "Only letters a-z and numbers 0-9 are allowed in usernames!<br>\n";
     print "Just make sure you provide password and confirm it when changing your username.<br>";
     print "Also the following characters are stripped out of the password = \ \" '";
     print "</td>";
