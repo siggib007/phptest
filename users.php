@@ -27,7 +27,7 @@
     }
     while ($Row = $Result->fetch_assoc())
     {
-      print "$Row[vcName],$Row[vcUnit],$Row[vcPhone],$Row[vcEmail],$Row[vcAddr1],$Row[vcAddr2],$Row[vcCity],$Row[vcState],$Row[vcZip],$Row[vcCountry]\n";
+      print "$Row[vcName],$Row[vcUnit],$Row[vcCell],$Row[vcEmail],$Row[vcAddr1],$Row[vcAddr2],$Row[vcCity],$Row[vcState],$Row[vcZip],$Row[vcCountry]\n";
     }
     exit;
   }
@@ -117,7 +117,7 @@
     print "{$Row['vcCity']}, {$Row['vcState']} {$Row['vcZip']}<br>\n";
     print "{$Row['vcCountry']}<br>\n";
     print "{$Row['vcEmail']}<br>\n";
-    print "{$Row['vcPhone']}<br>\n";
+    print "{$Row['vcCell']}<br>\n";
 
     $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = {$Row['iPrivLevel']};";
     if (!$PrivResult = $dbh->query ($strQuery))
@@ -160,7 +160,7 @@
     $strUserID = intval(substr(trim($_POST['UserID']),0,9));
     require("UserDBVar.php");
     print "<p>RegistrationID: $strUserID";
-    print "<form method=\"POST\">\n";
+    print "<form method=\"POST\" accept-charset=\"utf-8\">\n";
     require("UserRegForm.php");
     print "<tr>\n";
     print "<td width=\"280\" align=\"right\" class=\"lbl\">Priviledge Level:</td>\n";
@@ -216,7 +216,7 @@
     $strHealth = "";
     $strLocate = "";
 
-    print "<form method=\"POST\">\n";
+    print "<form method=\"POST\" accept-charset=\"utf-8\">\n";
     require("UserRegForm.php");
     print "<tr>\n";
     print "<td width=\"280\" align=\"right\" class=\"lbl\">Priviledge Level:</td>\n";

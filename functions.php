@@ -532,6 +532,7 @@ function SendHTMLAttach($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFile
   }
 
   // Construct email message
+  $mail->CharSet="UTF-8";
   $mail->setFrom($FromParts[1], $FromParts[0]);
   $mail->addAddress($ToParts[1], $ToParts[0]);
   $mail->Subject = $strSubject;

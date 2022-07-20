@@ -92,9 +92,9 @@
 			$salt = substr($strUID , 0, 4) ;
 			$PWD = crypt($Password , $salt);
 			$strQuery = "INSERT INTO tblUsers " .
-						"(vcName, vcEmail, vcPhone, vcAddr1, vcAddr2, vcCity, vcState, vcZip, vcCountry, " .
+						"(vcName, vcEmail, vcCell, vcAddr1, vcAddr2, vcCity, vcState, vcZip, vcCountry, " .
 						"vcUID, vcPWD, dMailSent, tMailSent, bInclude)" .
-						"VALUES ('$strName', '$strEmail', '$strPhone', '$strAddr1', '$strAddr2', '$strCity', '$strState', '$strZip', " .
+						"VALUES ('$strName', '$strEmail', '$strCell', '$strAddr1', '$strAddr2', '$strCity', '$strState', '$strZip', " .
 						"'$strCountry', '$strUID' , '$PWD', CURDATE(), CURTIME(), $bIncludeName); ";
 			$bUpdate = UpdateSQL ($strQuery,"insert");
 			if ($bUpdate)

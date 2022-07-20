@@ -288,9 +288,9 @@ INSERT INTO `tblAdminCategories` (`iCatID`, `vcCatName`) VALUES
 CREATE TABLE IF NOT EXISTS `tblUsrPrefTypes` (
   `iID` int(11) NOT NULL AUTO_INCREMENT,
   `iSortOrder` int(11) NOT NULL,
-  `vcCode` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `vcLabel` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `vcType` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `vcCode` varchar(15) DEFAULT NULL,
+  `vcLabel` varchar(50) DEFAULT NULL,
+  `vcType` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`iID`)
 ) ;
 

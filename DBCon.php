@@ -70,7 +70,6 @@ else
 $strURL = "Localhost/";
 
 
-// mysqli_set_charset("utf8");
 try
 {
   $dbh= new mysqli ($DBServerName, $UID, $PWD, $DefaultDB);
@@ -82,6 +81,7 @@ catch (Exception $e)
   error_log("Make sure database connections in DBCon.php are correct.");
   ShowErrHead();
 }
+$dbh->set_charset("utf8");
 if ($dbh->connect_errno)
 {
   error_log( "Failed to connect to $DBServerName.$DefaultDB using $UID and password that starts with " . substr($PWD,0,3) . " Error(" . $dbh->connect_errno . ") " . $dbh->connect_error);
@@ -90,7 +90,6 @@ if ($dbh->connect_errno)
 }
 else
 {
-  // $dbh->set_charset("utf-8");
   $strQuery = "SELECT * FROM tblconf";
   if (!$Result = $dbh->query ($strQuery))
   {
