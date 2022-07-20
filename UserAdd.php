@@ -1,7 +1,9 @@
 <?php
   $LastIndex = $HowMany - 1;
   $FName = $strNameParts[0];
+  $FName = preg_replace('/[^a-z0-9]*/i', '', $FName);
   $LName = $strNameParts[$LastIndex];
+  $LName = preg_replace('/[^a-z0-9]*/i', '', $LName);
   $strUID = CleanReg(strtolower(substr($FName,0,1).substr($LName,0,9)));
   $strUID = preg_replace('/[^a-z0-9]*/i', '', $strUID);
   if ($PWDLength%2>0)
