@@ -525,6 +525,12 @@ table.ClassListing
     margin-right: auto;
 }
 
+.CenterBox
+{
+  width: 700px;
+  margin: auto;
+}
+
 .LinkCategoryHeader
 {
     font-size: 17px;

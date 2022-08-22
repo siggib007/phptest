@@ -352,7 +352,9 @@ INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) 
   ('AllowReg', 'true', 'Allow Self Registraton', 'Boolean'),
   ('RecoverCodeLen', '32', 'Length of Recovery Code, must be even, ideally multiple of 4', 'text'),
   ('MinPWDLen', '12', 'Minimum length of any password', 'int'),
-	('InitSetup', 'True', 'Initial Setup Mode is active. This should not exists past setup', 'Boolean');
+	('InitSetup', 'True', 'Initial Setup Mode is active. This should not exists past setup', 'Boolean'),
+  ('UserUploadDir', 'upload', 'Upload Directory for normal users', 'text'), 
+  ('AdminUploadDir', 'lib', 'Upload Directory for admin users', 'text');
 
 -- Dumping structure for table tblContactInfo
 CREATE TABLE IF NOT EXISTS `tblContactInfo` (
