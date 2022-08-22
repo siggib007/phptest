@@ -16,29 +16,70 @@
 
   require("header.php");
   $DocRoot = $ConfArray["AdminUploadDir"];
-  printPg("Here are the files in the folder $DocRoot","note");
-  $arrFiles = scandir($DocRoot);
-  print "<div class=\"CenterBox\">\n";
-  print "<form method=\"POST\">\n";
-  $iNum = 1;
-  foreach ($arrFiles as $strFileName) 
+	if (isset($_POST['btnSubmit']))
+	{
+    $btnSubmit = $_POST['btnSubmit'];
+	}
+	else
+	{
+    $btnSubmit = "";
+	}
+
+  if ($btnSubmit == "")
   {
-    if (substr($strFileName,0,1) != ".")
+    printPg("Here are the files in the folder $DocRoot","note");
+    $arrFiles = scandir($DocRoot);
+    print "<div class=\"CenterBox\">\n";
+    print "<form method=\"POST\">\n";
+    $iNum = 1;
+    foreach ($arrFiles as $strFileName) 
     {
-      $strBoxName = "File$iNum";
-      $strLink = "<a href=\"$DocRoot/$strFileName\" target=_blank>$strFileName</a>";
-      print "<input type=\"checkbox\" name=\"$strBoxName\" value=\"$strFileName\">$strLink<br>\n";
-      $iNum++;
+      if (substr($strFileName,0,1) != ".")
+      {
+        $strBoxName = "File$iNum";
+        $strLink = "<a href=\"$DocRoot/$strFileName\" target=_blank>$strFileName</a>";
+        print "<input type=\"checkbox\" name=\"$strBoxName\" value=\"$strFileName\">$strLink<br>\n";
+        $iNum++;
+      }
     }
+    printPg("Delete is permanent and there is no undo.<br>\n There is no confirmation either!!!","alert");
+    print "<div class=\"BlueNote\">\n";
+    print "<input type=\"submit\" value=\"Delete\" name=\"btnSubmit\">\n";
+    print "<input type=\"submit\" value=\"Delete ALL\" name=\"btnSubmit\">\n";
+    print "</div>\n";
+    print "</form>\n";
+    print "</div>\n";
   }
-  printPg("Delete is permanent and there is no undo. There is no confirmation either!!!","alert");
-  print "<input type=\"submit\" value=\"Delete\">\n";
-  print "</form>\n";
-  
-  foreach ($_POST as $key => $value) 
+
+  if ($btnSubmit == "Delete")
   {
-    print("Deleting $value<br>\n");
+    print "<div class=\"CenterBox\">\n";
+    foreach ($_POST as $key => $value) 
+    {
+      if(substr($key,0,4)=="File")
+      {
+        $FileName = "$DocRoot/$value";
+        print "Deleting $FileName<br>\n";
+        unlink($FileName);
+      }
+    }
+    print "</div>\n";
   }
-  print "</div>\n";
+
+  if ($btnSubmit == "Delete ALL")
+  {
+    print "<div class=\"CenterBox\">\n";
+    printPg("Deleting everything","alert");
+    $arrFiles = scandir($DocRoot);
+    foreach ($arrFiles as $strFileName)
+    {
+      if (substr($strFileName,0,1) != ".")
+      {
+        unlink("$DocRoot/$strFileName");
+      }
+    }
+    printPg("Done","note");
+    print "</div>\n";
+  }
   require("footer.php");
 ?>

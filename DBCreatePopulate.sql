@@ -501,7 +501,6 @@ INSERT INTO `tblmenu` (`iMenuID`, `vcTitle`, `vcLink`, `iReadPriv`, `iWritePriv`
 	(23, 'Web site statistics', 'stats.php', 300, 400, 'Statistics', 5, 0, 0, 0, 0),
 	(28, 'Page Administration', 'PageAdmin.php', 300, 300, 'Page Administration', 3, 0, 0, 0, 0),
 	(30, 'Upload', 'Upload.php', 300, 300, 'Upload', 0, 0, 0, 0, 0),
-	(31, 'File Library', 'lib/', 300, 300, 'File Library', 5, 1, 0, 0, 0),
 	(41, 'FAQ Admin', 'FAQAdmin.php', 300, 300, 'FAQ Admin', 5, 0, 0, 0, 0),
 	(42, 'FAQ', 'FAQ.php', 300, 300, 'FAQ', 0, 0, 0, 0, 0),
 	(43, 'Priviledge Administration', 'PrivAdmin.php', 300, 300, 'Priv Admin', 4, 0, 0, 0, 0),

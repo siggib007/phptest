@@ -68,7 +68,7 @@ function printPg($strMsg,$strType)
       print "<p class=\"BlueNote\">$strMsg</p>\n";
       break;
     case "alert":
-      print "<p class=\"Attn\">$strMsg</p>\n";
+      print "<p class=\"LargeAttnCenter\">$strMsg</p>\n";
       break;
     case "center":
       print "<p class=\"MainTextCenter\">$strMsg</p>\n";
