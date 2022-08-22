@@ -1,6 +1,5 @@
 <?php
     require("header.php");
-    date_default_timezone_set('America/Los_Angeles');
     if (isset($_POST['btnSubmit']))
     {
       $btnSubmitValue = $_POST['btnSubmit'];

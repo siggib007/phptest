@@ -2,7 +2,7 @@
     $dtNow = date("Y-m-d H:i:s");
     $uuid = uniqid(mt_rand(), true);
     $strURL = $strURL . "EmailUpdate.php?$uuid";
-    // $strUserID = intval(trim($_POST['UserID']));
+    $strUserID = intval(trim($_POST['UserID']));
     if ($strUserID)
     {
         $strQuery = "update tblUsers set vcName = '$strName', vcAddr1 = '$strAddr1', " .

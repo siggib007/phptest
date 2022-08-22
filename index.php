@@ -61,6 +61,11 @@
     // }
     print "<p class=MainText>\n$PageText</p>\n";
   }
-
+  printPg("This is an alert","alert");
+  printPg("This is an error","error");
+  printPg("This is a blue note","note");
+  printPg("This normal centered","center");
+  printPg("This normal text","normal");
+  printPg("This not normal text","abnormal");
   require("footer.php");
 ?>

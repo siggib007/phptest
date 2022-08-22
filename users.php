@@ -1,5 +1,4 @@
 <?php
-  date_default_timezone_set('America/Los_Angeles');
   $PostVarCount = count($_POST);
 
   if (isset($_POST['btnSubmit']))
@@ -70,7 +69,7 @@
   if ($btnSubmitValue == 'Search')
   {
     $strName = CleanReg(substr(trim($_POST['txtName']),0,49));
-    $strQuery = "select iUserID, vcName from tblUsers ";
+    $strQuery = "select iUserID, vcName, vcEmail, vcMFASecret from tblUsers ";
     $strQuery .= "where vcName like '%$strName%' order by vcName;";
     $crit = "name contains $strName";
     if (!$Result = $dbh->query ($strQuery))
@@ -84,9 +83,24 @@
     print "<table class=\"MainText\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
     while ($Row = $Result->fetch_assoc())
     {
-      print "<tr valign=\"top\">\n<td>$Row[vcName]</td>";
-      print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"View\" name=\"btnSubmit\">";
-      print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
+      print "<tr valign=\"top\">\n";
+      print "<td>$Row[vcName]</td>\n";
+      print "<td>$Row[vcEmail]</td>\n";
+      if ($Row["vcMFASecret"] == "")
+      {
+        print "<td>No MFA</td>\n";
+        print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"View\" name=\"btnSubmit\">";
+        print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
+      }
+      else 
+      {
+        print "<td>MFA Enabled!!!</td>\n";
+        print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"View\" name=\"btnSubmit\">";
+        print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
+        print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"Reset MFA\" name=\"btnSubmit\">";
+        print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
+      }
+
       print "</tr>\n";
     }
     if ($NumAffected == 0)
@@ -95,7 +109,6 @@
     }
     print "</table>\n";
   }
-
 
   if ($btnSubmitValue == 'View')
   {
@@ -107,7 +120,7 @@
       error_log ($strQuery);
       print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
       exit(2);
-  }
+    }
     $Row = $Result->fetch_assoc();
     print "<p class=\"MainText\">\n";
     print "RegistrationID: $strUserID<br>\n";
@@ -118,6 +131,16 @@
     print "{$Row['vcCountry']}<br>\n";
     print "{$Row['vcEmail']}<br>\n";
     print "{$Row['vcCell']}<br>\n";
+    if ($Row["vcMFASecret"] == "")
+    {
+      print "No MFA<br>\n";
+      $bMFA = false;
+    }
+    else 
+    {
+      print "MFA Enabled!!!<br>\n";
+      $bMFA = true;
+    }
 
     $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = {$Row['iPrivLevel']};";
     if (!$PrivResult = $dbh->query ($strQuery))
@@ -126,7 +149,7 @@
       error_log ($strQuery);
       print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
       exit(2);
-  }
+    }
     $PrivRow = $PrivResult->fetch_assoc();
     $PrivName = $PrivRow['vcPrivName'];
     if ($PrivName == '')
@@ -149,11 +172,14 @@
     {
       print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";
       print "<input type=\"Submit\" value=\"Delete Account\" name=\"btnSubmit\">";
+      if ($bMFA)
+      {
+        print "<input type=\"Submit\" value=\"Reset MFA\" name=\"btnSubmit\">";
+      }
       print "<input type=\"hidden\" name=\"BeenSubmitted\" value=\"false\">\n";
       print "<input type=\"hidden\" value=\"$strUserID\" name=\"UserID\"></form>\n";
     }
   }
-
 
   if ($btnSubmitValue == 'Edit')
   {
@@ -241,13 +267,34 @@
     print "</table></form>\n";
   }
 
-  print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
-
+  if ($btnSubmitValue == "Reset MFA")
+  {
+    $iRegNum = intval(trim($_POST['UserID']));
+    $strQuery = "UPDATE tblUsers SET vcMFASecret='' WHERE iUserID=$iRegNum;";
+    if (UpdateSQL($strQuery,"update"))
+    {
+      printNote("MFA Successfully removed");
+    }
+    else
+    {
+      printErr("Failed to remove MFA");
+    }
+    $strQuery = "UPDATE tblUsrPrefValues SET vcValue='True' WHERE iUserID = $iRegNum AND iTypeID = 3;";
+    if (UpdateSQL($strQuery,"update"))
+    {
+      printNote("Email MFA successfully enabled");
+    }
+    else
+    {
+      printErr("Failed to enable Email MFA");
+    }
+  }
+  
   if ($btnSubmitValue =="Delete Account")
   {
     $iRegNum = intval(trim($_POST['UserID']));
     $BeenSubmitted = trim($_POST['BeenSubmitted']);
-
+    
     if($iRegNum)
     {
       if($BeenSubmitted == "True")
@@ -304,7 +351,6 @@
             "<br>Feel free to contact us at $SupportEmail if you have questions.</p>\n";
     }
   }
-
 
   if ($btnSubmitValue == 'Add User')
   {
@@ -366,5 +412,6 @@
     }
     print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
   }
+  print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
   require("footer.php");
 ?>

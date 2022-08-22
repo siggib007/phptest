@@ -57,6 +57,31 @@ function printNote($strMsg)
   print "<p class=\"BlueNote\">$strMsg</p>\n";
 }
 
+function printPg($strMsg,$strType)
+{
+  switch(strtolower($strType))
+  {
+    case "error":
+      print "<p class=\"Error\">$strMsg</p>\n";
+      break;
+    case "note":
+      print "<p class=\"BlueNote\">$strMsg</p>\n";
+      break;
+    case "alert":
+      print "<p class=\"Attn\">$strMsg</p>\n";
+      break;
+    case "center":
+      print "<p class=\"MainTextCenter\">$strMsg</p>\n";
+      break;
+    case "normal":
+      print "<p class=\"MainText\">$strMsg</p>\n";
+      break;
+    default:
+      error_log("unkown type $strType in printpg, printing as maintext");
+      print "<p class=\"MainText\">$strMsg</p>\n";
+  }
+}
+
 function QuerySQL($strQuery)
 {
   $dbh = $GLOBALS['dbh'];
