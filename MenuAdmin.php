@@ -16,11 +16,12 @@
     $btnSubmit = "";
   }
   print "<p class=\"Header1\">Menu Maintenace</p>\n";
+
   if ($btnSubmit == 'Edit')
   {
     print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
     $iMenuID = intval(substr(trim($_POST['MenuID']),0,49));
-    $strQuery = "SELECT * FROM tblmenu where iMenuID = $iMenuID;";
+    $strQuery = "SELECT * FROM vwMenuPos where iMenuID = $iMenuID;";
     if (!$Result = $dbh->query ($strQuery))
     {
       error_log ('Failed to fetch Menu data. Error ('. $dbh->errno . ') ' . $dbh->error);
@@ -122,6 +123,30 @@
       }
     }
     print "</select>\n</td>\n</tr>";
+    print "<tr><td width=\"280\" align=\"right\" class=\"lbl\">Subordinate of page:</td>";
+    print "<td><select size=\"1\" name=\"cmbSubOf\">\n";
+    $strQuery = "SELECT * FROM vwTopMenu WHERE iMenuID != $iMenuID;";
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
+    {
+      foreach($QueryData[1] as $MenuItem)
+      {
+        if ($MenuItem['iMenuID'] == $Row['iSubOfMenu'])
+        {
+          print "<option selected value=\"{$MenuItem['iMenuID']}\">{$MenuItem['vcTitle']}</option>\n";
+        }
+        else
+        {
+          print "<option value=\"{$MenuItem['iMenuID']}\">{$MenuItem['vcTitle']}</option>\n";
+        }
+      }
+    }
+    else
+    {
+      error_log ("Rowcount: $QueryData[0] Msg:$QueryData[1]");
+      print "<option value=\"0\">Failed to fetch list</option>\n";
+    }
+    print "</select>\n</td>\n</tr>";
     print "<tr><td colspan=\"2\" align=\"center\"><input type=\"Submit\" value=\"Save\" name=\"btnSubmit\"></td></tr>";
     print "</table></form>\n";
     print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
@@ -134,6 +159,7 @@
     $iReadPriv = intval(substr(trim($_POST['cmbReadPrivLevel']),0,6));
     $iWritePriv = intval(substr(trim($_POST['cmbWritePrivLevel']),0,6));
     $iAdminCatID = intval(substr(trim($_POST['cmbAdminCat']),0,6));
+    $iSubOfID = intval(substr(trim($_POST['cmbSubOf']),0,6));
     $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
     if (isset($_POST['chkSensitive']))
     {
@@ -154,11 +180,17 @@
     $strQuery = "update tblmenu set vcTitle = '$strTitle', vcHeader = '$strHeader', bAdmin = '$iAdminCatID', " .
                 " iReadPriv = $iReadPriv, iWritePriv = $iWritePriv, bSecure = $bSensitive, bNewWindow = $bWindow " .
                 " where iMenuID=$iMenuID";
+    
     UpdateSQL ($strQuery,"update");
     if ($iAdminCatID > 0)
     {
       $strQuery = "DELETE FROM tblmenutype WHERE iMenuID=$iMenuID;";
       UpdateSQL ($strQuery,"delete");
+    }
+    else 
+    {
+      $strQuery = "UPDATE tblmenutype SET iSubOfMenu = $iSubOfID WHERE iMenuID = $iMenuID;";
+      UpdateSQL ($strQuery,"update");
     }
   }
 
@@ -193,8 +225,9 @@
       $nextPos = $Row['NextID'];
     }
     $strQuery = "INSERT INTO tblmenutype (iMenuID, vcMenuType, iMenuOrder) VALUES ($iMenuID, 'head', $nextPos);";
-    // print $strQuery;
     UpdateSQL ($strQuery,"insert");
+    $strQuery = "UPDATE tblmenu SET bAdmin = 0 WHERE iMenuID=$iMenuID;";
+    UpdateSQL ($strQuery,"delete");
   }
 
   if ($btnSubmit == 'Remove from Menu')
@@ -226,8 +259,15 @@
   while ($Row = $Result->fetch_assoc())
   {
     print "<tr valign=\"top\">\n";
-    print "<td>$Row[vcTitle]</td>";
-    print "<td>$Row[vcHeader]</td>";
+    if ($Row["iSubOfMenu"] > 0)
+    {
+      print "<td>&nbsp;&nbsp; $Row[vcTitle]</td>\n";
+    }
+    else 
+    {
+      print "<td>$Row[vcTitle]</td>\n";
+    }
+    print "<td>$Row[vcHeader]</td>\n";
     print "<td>$Row[ReadPriv]</td>\n";
     print "<td>$Row[WritePriv]</td>\n";
     if ($Row['bSecure'] == 0)

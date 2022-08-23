@@ -823,6 +823,31 @@ INSERT INTO `US_States` (`iStateID`, `vcStateAbr`, `vcStateName`) VALUES
 CREATE VIEW `vwAdminCat` AS select `m`.`vcTitle` AS `vcTitle`,`m`.`vcLink` AS `vcLink`,`m`.`bNewWindow` AS `bNewWindow`,`m`.`iReadPriv` AS `iReadPriv`,`c`.`vcCatName` AS `vcCatName`,`c`.`iCatID` AS `iCatID` from (`tblmenu` `m` join `tblAdminCategories` `c` on((`m`.`bAdmin` = `c`.`iCatID`))) order by `c`.`vcCatName`,`m`.`vcTitle`;
 CREATE VIEW `vwemailupdate` AS select `e`.`iChangeID` AS `iChangeID`,`u`.`vcName` AS `vcName`,`e`.`vcGUID` AS `vcGUID`,`e`.`vcNewEmail` AS `vcNewEmail`,`e`.`vcReqIPAdd` AS `vcReqIPAdd`,`e`.`dtTimeStamp` AS `dtTimeStamp` from (`tblemailupdate` `e` join `tblUsers` `u` on((`e`.`iClientID` = `u`.`iUserID`))) order by `e`.`dtTimeStamp` desc;
 CREATE VIEW `vwlinks` AS select `tbllinks`.`vcLink` AS `vcLink`,`tbllinks`.`vcName` AS `vcName`,`tbllinks`.`vcComment` AS `vcComment`,`tbllinkcategory`.`iCatId` AS `icatid`,`tbllinkcategory`.`vcCategory` AS `vcCategory`,`tbllinkcategory`.`iSortNum` AS `iSortNum` from (`tbllinks` join `tbllinkcategory` on((`tbllinkcategory`.`iCatId` = `tbllinks`.`iCategory`)));
-CREATE VIEW `vwmenuitem` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`tblmenu`.`vcLink` AS `vcLink`,`tblmenu`.`iReadPriv` AS `iReadPriv`,`tblmenu`.`iWritePriv` AS `iWritePriv`,`tblmenu`.`bNewWindow` AS `bNewWindow`,`tblmenutype`.`vcMenuType` AS `vcMenuType`,`tblmenutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenutype`.`iSubOfMenu` AS `iSubOfMenu` from (`tblmenu` join `tblmenutype` on((`tblmenu`.`iMenuID` = `tblmenutype`.`iMenuID`))) order by `tblmenutype`.`vcMenuType`,`tblmenutype`.`iMenuOrder`,`tblmenutype`.`iSubOfMenu`;
-CREATE VIEW `vwmenupriv` AS select `tblmenu`.`iMenuID` AS `iMenuID`,`tblmenu`.`vcTitle` AS `vcTitle`,`readpriv`.`vcPrivName` AS `ReadPriv`,`writepriv`.`vcPrivName` AS `WritePriv`,`tblmenu`.`vcHeader` AS `vcHeader`,`tblmenu`.`bAdmin` AS `bAdmin`,`tblmenu`.`bSecure` AS `bSecure`,`menutype`.`iMenuOrder` AS `iMenuOrder`,`tblmenu`.`bNewWindow` AS `bNewWindow` from (((`tblmenu` join `tblprivlevels` `readpriv` on((`tblmenu`.`iReadPriv` = `readpriv`.`iPrivLevel`))) join `tblprivlevels` `writepriv` on((`tblmenu`.`iWritePriv` = `writepriv`.`iPrivLevel`))) left join `tblmenutype` `menutype` on((`tblmenu`.`iMenuID` = `menutype`.`iMenuID`)));
 CREATE VIEW `vwPrivLevels` AS select `tblprivlevels`.`iPrivLevel` AS `iOrder`,`tblprivlevels`.`iPrivLevel` AS `vcType`,`tblprivlevels`.`vcPrivName` AS `vcText` from `tblprivlevels` where (`tblprivlevels`.`iPrivLevel` > 0);
+
+CREATE OR REPLACE VIEW vwmenupriv AS 
+SELECT m.iMenuID, m.vcTitle, r.vcPrivName ReadPriv, w.vcPrivName WritePriv, m.vcHeader, m.bAdmin, m.bSecure, t.iMenuOrder, m.bNewWindow, t.iSubOfMenu
+FROM tblmenu m 
+LEFT JOIN tblmenutype t ON m.iMenuID = t.iMenuID
+JOIN tblprivlevels r ON m.iReadPriv = r.iPrivLevel
+JOIN tblprivlevels w ON m.iWritePriv = w.iPrivLevel;
+
+CREATE OR REPLACE VIEW vwmenuitem AS
+SELECT  m.*,t.vcMenuType,t.iMenuOrder,t.iSubOfMenu
+FROM tblmenu m
+JOIN tblmenutype t on m.iMenuID = t.iMenuID
+ORDER BY t.vcMenuType,t.iMenuOrder,t.iSubOfMenu;
+
+CREATE OR REPLACE VIEW vwTopMenu AS
+SELECT  m.*,t.vcMenuType,t.iMenuOrder,t.iSubOfMenu
+FROM tblmenu m
+JOIN tblmenutype t on m.iMenuID = t.iMenuID
+WHERE t.iSubOfMenu = 0 AND m.iMenuID != 21
+UNION 
+SELECT 0,"None",NULL,0,0,NULL,0,0,0,0,0,"head",0,0
+ORDER BY iMenuID;
+
+CREATE OR REPLACE VIEW vwMenuPos AS
+SELECT  m.*,t.vcMenuType,t.iMenuOrder,t.iSubOfMenu
+FROM tblmenu m
+LEFT JOIN tblmenutype t on m.iMenuID = t.iMenuID;

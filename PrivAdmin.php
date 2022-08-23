@@ -85,7 +85,6 @@
                   "FROM tblUsers u JOIN tblprivlevels p ON u.iPrivLevel = p.iPrivLevel ".
                   "WHERE u.iPrivLevel < $iPrivLevel ORDER BY u.vcName;");
     
-    error_log($strQuery);
     if (!$Result = $dbh->query ($strQuery))
     {
         error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
