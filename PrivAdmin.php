@@ -22,30 +22,30 @@
         $btnSubmit = "";
     }
 
+    
+    if ($btnSubmit == 'Update')
+    {
+      $iPrivUpdate = CleanSQLInput(substr(trim($_POST['cmbPrivUpdate']),0,4));
+      $iPrivLevel = CleanSQLInput(substr(trim($_POST['iPrivLvl']),0,4));
+      $strUserList = "";
+      foreach ($iUserArray as $val)
+      {
+        $strUserList .= "$val, ";
+      }
+      $strUserList .= "-55";
+      $strQuery = "update tblUsers set iPrivLevel = $iPrivUpdate where iUserID in ($strUserList);";
+      UpdateSQL ($strQuery,"update");
+      
+    }
+        
     if ($btnSubmit == 'Change')
     {
        $iPrivLevel = CleanSQLInput(substr(trim($_POST['cmbPriv']),0,4));
     }
     else
     {
-        $iPrivLevel = 100;
+        $iPrivLevel = 300;
     }
-
-    if ($btnSubmit == 'Update')
-    {
-       $iPrivUpdate = CleanSQLInput(substr(trim($_POST['cmbPrivUpdate']),0,4));
-       $iPrivLevel = CleanSQLInput(substr(trim($_POST['iPrivLvl']),0,4));
-       $strUserList = "";
-       foreach ($iUserArray as $val)
-       {
-           $strUserList .= "$val, ";
-       }
-       $strUserList .= "-55";
-       $strQuery = "update tblUsers set iPrivLevel = $iPrivUpdate where iUserID in ($strUserList);";
-       UpdateSQL ($strQuery,"update");
-
-    }
-
 
     print "<p class=\"Header1\">Priviledge Administration</p>\n";
 
@@ -81,7 +81,11 @@
 
     print "<form method=\"POST\">\n";
     print "<input type=\"hidden\" name=\"iPrivLvl\" value=\"$iPrivLevel\">";
-    $strQuery = "SELECT iUserID, vcName FROM tblUsers WHERE iPrivLevel < $iPrivLevel ORDER BY vcName;";
+    $strQuery = ("SELECT u.iUserID, u.vcName, u.vcEmail, p.vcPrivName " .
+                  "FROM tblUsers u JOIN tblprivlevels p ON u.iPrivLevel = p.iPrivLevel ".
+                  "WHERE u.iPrivLevel < $iPrivLevel ORDER BY u.vcName;");
+    
+    error_log($strQuery);
     if (!$Result = $dbh->query ($strQuery))
     {
         error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
@@ -107,9 +111,11 @@
 
     while ($Row = $Result->fetch_assoc())
     {
-        $iUIDdb = $Row['iUserID'];
-        $vcName = $Row['vcName'];
-        print "<option value=\"$iUIDdb \">$vcName </option>\n";
+        $iUIDdb = $Row["iUserID"];
+        $vcName = $Row["vcName"];
+        $strEmail = $Row["vcEmail"];
+        $strPriv = $Row["vcPrivName"];
+        print "<option value=\"$iUIDdb \">$vcName - $strEmail - $strPriv</option>\n";
     }
     print "</select>\n<br>";
     print "Change to:";
