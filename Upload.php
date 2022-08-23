@@ -16,7 +16,6 @@
     $MaxSize = ini_get('post_max_size');
     $MaxFileSize = ini_get('upload_max_filesize');
     $MaxFileCount = ini_get('max_file_uploads');
-    error_log(json_encode($_SERVER));
     if (isset($_FILES['Docfile']))
     {
       $FilesVarCount = count($_FILES['Docfile']['name']);
@@ -31,8 +30,9 @@
       $ContLen = $_SERVER['CONTENT_LENGTH'];
       if ($ContLen > $MaxConLen)
       {
-        print "<p class=\"Error\">Your upload was " . with_unit($ContLen ) . ". ";
-        print "This exceeds the content limit of $MaxSize. Please do your upload in smaller chunks.</p>\n";
+        $strMsg = "Your upload was " . with_unit($ContLen ) . ". ";
+        $strMsg .= "This exceeds the content limit of $MaxSize. Please do your upload in smaller chunks.";
+        printPg($strMsg,"error");
         $_POST['btnSubmit'] = "Go Back";
       }
     }
