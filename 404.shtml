@@ -13,13 +13,13 @@
             <TABLE border="0" cellPadding="4" cellSpacing="0">
                 <TR>
                     <TD align="center" vAlign="middle">
-                        <img border="0" src="img/PHPDemoBanner.png" align="center" height="150">
+                        <img border="0" src="img/PHPDemoBanner.png" align="center" height="100">
                     </TD>
                 </TR>
             </TABLE>
         </div>
         <p class="Header1">Page not found</p>
-        <p class="Attn" align=center>
+        <p class="Error" align=center>
             The page you were attempting to reach does not seem to exists on our system<BR>
             If you have any questions please contact us at support@example.com.
         </p>
