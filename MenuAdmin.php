@@ -177,6 +177,7 @@
     {
       $bWindow = 0;
     }
+    $iCurSubOf = GetSQLValue("SELECT iSubOfMenu FROM tblmenutype WHERE iMenuID = $iMenuID;");
     $strQuery = "update tblmenu set vcTitle = '$strTitle', vcHeader = '$strHeader', bAdmin = '$iAdminCatID', " .
                 " iReadPriv = $iReadPriv, iWritePriv = $iWritePriv, bSecure = $bSensitive, bNewWindow = $bWindow " .
                 " where iMenuID=$iMenuID";
@@ -191,6 +192,23 @@
     {
       $strQuery = "UPDATE tblmenutype SET iSubOfMenu = $iSubOfID WHERE iMenuID = $iMenuID;";
       UpdateSQL ($strQuery,"update");
+      if ($iSubOfID > 0)
+      {
+        $NewHeadPos = GetSQLValue("SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = $iSubOfID;");
+        $NewHeadPos ++;
+        $strQuery = "CALL spMovePos ('$iMenuID', '$NewHeadPos', 'head') ";
+        CallSP($strQuery);
+      }
+      else 
+      {
+        if ($iCurSubOf > 0)
+        {
+          $NewHeadPos = GetSQLValue("SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = $iCurSubOf;");
+          $NewHeadPos --;
+          $strQuery = "CALL spMovePos ('$iMenuID', '$NewHeadPos', 'head') ";
+          CallSP($strQuery);
+        }
+      }
     }
   }
 

@@ -66,6 +66,11 @@
   printPg("This is a blue note","note");
   printPg("This normal centered","center");
   printPg("This normal text","normal");
-  printPg("This not normal text","abnormal");
+  $strQuery = "SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = 1;";
+  $QueryData = QuerySQL($strQuery);
+  $arrTmp = array_values($QueryData[1][0]);
+  $itmp = $arrTmp[0];
+  $itmp--;
+  printPg($itmp,"note");
   require("footer.php");
 ?>

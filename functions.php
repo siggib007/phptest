@@ -115,6 +115,22 @@ function QuerySQL($strQuery)
   return [$rowcount,$arrReturn];
 }
 
+function GetSQLValue($strQuery)
+{
+  $QueryData = QuerySQL($strQuery);
+
+  if($QueryData[0] == 1)
+  {
+    $arrTmp = array_values($QueryData[1][0]);
+    return $arrTmp[0];
+  }
+  else
+  {
+    error_log("GetSQL Expected one row, that's not what I got. $strQuery Rowcount: $QueryData[0] Msg:$QueryData[1]");
+    return "Error occured";
+  }  
+}
+
 function UpdateSQL($strQuery,$type)
 {
   $DefaultDB = $GLOBALS['DefaultDB'];
