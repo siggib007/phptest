@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <title>Technical Difficulties</title>
-        <link href="sb.css" rel="stylesheet" type="text/css">
+        <link href="SiteStyle.css" rel="stylesheet" type="text/css">
     </HEAD>
     <body>
         <div id="left"></div>
