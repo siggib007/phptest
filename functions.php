@@ -126,8 +126,9 @@ function GetSQLValue($strQuery)
   }
   else
   {
-    error_log("GetSQL Expected one row, that's not what I got. $strQuery Rowcount: $QueryData[0] Msg:$QueryData[1]");
-    return "Error occured";
+    $strMsg = implode(";",$QueryData[1]);
+    error_log("GetSQL Expected one row, that's not what I got. $strQuery Rowcount: $QueryData[0] Msg:$strMsg");
+    return -15;
   }  
 }
 
