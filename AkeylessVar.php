@@ -13,6 +13,7 @@ $arrname[] = "MYSQL_PASSWORD";
 $arrname[] = "TWILIO_KEY";
 $arrname[] = "TWILIO_NUM";
 $arrname[] = "TWILIO_SID";
+$arrname[] = "DEVENV";
 
 $arrSecretValues = FetchKeylessStatic($arrname);
 if (array_key_exists("error",$arrSecretValues))
@@ -35,5 +36,6 @@ else
   $TwilioSID = $arrSecretValues["TWILIO_SID"];
   $FromNumber = $arrSecretValues["TWILIO_NUM"];
   $TwilioToken = $arrSecretValues["TWILIO_KEY"];
+  $DevEnvironment = $arrSecretValues["DEVENV"];
 }
 ?>

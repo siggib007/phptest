@@ -92,7 +92,10 @@
       UpdateSQL ($strQuery,"delete");
       $strQuery = "DELETE FROM tblmenu WHERE vcLink='$strPageName' LIMIT 1;";
       UpdateSQL ($strQuery,"delete");
-      unlink($strPageName);
+      if (strtolower($DevEnvironment) != "true")
+      {
+        unlink($strPageName);
+      }
       print "<p class=\"BlueAttn\">\n<a href='index.php'>Setup completed. Click here to go home</a>\n</p>\n";
     }
     else

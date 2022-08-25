@@ -57,11 +57,20 @@
   printPg("This is a blue note","note");
   printPg("This normal centered","center");
   printPg("This normal text","normal");
-  $strQuery = "SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = 1;";
+  $strQuery = "SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = 11;";
   $QueryData = QuerySQL($strQuery);
   $arrTmp = array_values($QueryData[1][0]);
   $itmp = $arrTmp[0];
   $itmp--;
   printPg($itmp,"note");
+  if (strtolower($DevEnvironment) != "true")
+  {
+    printPg("This is not a dev Env","note");
+  }
+  else 
+  {
+    printPg("Welcome to your Dev Env","note");
+  }
+
   require("footer.php");
 ?>

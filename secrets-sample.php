@@ -12,4 +12,5 @@ $UseStartTLS = "";
 $TwilioToken = "";
 $FromNumber = "";
 $TwilioSID = "";
+$DevEnvironment = "false";
 ?>
