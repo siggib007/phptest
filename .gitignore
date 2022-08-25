@@ -11,3 +11,5 @@ secret.php
 !img/PHPDemoBanner.png
 lib/
 ReviewMedia/
+*.xlsx
+*.csv
