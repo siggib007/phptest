@@ -1,69 +1,82 @@
 <?php
-    require("header.php");
-    print "<div class=Header1>Administration tasks</div>";
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
-    $strCat = "";
-    $i=1;
-    if ($strCatID > 0)
-    {
-        $strWhere = "WHERE iReadPriv <= $Priv and iCatID = $strCatID";
-    }
-    else
-    {
-        $strWhere = "WHERE iReadPriv <= $Priv and iCatID > 0";
-    }
+  Displays the Admin menu
+  */
 
-    $strQuery = "SELECT vcTitle, vcLink, bNewWindow, vcCatName FROM vwAdminCat $strWhere;";
-    if (!$Result = $dbh->query ($strQuery))
+  require("header.php");
+  printPg ("Administration tasks","h1");
+  
+  $strCat = "";
+  $i=1;
+  if ($strCatID > 0)
+  {
+    $strWhere = "WHERE iReadPriv <= $Priv and iCatID = $strCatID";
+  }
+  else
+  {
+    $strWhere = "WHERE iReadPriv <= $Priv and iCatID > 0";
+  }
+  
+  print "<table class=\"Admin\">\n";
+  
+  $strQuery = "SELECT vcTitle, vcLink, bNewWindow, vcCatName FROM vwAdminCat $strWhere;";
+  $QueryData = QuerySQL($strQuery);
+
+  if($QueryData[0] > 0)
+  {
+    foreach($QueryData[1] as $Row)
     {
-        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-        exit(2);
-    }
-    print "<table class=\"Admin\">\n";
-    while ($Row = $Result->fetch_assoc())
-    {
-        $strLink    = $Row['vcLink'];
-        $strName    = $Row['vcTitle'];
-        $bNewWindow = $Row['bNewWindow'];
-        $strCategory = $Row['vcCatName'];
-        if ($strCat != $strCategory)
+      $strLink     = $Row['vcLink'];
+      $strName     = $Row['vcTitle'];
+      $bNewWindow  = $Row['bNewWindow'];
+      $strCategory = $Row['vcCatName'];
+      if ($strCat != $strCategory)
+      {
+        if ($strCat != "")
         {
-            if ($strCat != "")
-            {
-                print "</td>\n";
-                if ($i<$iNumCol)
-                {
-                    $i++;
-                }
-                else
-                {
-                    $i=1;
-                    print "</tr>\n";
-                    print "<tr>\n";
-                }
-            }
-            else
-            {
-                print "<tr>\n";
-            }
-            print "<td class=\"Admin\">\n";
-            print "<p class=\"AdminCategoryHeader\">$strCategory</p>\n";
-            $strCat = $strCategory;
-        }
-        if ($bNewWindow == 1)
-        {
-            print "<div class=\"MainText\"> <a href=\"$strLink\" target=\"_blank\">$strName</a></div>\n";
+          print "</td>\n";
+          if ($i<$iNumCol)
+          {
+            $i++;
+          }
+          else
+          {
+            $i=1;
+            print "</tr>\n";
+            print "<tr>\n";
+          }
         }
         else
         {
-            print "<div class=\"MainText\"> <a href=\"$strLink\">$strName</a></div>\n";
+          print "<tr>\n";
         }
+        print "<td class=\"Admin\">\n";
+        print "<p class=\"AdminCategoryHeader\">$strCategory</p>\n";
+        $strCat = $strCategory;
+      }
+      if ($bNewWindow == 1)
+      {
+        print "<div class=\"MainText\"> <a href=\"$strLink\" target=\"_blank\">$strName</a></div>\n";
+      }
+      else
+      {
+        print "<div class=\"MainText\"> <a href=\"$strLink\">$strName</a></div>\n";
+      }
     }
-    print "</td>\n";
-    print "</tr>\n";
-    print "</table>\n";
+  }
+  else
+  {
+    error_log("Rowcount: $QueryData[0] Msg:$QueryData[1]");
+    printPg("Error occured fetching admin menu from DB","error");
+  }
 
-    require("footer.php");
+  print "</td>\n";
+  print "</tr>\n";
+  print "</table>\n";
+
+  require("footer.php");
 ?>

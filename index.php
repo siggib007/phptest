@@ -26,44 +26,36 @@
     $bCRLF = "";
   }
 
-  print "<p class=Header1>$PageHeader</p>";
-  if (substr($PageText,0,1)=="<")
+  printPg("$PageHeader","h1");
+  if(substr($PageText,0,1)=="<")
   {
     print "$PageText\n";
   }
   else
   {
-    if ($bCRLF == 1)
+    if($bCRLF == 1)
     {
-        $PageText = str_replace("\n","<br>\n",$PageText);
+      $PageText = str_replace("\n","<br>\n",$PageText);
     }
     $PageText = str_replace("\r\n","\n",$PageText);
     $PageText = str_replace("\r","\n",$PageText);
     $PageText = str_replace("\n\n","\n</p>\n<p class=MainText>\n",$PageText);
-    // $varpos = stripos($PageText,"$");
-    // if ($varpos !== False)
-    // {
-    //   $varEnd = stripos($PageText," ",$varpos);
-    //   if (!is_numeric($a[$varpos+1]))
-    //   {
-    //     $varName = substr($a,$varpos,$varend-$varpos);
-    //     $PageText = str_replace($varName,"$varName",$PageText);
-    //   }
-    // }
-    print "<p class=MainText>\n$PageText</p>\n";
+
+    printPg("$PageText");
   }
   printPg("This is an alert","alert");
   printPg("This is an error","error");
   printPg("This is a blue note","note");
   printPg("This normal centered","center");
   printPg("This normal text","normal");
+  printPg("This default normal");
   $strQuery = "SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = 11;";
   $QueryData = QuerySQL($strQuery);
   $arrTmp = array_values($QueryData[1][0]);
   $itmp = $arrTmp[0];
   $itmp--;
   printPg($itmp,"note");
-  if (strtolower($DevEnvironment) != "true")
+  if(strtolower($DevEnvironment) != "true")
   {
     printPg("This is not a dev Env","note");
   }

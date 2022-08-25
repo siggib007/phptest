@@ -57,7 +57,7 @@ function printNote($strMsg)
   print "<p class=\"BlueNote\">$strMsg</p>\n";
 }
 
-function printPg($strMsg,$strType)
+function printPg($strMsg,$strType="normal")
 {
   switch(strtolower($strType))
   {
@@ -75,6 +75,9 @@ function printPg($strMsg,$strType)
       break;
     case "normal":
       print "<p class=\"MainText\">$strMsg</p>\n";
+      break;
+    case "h1":
+      print "<p class=\"Header1\">$strMsg</p>\n";
       break;
     default:
       error_log("unkown type $strType in printpg, printing as maintext");
