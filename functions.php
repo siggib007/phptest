@@ -70,6 +70,9 @@ function printPg($strMsg,$strType="normal")
     case "alert":
       print "<p class=\"LargeAttnCenter\">$strMsg</p>\n";
       break;
+    case "attn":
+      print "<p class=\"Attn\">$strMsg</p>\n";
+      break;
     case "center":
       print "<p class=\"MainTextCenter\">$strMsg</p>\n";
       break;
