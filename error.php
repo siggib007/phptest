@@ -3,6 +3,8 @@
   Copyright © 2009,2015,2022  Siggi Bjarnason.
   Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+
+  Customize error handling for when error like 404 file not found occur
   */
 
   require("header.php");
@@ -34,7 +36,7 @@
   $ErrCodes['505'] = array("HTTP Version Not Supported","The server does not support the 'http protocol' version.");
   
   $iErrNum = getenv("REDIRECT_STATUS");
-  if (array_key_exists($iErrNum,$ErrCodes))
+  if(array_key_exists($iErrNum,$ErrCodes))
   {
     $error_code = $iErrNum . " - " . $ErrCodes[$iErrNum][0];
     $explanation = $ErrCodes[$iErrNum][1];
@@ -45,8 +47,8 @@
     $explanation = "Unknown error occured";
   }
 
-  printPg ("Unexpected error seems to have occured, sorry about that. Here are the error details:","error");
-  printPg ("$error_code. $explanation","error");
-  printPg ("If you have any questions please reach out to us at <a href=mailto:$SupportEmail>$SupportEmail</a>","note");
+  printPg("Unexpected error seems to have occured, sorry about that. Here are the error details:","error");
+  printPg("$error_code. $explanation","error");
+  printPg("If you have any questions please reach out to us at <a href=mailto:$SupportEmail>$SupportEmail</a>","note");
   require("footer.php");  
 ?>

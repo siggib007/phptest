@@ -1,116 +1,133 @@
 <?php
-    require("header.php");
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
-    if ($strReferer != $strPageURL and $PostVarCount > 0)
+  Allows for management of configuration items
+
+  */
+
+  require("header.php");
+
+  if($strReferer != $strPageURL and $PostVarCount > 0)
+  {
+    printPg("Invalid operation, Bad Reference!!!","error");
+    exit;
+  }
+
+  printPg("Site Configuration","h1");
+
+  if(($PostVarCount == 1) and ($_POST['btnSubmit'] == 'Go Back'))
+  {
+    header("Location: $strPageURL");
+  }
+
+  if(isset($_POST['btnSubmit']))
+  {
+    $btnSubmit = $_POST['btnSubmit'];
+  }
+  else
+  {
+    $btnSubmit = "";
+  }
+
+  if($btnSubmit == 'Save')
+  {
+    $strValueName = CleanSQLInput(substr(trim($_POST['txtValueName']),0,49));
+    $strValue = "False";
+    if(isset($_POST['txtValue']))
     {
-        print "<p class=\"Error\">Invalid operation, Bad Reference!!!</p> ";
-        exit;
+      $strValue = CleanSQLInput(substr(trim($_POST['txtValue']),0,49));
     }
-
-    print "<p class=\"Header1\">Site Configuration</p>\n";
-
-    if (($PostVarCount == 1) and ($_POST['btnSubmit'] == 'Go Back'))
+    if(isset($_POST['chkValue']))
     {
-        header("Location: $strPageURL");
+      $strValue = "True";
     }
+    $strQuery = "update tblconf set vcValue = '$strValue' where vcValueName = '$strValueName';";
+    UpdateSQL($strQuery,"update");
+  }
 
-    if (isset($_POST['btnSubmit']))
-    {
-            $btnSubmit = $_POST['btnSubmit'];
-    }
-    else
-    {
-            $btnSubmit = "";
-    }
+  print "<table>\n";
+  $strQuery = "SELECT * FROM tblconf where vcValueName not in ('Maintenance','ROOTPATH');";
+  $QueryData = QuerySQL($strQuery);
 
-    if ($btnSubmit == 'Save')
+  if($QueryData[0] > 0)
+  {
+    foreach($QueryData[1] as $Row)
     {
-        $strValueName = CleanSQLInput(substr(trim($_POST['txtValueName']),0,49));
-        $strValue = "False";
-        if (isset($_POST['txtValue']))
+      $Key = $Row['vcValueName'];
+      $Value = $Row['vcValue'];
+      $ValueDescr = $Row['vcValueDescr'];
+      $ValueType = $Row['vcValueType'];
+      if($WritePriv <=  $Priv)
+      {
+        print "<form method=\"POST\">\n";
+        print "<tr valign=\"top\">\n";
+        print "<td class=\"lblright\"><input type=\"hidden\" value=\"$Key\" name=\"txtValueName\">$ValueDescr: </td>\n";
+        print "<td>";
+        switch($ValueType)
         {
-            $strValue = CleanSQLInput(substr(trim($_POST['txtValue']),0,49));
-        }
-        if (isset($_POST['chkValue']))
-        {
-            $strValue = "True";
-        }
-        $strQuery = "update tblconf set vcValue = '$strValue' where vcValueName = '$strValueName';";
-        UpdateSQL ($strQuery,"update");
-    }
-
-    print "<table>\n";
-    $strQuery = "SELECT * FROM tblconf where vcValueName not in ('Maintenance','ROOTPATH');";
-    if (!$Result = $dbh->query ($strQuery))
-    {
-        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-        exit(2);
-    }
-    while ($Row = $Result->fetch_assoc())
-    {
-        $Key = $Row['vcValueName'];
-        $Value = $Row['vcValue'];
-        $ValueDescr = $Row['vcValueDescr'];
-        $ValueType = $Row['vcValueType'];
-        if ($WritePriv <=  $Priv)
-        {
-            print "<form method=\"POST\">\n";
-            print "<tr valign=\"top\">\n";
-            print "<td class=\"lblright\"><input type=\"hidden\" value=\"$Key\" name=\"txtValueName\">$ValueDescr: </td>\n";
-            print "<td>";
-            switch ($ValueType)
+          case "Boolean":
+            if($Value=="True")
             {
-                case "Boolean":
-                    if ($Value=="True")
-                    {
-                        $strChecked = "checked";
-                    }
-                    else
-                    {
-                        $strChecked = "";
-                    }
-                    print "<input type=\"checkbox\" name=\"chkValue\" $strChecked>";
-                    break;
-                case "int":
-                case "text":
-                    print "<input type=\"text\" value=\"$Value\" name=\"txtValue\" size=\"50\" >";
-                    break;
-                default :
-                    $strQuery = "SELECT vcType, vcText FROM $ValueType ORDER BY iOrder;";
-                    if (!$Result2 = $dbh->query ($strQuery))
-                    {
-                        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-                        error_log ($strQuery);
-                        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-                        exit(2);
-                    }
-
-                    print "<select size=\"1\" name=\"txtValue\">\n";
-                    while ($Row2 = $Result2->fetch_assoc())
-                    {
-                        if ($Row2['vcType'] == $Value)
-                        {
-                            print "<option selected value=\"{$Row2['vcType']}\">{$Row2['vcText']}</option>\n";
-                        }
-                        else
-                        {
-                            print "<option value=\"{$Row2['vcType']}\">{$Row2['vcText']}</option>\n";
-                        }
-                    }
-                    print "</select>\n";
+              $strChecked = "checked";
             }
-            print "</td>\n";
-            print "<td><input type=\"Submit\" value=\"Save\" name=\"btnSubmit\"></td>";
-            print "</tr>\n";
-            print "</form>\n";
+            else
+            {
+              $strChecked = "";
+            }
+            print "<input type=\"checkbox\" name=\"chkValue\" $strChecked>";
+            break;
+          case "int":
+          case "text":
+            print "<input type=\"text\" value=\"$Value\" name=\"txtValue\" size=\"50\" >";
+            break;
+          default :
+            print "<select size=\"1\" name=\"txtValue\">\n";
+            $strQuery = "SELECT vcType, vcText FROM $ValueType ORDER BY iOrder;";
+            $QueryData = QuerySQL($strQuery);
+
+            if($QueryData[0] > 0)
+            {
+              foreach($QueryData[1] as $Row2)
+              {
+                if($Row2['vcType'] == $Value)
+                {
+                  print "<option selected value=\"{$Row2['vcType']}\">{$Row2['vcText']}</option>\n";
+                }
+                else
+                {
+                  print "<option value=\"{$Row2['vcType']}\">{$Row2['vcText']}</option>\n";
+                }
+              }
+            }
+            else
+            {
+              $strMsg = implode(";",$QueryData[1]);
+              error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+              printPg("Error occured fetching admin menu from DB","error");
+            }
+            print "</select>\n";
         }
-        else
-        {
-            print "$ValueDescr : $Value<br>\n";
-        }
+        print "</td>\n";
+        print "<td><input type=\"Submit\" value=\"Save\" name=\"btnSubmit\"></td>";
+        print "</tr>\n";
+        print "</form>\n";
+      }
+      else
+      {
+        print "$ValueDescr : $Value<br>\n";
+      }
     }
-    print "</table>\n";
-    require("footer.php");
+  }
+  else
+  {
+    $strMsg = implode(";",$QueryData[1]);
+    error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+    printPg("Error occured fetching admin menu from DB","error");
+  }
+
+  print "</table>\n";
+  require("footer.php");
 ?>

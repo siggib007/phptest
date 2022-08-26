@@ -38,7 +38,6 @@
     $btnSubmit = "";
   }
 
-  error_log("button: $btnSubmit");
   if ($btnSubmit == 'Reset' or $btnSubmit == 'Cancel')
   {
     unset($_SESSION["2FASecret"]);

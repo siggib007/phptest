@@ -1,32 +1,45 @@
 <?php 
-    require("header.php"); 
-    $uuid = $_SERVER["QUERY_STRING"];
-    #print "UUID: $uuid<br>/n";
-    $strQuery = "SELECT * FROM tblemailupdate WHERE vcGUID= '$uuid' and dtConfirmed is null";
-    if (!$Result = $dbh->query ($strQuery))
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+
+  Page to handle email updates after user confirms it.
+  */
+
+  require("header.php"); 
+  $uuid = $_SERVER["QUERY_STRING"];
+  $strQuery = "SELECT * FROM tblemailupdate WHERE vcGUID= '$uuid' and dtConfirmed is null";
+  $QueryData = QuerySQL($strQuery);
+
+  if($QueryData[0] == 1)
+  {
+    foreach($QueryData[1] as $Row)
     {
-        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        exit(2);
+      $strEmail = $Row['vcNewEmail'];
+      $iUserID = $Row['iClientID'];
+      print "Updating email in record $iUserID to $strEmail<br>\n";
+      $strQuery = "update tblUsers set vcEmail = '$strEmail' where `iUserID`= $iUserID";
+      if(UpdateSQL ($strQuery, "update"))
+      {
+        $strQuery = "update tblemailupdate set dtConfirmed = now() where vcGUID= '$uuid';";
+        UpdateSQL($strQuery, "update");
+      }
     }
-    $NumAffected = $Result->num_rows;
-    if ($NumAffected<>1)
+  }
+  else
+  {
+    if($QueryData[0] < 0)
     {
-        print "Invalid Confirmation string provided. Please check your email to ensure that you are using the entire URL " .
-                "If you need assistance please contact $SupportEmail.<br> \n";
+      $strMsg = implode(";",$QueryData[1]);
+      error_log("Query of $strQuery failed to return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg("Error occured fetching admin menu from DB","error");
     }
-    else
+    else 
     {
-        $Row = $Result->fetch_assoc();
-        $strEmail = $Row['vcNewEmail'];
-        $iUserID = $Row['iClientID'];
-        print "Updating email in record $iUserID to $strEmail<br>\n";
-        $strQuery = "update tblUsers set vcEmail = '$strEmail' where `iUserID`= $iUserID";
-        if(UpdateSQL ($strQuery, "update"))
-        {
-            $strQuery = "update tblemailupdate set dtConfirmed = now() where vcGUID= '$uuid';";
-            UpdateSQL($strQuery, "update");
-        }
+      printPg("Invalid Confirmation string provided. Please check your email to ensure that you are using the entire URL " .
+              "If you need assistance please contact $SupportEmail.","alert");
     }
-    require("footer.php"); 
+  }  
+  require("footer.php"); 
 ?>
