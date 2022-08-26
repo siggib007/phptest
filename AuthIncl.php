@@ -1,5 +1,12 @@
 <?php
-  //print "Login Successful<br>\n";
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+  
+  Part of the authentication routine, required in auth.php
+  */
+  
   $_SESSION["auth_username"] = $Row['vcName'];
   $_SESSION["auth_UID"] = $Row['vcUID'];
   $_SESSION["UID"] = $iUserID;
@@ -19,14 +26,7 @@
   }
 
   $strQuery = "update tblUsers set dtLastLogin = '$dtNow' where iUserID='$iUserID'";
-  if (!$dbh->query ($strQuery))
-  {
-    $strError = 'Database update during loginfailed. Error ('. $dbh->errno . ') ' . $dbh->error;
-    $strError .= $strQuery;
-    EmailText("$SupportEmail","Automatic Error Report",$strError,$FromEmail);
-    error_log ($strError);
-  }
-  else
+  if (UpdateSQL($strQuery,"update"))
   {
     header("Location: " . $strReturn );
   }

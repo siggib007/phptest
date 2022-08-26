@@ -4,7 +4,7 @@
   Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
-  part of the authentication routine.
+  Main authentication code.
   */
 
 

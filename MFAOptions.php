@@ -27,7 +27,7 @@
   }
   elseif ($_SESSION["bSMSemail"])
   {
-    print "<p class=BlueAttn>To use SMS or email MFA, change the dropdown and hit submit, the value field will be ignored.</p>";
+    print "<p class=BlueAttn>To use SMS or email MFA, change the dropdown make sure the value field is empty and hit submit</p>";
   }
   print "<form method=\"POST\">";
   print "Select your MFA Type: ";
