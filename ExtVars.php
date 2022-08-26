@@ -15,7 +15,6 @@ UseStartTLS     # Switch to encrypted connection post connection
 $TwilioToken    # Twilio API Token for SMS sending
 $FromNumber     # What the SMS From should be
 $TwilioSID      # The SMS Sender Account SID
-$DevEnvironment # Set to true if this is a dev environment, some other value if it is production
 
 
 Decide where and how secure you want to keep and access environment variables and secrets

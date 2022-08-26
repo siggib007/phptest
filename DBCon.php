@@ -19,6 +19,7 @@ require_once("functions.php");
 // default_charset = "utf-8";
 ini_set( 'default_charset', 'UTF-8' );
 set_time_limit(30);
+$DevEnvironment = getenv("DEVENV");
 $ROOTPATH = "/";
 $HeadImg ="img/PHPDemoBanner.png";
 $CSSName = "SiteStyle.css";

@@ -15,7 +15,6 @@ if (array_key_exists("secrets",$arrSecretValues))
   $TwilioToken = $arrSecretValues["secrets"]["TWILIO_KEY"]["computed"];
   $FromNumber = $arrSecretValues["secrets"]["TWILIO_NUM"]["computed"];
   $TwilioSID = $arrSecretValues["secrets"]["TWILIO_SID"]["computed"];
-  $DevEnvironment = $arrSecretValues["secrets"]["DEVENV"]["computed"];
 }
 else
 {
