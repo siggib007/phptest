@@ -1,19 +1,12 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
-//Copyright © 2009,2015,2022  Siggi Bjarnason.
-//
-//This program is free software: you can redistribute it and/or modify
-//it under the terms of the GNU General Public License as published by
-//the Free Software Foundation, either version 3 of the License, or
-//(at your option) any later version.
-//
-//This program is distributed in the hope that it will be useful,
-//but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//GNU General Public License for more details.
-//
-//You should have received a copy of the GNU General Public License
-//along with this program.  If not, see <http://www.gnu.org/licenses/>
+  Central collection of various functions
+  */
+
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -99,22 +92,26 @@ function QuerySQL($strQuery)
   {
     $Result = $dbh->query($strQuery);
   }
-  catch (Throwable $e)
+  catch(Throwable $e)
   {
-    error_log("Fatal error while attemting to execute a SQL query. ". $e->getMessage());
-    error_log ($strQuery);
+    $eLine = $e->getLine();
+    $eFile = $e->getFile();
+    $eCode = $e->getCode();
+    $errMsg = "Fatal error #$eCode when executing the query on line $eLine in $eFile. ";
+    error_log($errMsg. $e->getMessage());
+    error_log($strQuery);
     $errMsg = "Fatal error when executing the query";
     return [-1,$errMsg];
   }
-  if (!$Result)
+  if(!$Result)
   {
-    error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
+    error_log('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
+    error_log($strQuery);
     $errMsg = "Failed to fetch data $strFrom";
     return [-1,$errMsg];
   }
   $rowcount=mysqli_num_rows($Result);
-  while ($Row = $Result->fetch_assoc())
+  while($Row = $Result->fetch_assoc())
   {
     $arrReturn[] = $Row;
   }
@@ -138,30 +135,44 @@ function GetSQLValue($strQuery)
   }  
 }
 
-function UpdateSQL($strQuery,$type)
+function UpdateSQL($strQuery,$type="call")
 {
   $DefaultDB = $GLOBALS['DefaultDB'];
   $dbh = $GLOBALS['dbh'];
   $SupportEmail = $GLOBALS['SupportEmail'];
   $FromEmail = $GLOBALS['FromEmail'];
 
-  if ($dbh->query ($strQuery))
+  try
+  {
+    $Result = $dbh->query($strQuery);
+  }
+  catch(Throwable $e)
+  {
+    $eLine = $e->getLine();
+    $eFile = $e->getFile();
+    $eCode = $e->getCode();
+    $errMsg = "Fatal error #$eCode when executing the query on line $eLine in $eFile. ";
+    error_log($errMsg. $e->getMessage());
+    error_log($strQuery);
+    printPg("Database $type failed!","error");
+    return false;
+  }
+
+  if($Result)
   {
     $NumAffected = $dbh->affected_rows;
-    // print "<p class=\"MainText\">Query: $strQuery<br>\n";
-    // print "<p class=\"MainText\">Database $type of $NumAffected record successful<br>\n";
     return TRUE;
   }
   else
   {
     $strError = "Database $type failed. Error (". $dbh->errno . ") " . $dbh->error . "\n";
-    If ($dbh->errno =="1451")
+    If($dbh->errno =="1451")
     {
       print "\n<p class=\"error\">Unable to delete the selected value as it is still in use in other parts of the system</p>\n";
     }
     else
     {
-      print "\n<p class=\"error\">Database $type failed: </p>\n";
+      printPg("Database $type failed!","error");
       error_log($strError);
       error_log("SQL: $strQuery");
       if(EmailText("$SupportEmail","Automatic Error Report","$strError\n$strQuery",$FromEmail))
@@ -177,59 +188,6 @@ function UpdateSQL($strQuery,$type)
                 "what you were doing.</p>";
       }
     }
-    return FALSE;
-  }
-}
-
-function CallSP($strQuery)
-{
-  $DefaultDB = $GLOBALS['DefaultDB'];
-  $dbh = $GLOBALS['dbh'];
-  $SupportEmail = $GLOBALS['SupportEmail'];
-  $FromEmail = $GLOBALS['FromEmail'];
-
-  if ($dbh->query ($strQuery))
-  {
-    // print "Database update successful<br>\n";
-    return TRUE;
-  }
-  else
-  {
-    $strError = 'Database update failed. Error ('. $dbh->errno . ') ' . $dbh->error;
-
-    print "\nDatabase update failed: \n";
-    error_log($strError);
-    error_log("SQL: $strQuery");
-    if(EmailText("$SupportEmail","Automatic Error Report","$strError\n$strQuery",$FromEmail))
-    {
-      print "We seem to be experiencing technical difficulties. We have been notified. " .
-      "Please try again later. Thank you.<br>";
-    }
-    else
-    {
-      $strError = str_replace("\n","<br>\n",$strError);
-      print "We seem to be experiencing technical difficulties. " .
-            "Please send us a message at $SupportEmail with information about " .
-            "what you were doing.</p>";
-    }
-    return FALSE;
-  }
-}
-
-function CallSPNoOut($strQuery)
-{
-  $dbh = $GLOBALS['dbh'];
-
-  if ($dbh->query ($strQuery))
-  {
-      return TRUE;
-  }
-  else
-  {
-    $strError = 'Database update failed. Error ('. $dbh->errno . ') ' . $dbh->error . "\n";
-
-    error_log($strError);
-    error_log($strQuery);
     return FALSE;
   }
 }
@@ -260,17 +218,11 @@ function SpamDetect($InVar)
   $FromEmail = $GLOBALS['FromEmail'];
   $strRemoteIP = $GLOBALS['strRemoteIP'];
   $strURLRegx = "#(http://)|(a href)#i";
-  if (preg_match($strURLRegx,$InVar))
+  if(preg_match($strURLRegx,$InVar))
   {
     $InVar = str_replace("'","\'",$InVar);
     $strQuery = "INSERT INTO tblSpamLog (vcIPAddress, vcContent) VALUES ('$strRemoteIP', '$InVar');";
-    if (!$dbh->query ($strQuery))
-    {
-      $strError = 'Database insert failed. Error ('. $dbh->errno . ') ' . $dbh->error . "\n";
-      $strError .= "$strQuery\n";
-      error_log($strError);
-      EmailText("$SupportEmail","Automatic Error Report",$strError,"From:$SupportEmail");
-    }
+    UpdateSQL($strQuery);
     return TRUE;
   }
   else
@@ -301,7 +253,7 @@ function Log_BackTrace($BackTrace, $msg)
     error_log("Stack level $Level");
     foreach($value as $key => $value)
     {
-      if (is_array($value))
+      if(is_array($value))
       {
         $pre = $key;
         foreach($value as $key => $value)
@@ -320,12 +272,12 @@ function Log_BackTrace($BackTrace, $msg)
 
 function Log_Session($msg)
 {
-  $Session=$_SESSION;
+  $Session = $_SESSION;
   error_log("");
   error_log("$msg start dump of SESSION array");
   foreach($Session as $key => $value)
   {
-    if (is_array($value))
+    if(is_array($value))
     {
       $pre = $key;
       foreach($value as $key => $value)
@@ -347,7 +299,7 @@ function Log_Array($array, $msg)
   error_log("$msg start dump of array");
   foreach($array as $key => $value)
   {
-    if (is_array($value))
+    if(is_array($value))
     {
       $pre = $key;
       foreach($value as $key => $value)
@@ -383,20 +335,20 @@ function return_bytes($val)
 
 function with_unit($val)
 {
-  $Units[0]="";
-  $Units[1]="KB";
-  $Units[2]="MB";
-  $Units[3]="GB";
-  $Units[4]="TB";
+  $Units[0] = "";
+  $Units[1] = "KB";
+  $Units[2] = "MB";
+  $Units[3] = "GB";
+  $Units[4] = "TB";
   $val = trim($val);
   $tmp = $val/1024;
-  $i=0;
-  while ($tmp > 1)
+  $i = 0;
+  while($tmp > 1)
   {
     $tmp = $val/1024;
-    if ($tmp > 1)
+    if($tmp > 1)
     {
-      $val=$tmp;
+      $val = $tmp;
       $tmp = $val/1024;
       $i++;
     }
@@ -408,27 +360,10 @@ function with_unit($val)
   return number_format($val, 2) . " " . $Units[$i];
 }
 
-function copyemz($file1,$file2)
-{
-  $contentx=@file_get_contents($file1);
-  $openedfile = fopen($file2, "w");
-  fwrite($openedfile, $contentx);
-  fclose($openedfile);
-  if ($contentx === FALSE)
-  {
-    $status=false;
-  }
-  else
-  {
-    $status=true;
-  }
-  return $status;
-}
-
 function codeToMessage($code)
 {
   $MaxFileSize = ini_get('upload_max_filesize');
-  switch ($code)
+  switch($code)
   {
     case UPLOAD_ERR_INI_SIZE:
         $message = "The uploaded file exceeds file size limit of $MaxFileSize";
@@ -461,39 +396,39 @@ function codeToMessage($code)
 function ValidateIntlPhoneNumber($phone)
 {
   $strMsg = "";
-  if ($phone == "")
+  if($phone == "")
   {
     return "";
   }
   $NumLen = strlen(preg_replace("/[^0-9]/", "", $phone));
-  if ($NumLen == 0)
+  if($NumLen == 0)
   {
     return "Cell is not empty, yet it contains no digits. Please leave empty if you don't want to provide your number";
   }
-  if ($NumLen < 7)
+  if($NumLen < 7)
   {
     $strMsg .= "That number only has $NumLen digits, seems awfully short for a valid number please double check.<br>\n "
               . "Please leave empty if you don't want to provide your number<br>\n";
   }
-  if ($NumLen > 15)
+  if($NumLen > 15)
   {
     $strMsg .= "That number has $NumLen digits, seems awfully long for a valid number please double check. <br>\n"
               . "Please leave empty if you don't want to provide your number<br>\n";
   }
-  if (substr($phone, 0,1) != "+")
+  if(substr($phone, 0,1) != "+")
   {
     $strMsg .= "Please format your phone number using the internation format of +123-555-1234-5678.<br>\n"
                . "Where 123 is the country code, 555 is the area code (where applicable) and the rest is the local number.<br>\n "
                . "Seperators are optional and can be whatever you want. Just start with a +<br>\n";
   }
-  if (substr($phone, 0,1) == "0")
+  if(substr($phone, 0,1) == "0")
   {
     $strMsg .= "Please format your phone number using the internation format of +123-555-1234-5678<br>\n"
                . "Where 123 is the country code, 555 is the area code (where applicable) and the rest is the local number.<br>\n"
                . "Seperators are optional and can be whatever you want. Just start with a +<br>\n"
                . "Please leave off all leading zeros and any international call prefixes, such as 00 or 011, etc.<br>\n";
   }
-  if ($NumLen < 10 && substr($phone, 0,1) != "+")
+  if($NumLen < 10 && substr($phone, 0,1) != "+")
   {
     $strMsg .= "That number only has $NumLen digits, did you forget the country code? ";
   }
@@ -511,7 +446,7 @@ function format_phone_us($phone)
         return "Area code is required";
         break;
     case 11:
-        $phone=  substr($phone, 1);
+        $phone = substr($phone, 1);
     case 10:
         return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "+1 ($1) $2-$3", $phone);
         break;
@@ -528,11 +463,11 @@ function StripHTML($content)
   $content = str_replace("<td>","|",$content);
   $content = str_replace("</td>","",$content);
   $unwanted = ['style','script'];
-  foreach ( $unwanted as $tag )
+  foreach( $unwanted as $tag )
   {
     $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
   }
-  unset( $tag );
+  unset($tag);
   $content = str_replace("\r","",$content);
   $content = strip_tags($content);
   $content = preg_replace("/([\r\n]{4,}|[\n]{2,}|[\r]{2,})/", "\n", $content);
@@ -564,13 +499,13 @@ function SendHTMLAttach($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFile
   $mail->SMTPAuth = true;
   $mail->Username = $GLOBALS['MailUser'];
   $mail->Password = $GLOBALS['MailPWD'];
-  if (strtolower($GLOBALS['UseSSL'])=="true")
+  if(strtolower($GLOBALS['UseSSL'])=="true")
   {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
   }
   else
   {
-    if (strtolower($GLOBALS['UseStartTLS'])=="true")
+    if(strtolower($GLOBALS['UseStartTLS'])=="true")
     {
       $mail->SMTPSecure = 'tls';
     }
@@ -590,29 +525,29 @@ function SendHTMLAttach($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFile
   $mail->AltBody = $strTxtMsg;
 
   // add string attachment
-  if ($strAttach != "" and $strFileName != "")
+  if($strAttach != "" and $strFileName != "")
   {
     $mail->addStringAttachment($strAttach, $strFileName);
   }
 
   // Process any custom headers
-  if (is_array($strAddHeader))
+  if(is_array($strAddHeader))
   {
-    foreach ($strAddHeader as $header)
+    foreach($strAddHeader as $header)
     {
       $mail->addCustomHeader($header);
     }
   }
   else
   {
-    if ($strAddHeader != "")
+    if($strAddHeader != "")
     {
       $mail->addCustomHeader($strAddHeader);
     }
   }
 
   // Attach file attachment
-  if ($strFile2Attach != "")
+  if($strFile2Attach != "")
   {
     $mail->addAttachment($strFile2Attach);
   }
@@ -636,7 +571,7 @@ function EmailText($to,$subject,$message,$from)
   $from = str_replace("<", "|", $from);
   $from = str_replace(">", "", $from);
   $from = str_replace("From:", "", $from);
-  if (stripos($from, "|")===FALSE)
+  if(stripos($from, "|")===FALSE)
   {
     $iPos = stripos($from, "@");
     $name = substr($from, 0,$iPos);
@@ -644,15 +579,15 @@ function EmailText($to,$subject,$message,$from)
   }
   $to = str_replace("<", "|", $to);
   $to = str_replace(">", "", $to);
-  if (stripos($to, "|")===FALSE)
+  if(stripos($to, "|")===FALSE)
   {
     $iPos = stripos($to, "@");
     $name = substr($to, 0,$iPos);
     $to = "$name|$to";
   }
   $message = str_replace("\n", "<br>\n", $message);
-  $response = SendHTMLAttach ($message, $from, $to, $subject, $strFileName, $strAttach);
-  if ($response == "Message has been sent")
+  $response = SendHTMLAttach($message, $from, $to, $subject, $strFileName, $strAttach);
+  if($response == "Message has been sent")
   {
     return TRUE;
   }
@@ -688,7 +623,7 @@ function FetchKeylessStatic($arrNames)
   $response = curl_exec($curl);
   curl_close($curl);
   $arrResponse = json_decode($response, TRUE);
-  if (array_key_exists("error",$arrResponse))
+  if(array_key_exists("error",$arrResponse))
   {
     error_log("Failed to authenticate to the AKEYLESS system. ".$arrResponse["error"]);
     return $arrResponse;
@@ -761,14 +696,14 @@ function SendUserSMS($msg,$iUserID)
   $QueryData = QuerySQL($strQuery);
   if($QueryData[0] > 0)
   {
-    if (strtolower($QueryData[1][0]["vcValue"]) == "true")
+    if(strtolower($QueryData[1][0]["vcValue"]) == "true")
     {
       $strQuery = "SELECT vcCell FROM tblUsers WHERE iUserID = $iUserID;";
       $QueryData = QuerySQL($strQuery);
       if($QueryData[0] > 0)
       {
         $response = SendTwilioSMS($msg,$QueryData[1][0]["vcCell"]);
-        if ($response[0])
+        if($response[0])
         {
           return "queued";
         }
@@ -776,11 +711,11 @@ function SendUserSMS($msg,$iUserID)
         {
           $arrResponse = json_decode($response[1], TRUE);
           $errmsg = "";
-          if (array_key_exists("message",$arrResponse))
+          if(array_key_exists("message",$arrResponse))
           {
             $errmsg .= $arrResponse["message"];
           }
-          if (array_key_exists("more_info",$arrResponse))
+          if(array_key_exists("more_info",$arrResponse))
           {
             $errmsg .= " For more information see " . $arrResponse["more_info"];
           }
@@ -842,7 +777,7 @@ function SendTwilioSMS($msg,$number)
   // print "HTTP Response code is $httpcode<br>\n";
   curl_close($curl);
   $arrResponse = json_decode($response, TRUE);
-  if ($arrResponse["status"]=="queued")
+  if($arrResponse["status"]=="queued")
   {
     return [TRUE,$response];
   }
@@ -854,22 +789,22 @@ function SendTwilioSMS($msg,$number)
 
 function GenerateRecovery($iUserID)
 {
-  if (isset($GLOBALS["ConfArray"]["RecoverCodeLen"]) )
+  if(isset($GLOBALS["ConfArray"]["RecoverCodeLen"]) )
   {
-      $iCodeLen = $GLOBALS["ConfArray"]["RecoverCodeLen"];
+    $iCodeLen = $GLOBALS["ConfArray"]["RecoverCodeLen"];
   }
   else
   {
-      $iCodeLen = 1;
+    $iCodeLen = 8;
   }
   $RecovCode = $GLOBALS["TextArray"]["RecovCode"];
   $strRecoveryCode = chunk_split(bin2hex(random_bytes($iCodeLen/2)),4," ");
-  print "<p class=\"BlueAttn\">$RecovCode</p>";
-  print "<p class=\"BlueAttn\">$strRecoveryCode</p>";
+  printPg("$RecovCode","note");
+  printPg("$strRecoveryCode","note");
   $strCleanRecovery = str_replace(' ','',$strRecoveryCode);
   $strECode = password_hash($strCleanRecovery, PASSWORD_DEFAULT);
   $strQuery = "update tblUsers set vcRecovery = '$strECode' where iUserID = $iUserID;";
-  UpdateSQL ($strQuery, "update");
+  UpdateSQL($strQuery, "update");
 }
 
 function LoadMFAOptions($iUserID)
@@ -888,7 +823,7 @@ function LoadMFAOptions($iUserID)
       $strTOTP = $Row['vcMFASecret'];
     }
   }
-  if ($strTOTP != "")
+  if($strTOTP != "")
   {
     $bMFA_active = True;
     $arrOptions["totp"] = "TOTP MFA Authenticator";
@@ -900,18 +835,18 @@ function LoadMFAOptions($iUserID)
   {
     foreach($QueryData[1] as $Row)
     {
-      if (strtolower($Row['vcValue']) == "true")
+      if(strtolower($Row['vcValue']) == "true")
       {
         $bSMSemail = True;
       }
     }
   }
-  if ($bSMSemail)
+  if($bSMSemail)
   {
     $bMFA_active = True;
     $arrOptions["smsemail"] = "SMS or Email MFA";
   }
-  if ($bMFA_active)
+  if($bMFA_active)
   {
     $arrOptions["recover"] = "Recovery Code";
   }
@@ -921,7 +856,7 @@ function LoadMFAOptions($iUserID)
   return $arrOptions;
 }
 
-function NotifyActivity ($strActivity,$arrTypes)
+function NotifyActivity($strActivity,$arrTypes)
 {
   $FromEmail = $GLOBALS["FromEmail"];
   $ProdName = $GLOBALS["ProdName"];
@@ -947,14 +882,14 @@ function NotifyActivity ($strActivity,$arrTypes)
   {
     if(array_key_exists($arrTypes["email"],$DataSet)) # Receive email notification on each login is defined
     {
-      if (strtolower($DataSet[$arrTypes["email"]]["value"]) == "true")
+      if(strtolower($DataSet[$arrTypes["email"]]["value"]) == "true")
       {
         EmailText($DataSet[$arrTypes["email"]]["email"],"Successful $strActivity Notification","Your account on $ProdName had a successfully $strActivity",$FromEmail);
       }
     }
     if(array_key_exists($arrTypes["SMS"],$DataSet)) # Receive SMS notification on each login is defined
     {
-      if (strtolower($DataSet[$arrTypes["SMS"]]["value"]) == "true")
+      if(strtolower($DataSet[$arrTypes["SMS"]]["value"]) == "true")
       {
         SendUserSMS("Your account on $ProdName had a successfully $strActivity",$iUserID);
       }
@@ -964,11 +899,11 @@ function NotifyActivity ($strActivity,$arrTypes)
 
 function FileUpload($arrFiles,$DocRoot)
 {
-  if (!is_dir($DocRoot))
+  if(!is_dir($DocRoot))
   {
-      mkdir($DocRoot);
+    mkdir($DocRoot);
   }
-  if (is_array($arrFiles['name']))
+  if(is_array($arrFiles['name']))
   {
     $FileList = "";
     $SizeTotal = 0;
@@ -976,7 +911,7 @@ function FileUpload($arrFiles,$DocRoot)
     $arrError = array();
     $arrFilesList = array();
     $FilesVarCount = count($arrFiles['name']);
-    for ($i = 0; $i < $FilesVarCount; $i++)
+    for($i = 0; $i < $FilesVarCount; $i++)
     {
       $DocFileName = $arrFiles['name'][$i];
       $DocBaseName = basename($DocFileName);
@@ -985,9 +920,9 @@ function FileUpload($arrFiles,$DocRoot)
       $Error = $arrFiles['error'][$i];
       $Size =  $arrFiles['size'][$i];
       $SizeUnit = with_unit($Size);
-      if ($Error == UPLOAD_ERR_OK)
+      if($Error == UPLOAD_ERR_OK)
       {
-        if (move_uploaded_file($tmpFile, $newPath))
+        if(move_uploaded_file($tmpFile, $newPath))
         {
           $arrMsg[] = "<div class=\"MainText\">File $DocBaseName uploaded successfully<br></div>";
           $FileList .= "$DocBaseName, Size: $SizeUnit<br>\n";
@@ -1022,9 +957,9 @@ function FileUpload($arrFiles,$DocRoot)
     $SizeUnit = with_unit($Size);
     error_log("tmpfile: $tmpFile  -  newpath: $newPath  - Error: $Error");
 
-    if ($Error == UPLOAD_ERR_OK)
+    if($Error == UPLOAD_ERR_OK)
     {
-      if (move_uploaded_file($tmpFile, $newPath))
+      if(move_uploaded_file($tmpFile, $newPath))
       {
         $arrMsg[] = "<div class=\"MainText\">File $DocBaseName uploaded successfully<br></div>";
         $FileList .= "$DocBaseName, Size: $SizeUnit<br>\n";

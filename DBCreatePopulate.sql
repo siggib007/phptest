@@ -1,15 +1,15 @@
 -- Dumping database structure for PHPDemo
 DROP DATABASE IF EXISTS `PHPDemo`;
-CREATE DATABASE IF NOT EXISTS `PHPDemo`;
+CREATE DATABASE IF NOT EXISTS `PHPDemo` DEFAULT CHARACTER SET = 'utf8mb4' COLLATE utf8mb4_unicode_ci ;
 USE `PHPDemo`;
 
 -- Dumping structure for table CountryCodes
-CREATE TABLE IF NOT EXISTS `CountryCodes` (
+CREATE TABLE IF NOT EXISTS `CountryCodes`  (
   `iCountryID` int(11) NOT NULL,
   `vcCountryCode` char(2) NOT NULL DEFAULT '',
   `vcCountryName` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`iCountryID`)
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table CountryCodes: 242 rows
 INSERT INTO `CountryCodes` (`iCountryID`, `vcCountryCode`, `vcCountryName`) VALUES
@@ -274,7 +274,7 @@ CREATE TABLE IF NOT EXISTS `tblAdminCategories` (
   `iCatID` tinyint(4) NOT NULL AUTO_INCREMENT,
   `vcCatName` varchar(50) NOT NULL,
   PRIMARY KEY (`iCatID`)
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table tblAdminCategories: ~5 rows (approximately)
 INSERT INTO `tblAdminCategories` (`iCatID`, `vcCatName`) VALUES
@@ -292,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `tblUsrPrefTypes` (
   `vcLabel` varchar(50) DEFAULT NULL,
   `vcType` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`iID`)
-) ;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table PHPDemo.tblUsrPrefTypes: ~8 rows (approximately)
 INSERT INTO `tblUsrPrefTypes` (`iID`, `iSortOrder`, `vcCode`, `vcLabel`, `vcType`) VALUES
@@ -313,7 +313,7 @@ CREATE TABLE `tblUsrPrefValues`
 	`iUserID` INT(11) NOT NULL,
 	`vcValue` VARCHAR(150) NULL DEFAULT NULL,
 	PRIMARY KEY (`iID`) USING BTREE
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table tblconf
@@ -322,7 +322,7 @@ CREATE TABLE IF NOT EXISTS `tblconf` (
   `vcValue` varchar(50) NOT NULL,
   `vcValueDescr` varchar(150) NOT NULL,
   `vcValueType` varchar(50) NOT NULL
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblconf: ~21 rows (approximately)
 INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) VALUES
@@ -364,7 +364,7 @@ CREATE TABLE IF NOT EXISTS `tblContactInfo` (
   `vcLabel` varchar(25) DEFAULT NULL,
   `vcValue` varchar(250) NOT NULL,
   PRIMARY KEY (`iContactID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblContactInfo: ~5 rows (approximately)
 INSERT INTO `tblContactInfo` (`iContactID`, `vcType`, `iSequence`, `vcLabel`, `vcValue`) VALUES
@@ -377,7 +377,7 @@ INSERT INTO `tblContactInfo` (`iContactID`, `vcType`, `iSequence`, `vcLabel`, `v
 -- Dumping structure for table tblContactTypes
 CREATE TABLE IF NOT EXISTS `tblContactTypes` (
   `vcTypes` varchar(20) NOT NULL
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblContactTypes: ~3 rows (approximately)
 INSERT INTO `tblContactTypes` (`vcTypes`) VALUES
@@ -394,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `tblContent` (
   `tPageText` longtext NOT NULL,
   `bLineBreak` tinyint(4) NOT NULL,
   PRIMARY KEY (`iRevID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblContent: ~1 rows (approximately)
 INSERT INTO `tblContent` (`iRevID`, `iMenuID`, `dtTimeStamp`, `vcPageHeader`, `tPageText`, `bLineBreak`) VALUES
@@ -411,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `tblemailupdate` (
   `dtConfirmed` datetime DEFAULT NULL,
   PRIMARY KEY (`iChangeID`),
   UNIQUE KEY `vcGUID` (`vcGUID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table tblFAQ
 CREATE TABLE IF NOT EXISTS `tblFAQ` (
@@ -419,7 +419,7 @@ CREATE TABLE IF NOT EXISTS `tblFAQ` (
   `vcQuestion` varchar(150) NOT NULL,
   `tAnswer` text,
   PRIMARY KEY (`iFAQid`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table tblFeedback
 CREATE TABLE IF NOT EXISTS `tblFeedback` (
@@ -428,7 +428,7 @@ CREATE TABLE IF NOT EXISTS `tblFeedback` (
   `tFeedbackDescr` text NOT NULL,
   `vcImgPath` tinytext NOT NULL,
   PRIMARY KEY (`iFeedbackID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table tblFeedback: 1 rows
 INSERT INTO `tblFeedback` (`iFeedbackID`, `vcFeedbackName`, `tFeedbackDescr`, `vcImgPath`) VALUES
@@ -440,7 +440,7 @@ CREATE TABLE IF NOT EXISTS `tbllinkcategory` (
   `vcCategory` varchar(100) NOT NULL,
   `iSortNum` int(11) NOT NULL,
   PRIMARY KEY (`iCatId`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table tbllinkcategory: ~2 rows (approximately)
 INSERT INTO `tbllinkcategory` (`iCatId`, `vcCategory`, `iSortNum`) VALUES
@@ -455,7 +455,7 @@ CREATE TABLE IF NOT EXISTS `tbllinks` (
   `vcName` varchar(150) NOT NULL,
   `vcComment` varchar(500) NOT NULL,
   PRIMARY KEY (`iLinkID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table tbllinks: ~1 rows (approximately)
 INSERT INTO `tbllinks` (`iLinkID`, `iCategory`, `vcLink`, `vcName`, `vcComment`) VALUES
@@ -477,7 +477,7 @@ CREATE TABLE IF NOT EXISTS `tblmenu` (
   PRIMARY KEY (`iMenuID`),
 	UNIQUE KEY `vcLink` (`vcLink`),
   KEY `bAdmin` (`bAdmin`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblmenu: ~61 rows (approximately)
 INSERT INTO `tblmenu` (`iMenuID`, `vcTitle`, `vcLink`, `iReadPriv`, `iWritePriv`, `vcHeader`, `bAdmin`, `bNewWindow`, `bCont`, `bdel`, `bSecure`) VALUES
@@ -548,7 +548,7 @@ CREATE TABLE IF NOT EXISTS `tblmenutype` (
   `iMenuOrder` int(11) NOT NULL,
   `iSubOfMenu` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`iTypeID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblmenutype: ~14 rows (approximately)
 INSERT INTO `tblmenutype` (`iTypeID`, `iMenuID`, `vcMenuType`, `iMenuOrder`, `iSubOfMenu`) VALUES
@@ -579,7 +579,7 @@ CREATE TABLE IF NOT EXISTS `tblPageMeta` (
   `vcMetaValue` varchar(500) NOT NULL,
   `vcAttrName` varchar(50) NOT NULL,
   PRIMARY KEY (`iMetaID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblPageMeta: ~10 rows (approximately)
 INSERT INTO `tblPageMeta` (`iMetaID`, `iMenuID`, `vcMetaName`, `vcMetaValue`, `vcAttrName`) VALUES
@@ -605,7 +605,7 @@ CREATE TABLE IF NOT EXISTS `tblPageTable` (
   `iLimit` int(11) NOT NULL,
   PRIMARY KEY (`iTableID`),
   KEY `iMenuID` (`iMenuID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblPageTable: ~0 rows (approximately)
 
@@ -616,7 +616,7 @@ CREATE TABLE IF NOT EXISTS `tblPageTexts` (
   `vcTextDescr` varchar(100) NOT NULL,
   `tPageTexts` text NOT NULL,
   PRIMARY KEY (`vcTextName`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblPageTexts: ~4 rows (approximately)
 INSERT INTO `tblPageTexts` (`vcTextName`, `vcTextDescr`, `tPageTexts`) VALUES
@@ -635,7 +635,7 @@ CREATE TABLE IF NOT EXISTS `tblPageTypes` (
   `iTypeID` int(11) NOT NULL AUTO_INCREMENT,
   `vcPageType` varchar(50) NOT NULL,
   PRIMARY KEY (`iTypeID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblPageTypes: ~2 rows (approximately)
 INSERT INTO `tblPageTypes` (`iTypeID`, `vcPageType`) VALUES
@@ -647,7 +647,7 @@ CREATE TABLE IF NOT EXISTS `tblprivlevels` (
   `iPrivLevel` int(11) NOT NULL,
   `vcPrivName` varchar(25) NOT NULL,
   PRIMARY KEY (`iPrivLevel`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblprivlevels: ~7 rows (approximately)
 INSERT INTO `tblprivlevels` (`iPrivLevel`, `vcPrivName`) VALUES
@@ -664,7 +664,7 @@ CREATE TABLE IF NOT EXISTS `tblReviewSiteURL` (
   `vcSiteURL` varchar(100) NOT NULL,
   `vcImgPath` tinytext,
   PRIMARY KEY (`iSiteID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblReviewSiteURL: 3 rows
 INSERT INTO `tblReviewSiteURL` (`iSiteID`, `vcSiteName`, `vcSiteURL`, `vcImgPath`) VALUES
@@ -677,7 +677,7 @@ CREATE TABLE IF NOT EXISTS `tblSecureOption` (
   `iOrder` tinyint(4) NOT NULL,
   `vcType` varchar(50) NOT NULL,
   `vcText` varchar(150) NOT NULL
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblSecureOption: ~3 rows (approximately)
 INSERT INTO `tblSecureOption` (`iOrder`, `vcType`, `vcText`) VALUES
@@ -694,7 +694,7 @@ CREATE TABLE IF NOT EXISTS `tblSpamLog` (
   PRIMARY KEY (`iLogID`),
   KEY `dtLogDateTime` (`dtLogDateTime`,`vcIPAddress`),
   KEY `vcIPAddress` (`vcIPAddress`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping structure for table tblstats
 CREATE TABLE IF NOT EXISTS `tblstats` (
@@ -708,7 +708,7 @@ CREATE TABLE IF NOT EXISTS `tblstats` (
   `vcModifiedBy` varchar(150) NOT NULL,
   `dtModifiedTime` datetime NOT NULL,
   PRIMARY KEY (`iStatID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table tblstats: ~1 rows (approximately)
 INSERT INTO `tblstats` (`iStatID`, `vcFromClause`, `vcWhereClause`, `vcGroupByClause`, `vcUnique`, `vcStatName`, `iOrderID`, `vcModifiedBy`, `dtModifiedTime`) VALUES
@@ -737,7 +737,7 @@ CREATE TABLE IF NOT EXISTS `tblUsers` (
   `vcRecovery` varchar(260) DEFAULT NULL,
   `bChangePWD` BIT DEFAULT NULL,
   PRIMARY KEY (`iUserID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping structure for table US_States
 CREATE TABLE IF NOT EXISTS `US_States` (
@@ -745,7 +745,7 @@ CREATE TABLE IF NOT EXISTS `US_States` (
   `vcStateAbr` char(2) NOT NULL DEFAULT '',
   `vcStateName` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`iStateID`)
-);
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 -- Dumping data for table US_States: 65 rows
 INSERT INTO `US_States` (`iStateID`, `vcStateAbr`, `vcStateName`) VALUES

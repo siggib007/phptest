@@ -197,7 +197,7 @@
         $NewHeadPos = GetSQLValue("SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = $iSubOfID;");
         $NewHeadPos ++;
         $strQuery = "CALL spMovePos ('$iMenuID', '$NewHeadPos', 'head') ";
-        CallSP($strQuery);
+        UpdateSQL($strQuery);
       }
       else 
       {
@@ -206,7 +206,7 @@
           $NewHeadPos = GetSQLValue("SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = $iCurSubOf;");
           $NewHeadPos --;
           $strQuery = "CALL spMovePos ('$iMenuID', '$NewHeadPos', 'head') ";
-          CallSP($strQuery);
+          UpdateSQL($strQuery);
         }
       }
     }
@@ -221,7 +221,7 @@
     if ($NewHeadPos > 0)
     {
       $strQuery = "CALL spMovePos ('$iMenuID', '$NewHeadPos', 'head') ";
-      CallSP($strQuery);
+      UpdateSQL($strQuery);
     }
   }
 

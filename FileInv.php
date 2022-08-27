@@ -1,56 +1,66 @@
 <?php
-//Copyright © 2009,2015,2022  Siggi Bjarnason.
-//
-//This program is free software: you can redistribute it and/or modify
-//it under the terms of the GNU General Public License as published by
-//the Free Software Foundation, either version 3 of the License, or
-//(at your option) any later version.
-//
-//This program is distributed in the hope that it will be useful,
-//but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//GNU General Public License for more details.
-//
-//You should have received a copy of the GNU General Public License
-//along with this program.  If not, see <http://www.gnu.org/licenses/>
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
-require_once("header.php");
-$arrFiles = array();
-$handle = opendir('.');
+  Page that imports new and unknown php into the menu table
 
-if ($handle) {
-  while (($entry = readdir($handle)) !== FALSE) {
-    $arrFiles[] = $entry;
+  */
+
+  require_once("header.php");
+  $arrFiles = array();
+  $handle = opendir('.');
+
+  if($handle) {
+    while(($entry = readdir($handle)) !== FALSE) 
+    {
+      $arrFiles[] = $entry;
+    }
   }
-}
 
-closedir($handle);
-//print "<p>".var_dump($arrFiles)."</P>";
-$strQuery = "SELECT vcLink FROM tblmenu";
-if (!$Result = $dbh->query ($strQuery))
-{
-    error_log ('Failed to fetch menu data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
-    print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-    exit(2);
-}
-$KnownFiles = array();
-while ($Row = $Result->fetch_assoc())
-{
-  $KnownFiles[] = $Row['vcLink'];
-}
-// $KnownFiles = array("DBCon.php","functions.php","index.php","secrets.php");
+  closedir($handle);
+  $strQuery = "SELECT vcLink FROM tblmenu";
+  $QueryData = QuerySQL($strQuery);
+  $KnownFiles = array();
 
-print "<p class=\"Header1\">Here are the files that are missing are being inserted</p>";
-foreach($arrFiles as $file)
-{
-  if (substr($file,-3)=="php" and ! in_array($file,$KnownFiles))
+  if($QueryData[0] > 0)
   {
-    print "<p class=\"BlueNote\">$file</P>";
-    $strQuery = "INSERT INTO tblmenu (vcTitle, vcLink, iReadPriv, vcHeader, bAdmin, bSecure) VALUES ('$file', '$file', '500', '$file', '0', '0');";
-    // print $strQuery;
-    UpdateSQL ($strQuery,"insert");
+    foreach($QueryData[1] as $Row)
+    {
+      $KnownFiles[] = $Row['vcLink'];
+    }
   }
-}
-require_once("footer.php");
+  else
+  {
+    if($QueryData[0] == 0)
+    {
+      printPg("No Records","note");
+    }
+    else
+    {
+      $strMsg = implode(";",$QueryData[1]);
+      error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg("Error occured fetching admin menu from DB","error");
+    }
+  }
+
+  printPg("Here are the files that are missing","h1");
+  foreach($arrFiles as $file)
+  {
+    if(substr($file,-3)=="php" and ! in_array($file,$KnownFiles))
+    {
+      printPg("$file","note");
+      $strQuery = "INSERT INTO tblmenu (vcTitle, vcLink, iReadPriv, vcHeader, bAdmin, bSecure) VALUES ('$file', '$file', '500', '$file', '0', '0');";
+      if(UpdateSQL($strQuery,"insert"))
+      {
+        printPg("Inserted successfully","note");
+      }
+      else 
+      {
+        printPg("Insert Failed","error");
+      }
+    }
+  }
+  require_once("footer.php");
 ?>

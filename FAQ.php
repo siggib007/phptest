@@ -1,22 +1,43 @@
 <?php
-    require("header.php");
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
-    print "<p class=\"Header1\">Frequently Asked Questions (FAQ)</p>\n";
-    $strQuery = "select iFAQid, vcQuestion, tAnswer from tblFAQ;";
-    if (!$Result = $dbh->query ($strQuery))
+  Page to display FAQs
+
+  */
+    
+  require("header.php");
+
+  printPg("Frequently Asked Questions (FAQ)","h1");
+  $strQuery = "select iFAQid, vcQuestion, tAnswer from tblFAQ;";
+  $QueryData = QuerySQL($strQuery);
+
+  if($QueryData[0] > 0)
+  {
+    foreach($QueryData[1] as $Row)
     {
-        error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-        error_log ($strQuery);
-        print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-        exit(2);
+      $vcQuestion = $Row['vcQuestion'];
+      $strAnswer = $Row['tAnswer'];
+      $iFAQid = $Row['iFAQid'];
+      print "<div class=\"ClassName\"><a id=$iFAQid>$vcQuestion</a></div>\n";
+      print "<div class=\"ClassDescr\">$strAnswer</div>\n";
     }
-    while ($Row = $Result->fetch_assoc())
+  }
+  else
+  {
+    if($QueryData[0] == 0)
     {
-        $vcQuestion = $Row['vcQuestion'];
-        $strAnswer = $Row['tAnswer'];
-        $iFAQid = $Row['iFAQid'];
-        print "<div class=\"ClassName\"><a id=$iFAQid>$vcQuestion</a></div>\n";
-        print "<div class=\"ClassDescr\">$strAnswer</div>\n";
+      printPg("No Records","note");
     }
-    require("footer.php");
+    else 
+    {
+      $strMsg = implode(";",$QueryData[1]);
+      error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg("Error occured fetching admin menu from DB","error");
+    }
+  }
+
+  require("footer.php");
 ?>

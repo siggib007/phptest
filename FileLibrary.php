@@ -1,22 +1,15 @@
 <?php
-  //Copyright © 2009,2015,2022  Siggi Bjarnason.
-  //
-  //This program is free software: you can redistribute it and/or modify
-  //it under the terms of the GNU General Public License as published by
-  //the Free Software Foundation, either version 3 of the License, or
-  //(at your option) any later version.
-  //
-  //This program is distributed in the hope that it will be useful,
-  //but WITHOUT ANY WARRANTY; without even the implied warranty of
-  //MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  //GNU General Public License for more details.
-  //
-  //You should have received a copy of the GNU General Public License
-  //along with this program.  If not, see <http://www.gnu.org/licenses/>
+    /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+
+  Display content of upload directory with option to delete one, many or all
+  */
 
   require("header.php");
   $DocRoot = $ConfArray["AdminUploadDir"];
-	if (isset($_POST['btnSubmit']))
+	if(isset($_POST['btnSubmit']))
 	{
     $btnSubmit = $_POST['btnSubmit'];
 	}
@@ -25,16 +18,16 @@
     $btnSubmit = "";
 	}
 
-  if ($btnSubmit == "")
+  if($btnSubmit == "")
   {
     printPg("Here are the files in the folder $DocRoot","note");
     $arrFiles = scandir($DocRoot);
     print "<div class=\"CenterBox\">\n";
     print "<form method=\"POST\">\n";
     $iNum = 1;
-    foreach ($arrFiles as $strFileName) 
+    foreach($arrFiles as $strFileName) 
     {
-      if (substr($strFileName,0,1) != ".")
+      if(substr($strFileName,0,1) != ".")
       {
         $strBoxName = "File$iNum";
         $strLink = "<a href=\"$DocRoot/$strFileName\" target=_blank>$strFileName</a>";
@@ -51,10 +44,10 @@
     print "</div>\n";
   }
 
-  if ($btnSubmit == "Delete")
+  if($btnSubmit == "Delete")
   {
     print "<div class=\"CenterBox\">\n";
-    foreach ($_POST as $key => $value) 
+    foreach($_POST as $key => $value) 
     {
       if(substr($key,0,4)=="File")
       {
@@ -66,14 +59,14 @@
     print "</div>\n";
   }
 
-  if ($btnSubmit == "Delete ALL")
+  if($btnSubmit == "Delete ALL")
   {
     print "<div class=\"CenterBox\">\n";
     printPg("Deleting everything","alert");
     $arrFiles = scandir($DocRoot);
-    foreach ($arrFiles as $strFileName)
+    foreach($arrFiles as $strFileName)
     {
-      if (substr($strFileName,0,1) != ".")
+      if(substr($strFileName,0,1) != ".")
       {
         unlink("$DocRoot/$strFileName");
       }

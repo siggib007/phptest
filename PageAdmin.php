@@ -286,7 +286,7 @@
         {
           $strQuery = "INSERT INTO tblmenu (vcTitle, vcLink, iReadPriv, iWritePriv, vcHeader, bAdmin, bCont, bdel)"
                     . "VALUES ('$MenuTitle', '$FileName', '$PrivLevel', '$PrivLevel', '$PageName', '$AdminPage', '$PageType', '1');";
-          if (CallSP($strQuery))
+          if (UpdateSQL($strQuery,"insert"))
           {
             $strQuery = "SELECT iMenuID FROM tblmenu WHERE vcLink = '$FileName' LIMIT 1;";
             if (!$Result = $dbh->query ($strQuery))
@@ -313,7 +313,7 @@
               {
                 $strQuery = "INSERT INTO tblmenutype (iMenuID, vcMenuType, iMenuOrder, iSubOfMenu)" .
                             " VALUES ('$iPageID', 'head', '$iMaxHead', '$iSubPage');";
-                CallSP($strQuery);
+                UpdateSQL($strQuery,"insert");
               }
             }
           }
@@ -419,7 +419,7 @@
           }
           break;
       }
-      CallSP($strQuery);
+      UpdateSQL($strQuery,"insert");
     }
     else
     {
