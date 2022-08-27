@@ -1,14 +1,19 @@
 # phptest
 ## PHP Demo Overview and history
-This started out because I wanted something quick and simple to verify that all the components where in place to make a PHP site driven by MySQL/MariaDB database. Then this grew into a demo site to test various functions and features as well as base code for a fully functioning PHP site, except it is lacking all meaningful functionality as it is just a base to be built upon. It does however have all the base authentication, registration, setup and administration functionality. I plan to add more base features as I think of them and have time to implement them. Documentation of all the features is forthcoming. 
+This started out because I wanted something quick and simple to verify that all the components where in place to make a PHP site driven by MySQL/MariaDB database. Then this grew into a demo site to test various functions and features as well as base code for a fully functioning PHP site, except it is lacking all meaningful functionality as it is just a base to be built upon. It does however have all the base authentication, registration, setup and administration functionality. I plan to add more base features as I think of them and have time to implement them. Documentation of all the features is forthcoming.
+
+One thing kind of unique, or weird depending on your point of view, about this site is that there isn't a single <script> element anywhere. This entire site was create without any javascript. This was done on purpose, mostly just to demonstrate that it is possible to create a fully functional and interesting site without any javascript. This is entire pure PHP, HTML and CSS. Yes the CSS needs a lot of work but that is a seperate project that maybe I will solict help from a CSS guru at some point, not something I am worried about right now. 
+
+Another thing is that this was written completely from scratch, there are no frameworks used in this and only two modules that are not inherent in native PHP. So my SBOM is very simple.
+- PHPMailer for handling sending of emails
+- RobThree2FA for TOTP authentication. 
+Everything else was written from scratch by me. Any external service used such as Twilio or Doppler are accessed via REST API using built in curl functions.
 
 There are few environment variables needed for both the SQL server and the PHP part. I've tested this with environment variables as well as using Doppler Secrets management (see https://infosechelp.net/secrets-management/ for more info on them) as well as a secret management system from AKEYLESS systems (https://infosechelp.net/secrets-management-a-key-less-edition for more info on them). See ExtVars.php for more details on environment variables required.
 
-One thing to note, I'm not a front end designer. While I would never claim to even be a developer of any kind I'm much more of a backend dev than anything else. I am very utilitarian by nature so this site is very functional and utilitarian, however it will never win any awards or even compliments for aesthetics or anything along those lines. I welcome feedback about functionality and security misses, not so much about aesthetics. Users who require that they find the site pretty in order to be able to use it are outside the scope of this project. 
+One thing to note, I'm not a front end designer. While I would never claim to even be a developer of any kind I'm much more of a backend dev than anything else. I am very utilitarian by nature so this site is very functional and utilitarian, however it will never win any awards or even compliments for aesthetics or anything along those lines. As I said before the CSS and other aspects could use a lot of work, but that is not a focus at this point. Reach out if you want to help with that. 
 
 If you are deploying this anywhere other than your laptop for testing purposes I strongly recommend you delete EmailTest.php from the server. If an unauthorized person where to gain access to this site they could start sending emails in your name and bypassing DMARC/SPF. 
-
-You might also want to remove the Archive folder as that just contains old junk. 
 
 ## Deploy with Docker and Doppler
 
