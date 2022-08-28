@@ -1,12 +1,19 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+
+  Login form
+  */
+
   $strURI = $_SERVER["REQUEST_URI"];
   $strPageNameParts = explode('/',$strURI);
   $HowMany = count($strPageNameParts);
   $LastIndex = $HowMany - 1;
   $strPageName = strtolower($strPageNameParts[$LastIndex]);
-  if ($strPageName == 'loginincl.php')
+  if($strPageName == 'loginincl.php')
   {
-    print"$strURI<br>";
     header("Location: index.php");
     exit;
   }

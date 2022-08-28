@@ -129,9 +129,16 @@ function GetSQLValue($strQuery)
   }
   else
   {
-    $strMsg = implode(";",$QueryData[1]);
-    error_log("GetSQL Expected one row, that's not what I got. $strQuery Rowcount: $QueryData[0] Msg:$strMsg");
-    return -15;
+    if($QueryData[0] == 0)
+    {
+      return 0;
+    }
+    else 
+    {
+      $strMsg = implode(";",$QueryData[1]);
+      error_log("GetSQL Expected one row, that's not what I got. $strQuery Rowcount: $QueryData[0] Msg:$strMsg");
+      return -15;
+    }
   }  
 }
 

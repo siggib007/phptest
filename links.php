@@ -1,39 +1,56 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+
+  Page to show all the cool links we've recorded in LinkAdmin
+  */
+
   require("header.php");
-  print "<div class=Header1>Links</div>";
+  printPg("Links","h1");
   $strCat = "";
-  $strQuery = "SELECT vcCategory,vcLink,vcName,vcComment FROM vwlinks order by iSortNum;";
-  if (!$Result = $dbh->query ($strQuery))
+  $strQuery = "SELECT vcCategory,vcLink,vcName,vcComment FROM vwLinks order by iSortNum;";
+  $QueryData = QuerySQL($strQuery);
+  if($QueryData[0] > 0)
   {
-    error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
-    print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-    exit(2);
-  }
-  while ($Row = $Result->fetch_assoc())
-  {
-    $strCategory = $Row['vcCategory'];
-    $strLink     = $Row['vcLink'];
-    $strName     = $Row['vcName'];
-    $strComment  = $Row['vcComment'];
-    if ($strCat != $strCategory)
+    foreach($QueryData[1] as $Row)
     {
-      if ($strCat != "")
+      $strCategory = $Row['vcCategory'];
+      $strLink     = $Row['vcLink'];
+      $strName     = $Row['vcName'];
+      $strComment  = $Row['vcComment'];
+      if($strCat != $strCategory)
       {
-        print "</ul>\n";
+        if($strCat != "")
+        {
+          print "</ul>\n";
+        }
+        print "<p class=\"LinkCategoryHeader\">$strCategory</p>\n<ul>\n";
+        $strCat = $strCategory;
       }
-      print "<p class=\"LinkCategoryHeader\">$strCategory</p>\n<ul>\n";
-      $strCat = $strCategory;
+      if($ShowLinkURL == "False")
+      {
+        print "<li class=\"MainText\"><a href=\"$strLink\" target=\"_blank\"><b>$strName</b></a>  $strComment</li> \n";
+      }
+      else
+      {
+        print "<li class=\"MainText\"><b>$strName</b> <a href=\"$strLink\" target=\"_blank\">$strLink</a>  $strComment</li> \n";
+      }
     }
-    if ($ShowLinkURL == "False")
+  }
+  else
+  {
+    if($QueryData[0] == 0)
     {
-      print "<li class=\"MainText\"><a href=\"$strLink\" target=\"_blank\"><b>$strName</b></a>  $strComment</li> \n";
+      printPg("No Data","note");
     }
     else
     {
-      print "<li class=\"MainText\"><b>$strName</b> <a href=\"$strLink\" target=\"_blank\">$strLink</a>  $strComment</li> \n";
+      $strMsg = implode(";",$QueryData[1]);
+      error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg("$ErrMsg","error");
     }
   }
-  print "<p></p>";
   require("footer.php");
 ?>

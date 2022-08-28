@@ -1,13 +1,19 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+  */
+
   require("header.php");
 
-  if ($strReferer != $strPageURL and $PostVarCount > 0)
+  if($strReferer != $strPageURL and $PostVarCount > 0)
   {
-    print "<p class=\"Error\">Invalid operation, Bad Reference!!!</p> ";
+    printPg("Invalid operation, Bad Reference!!!","error");
     exit;
   }
 
-  if (isset($_POST['btnSubmit']))
+  if(isset($_POST['btnSubmit']))
   {
     $btnSubmit = $_POST['btnSubmit'];
   }
@@ -15,39 +21,48 @@
   {
     $btnSubmit = "";
   }
-  print "<p class=\"Header1\">Menu Maintenace</p>\n";
+  printPg("Menu Maintenace","h1");
 
-  if ($btnSubmit == 'Edit')
+  if($btnSubmit == 'Edit')
   {
     print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
     $iMenuID = intval(substr(trim($_POST['MenuID']),0,49));
     $strQuery = "SELECT * FROM vwMenuPos where iMenuID = $iMenuID;";
-    if (!$Result = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch Menu data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    $Row = $Result->fetch_assoc();
-    if ($Row['bSecure'] == 0)
-    {
-      $strChecked = "";
+      foreach($QueryData[1] as $Row)
+      {
+        if ($Row['bSecure'] == 0)
+        {
+          $strChecked = "";
+        }
+        else
+        {
+          $strChecked = "checked";
+        }
+        if ($Row['bNewWindow'] == 0)
+        {
+          $bWindow = "";
+        }
+        else
+        {
+          $bWindow = "checked";
+        }
+      }
     }
     else
     {
-      $strChecked = "checked";
+      if($QueryData[0] < 0)
+      {
+        $strMsg = implode(";",$QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg("$ErrMsg","error");
+      }
     }
-    if ($Row['bNewWindow'] == 0)
-    {
-      $bWindow = "";
-    }
-    else
-    {
-      $bWindow = "checked";
-    }
+
     print "<form method=\"POST\">\n";
-    print "<table border=\"0\" width=\"850\">\n";
+    print "<table border=\"0\" width=\"850\" class=center>\n";
     print "<input type=\"hidden\" name=\"MenuID\" size=\"5\" value=\"$iMenuID\"></p>";
     print "<tr><td width=\"280\" align=\"right\" class=\"lbl\">Menu Title: </td>\n";
     print "<td width=\"520\"><input type=\"text\" name=\"txtTitle\" size=\"50\" value=\"{$Row['vcTitle']}\"></td></tr>\n";
@@ -60,68 +75,87 @@
     print "<tr><td width=\"280\" align=\"right\" class=\"lbl\">Read Priviledge Required:</td>";
     print "<td><select size=\"1\" name=\"cmbReadPrivLevel\">\n";
     $strQuery = "select * from tblprivlevels;";
-    if (!$Result2 = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch privlevels data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    while ($Row2 = $Result2->fetch_assoc())
-    {
-      if ($Row2['iPrivLevel'] == $Row['iReadPriv'])
+      foreach($QueryData[1] as $Row2)
       {
-        print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        if ($Row2['iPrivLevel'] == $Row['iReadPriv'])
+        {
+          print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        }
+        else
+        {
+          print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        }
       }
-      else
+    }
+    else
+    {
+      if($QueryData[0] < 0)
       {
-        print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        $strMsg = implode(";",$QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg("$ErrMsg","error");
       }
     }
     print "</select>\n</td>\n</tr>";
     print "<tr><td width=\"280\" align=\"right\" class=\"lbl\">Write Priviledge Required:</td>";
     print "<td><select size=\"1\" name=\"cmbWritePrivLevel\">\n";
     $strQuery = "select * from tblprivlevels;";
-    if (!$Result2 = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch privlevels data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    while ($Row2 = $Result2->fetch_assoc())
-    {
-      if ($Row2['iPrivLevel'] == $Row['iWritePriv'])
+      foreach($QueryData[1] as $Row2)
       {
-        print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        if ($Row2['iPrivLevel'] == $Row['iWritePriv'])
+        {
+          print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        }
+        else
+        {
+          print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        }
       }
-      else
+    }
+    else
+    {
+      if($QueryData[0] < 0)
       {
-        print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        $strMsg = implode(";",$QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg("$ErrMsg","error");
       }
     }
     print "</select>\n</td>\n</tr>";
     print "<tr><td width=\"280\" align=\"right\" class=\"lbl\">Administrative category:</td>";
     print "<td><select size=\"1\" name=\"cmbAdminCat\">\n";
     $strQuery = "select * from tblAdminCategories;";
-    if (!$Result2 = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch Admin Category data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    while ($Row2 = $Result2->fetch_assoc())
-    {
-      if ($Row2['iCatID'] == $Row['bAdmin'])
+      foreach($QueryData[1] as $Row2)
       {
-        print "<option selected value=\"{$Row2['iCatID']}\">{$Row2['vcCatName']}</option>\n";
-      }
-      else
-      {
-        print "<option value=\"{$Row2['iCatID']}\">{$Row2['vcCatName']}</option>\n";
+        if ($Row2['iCatID'] == $Row['bAdmin'])
+        {
+          print "<option selected value=\"{$Row2['iCatID']}\">{$Row2['vcCatName']}</option>\n";
+        }
+        else
+        {
+          print "<option value=\"{$Row2['iCatID']}\">{$Row2['vcCatName']}</option>\n";
+        }
       }
     }
+    else
+    {
+      if($QueryData[0] < 0)
+      {
+        $strMsg = implode(";",$QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg("$ErrMsg","error");
+      }
+    }
+
     print "</select>\n</td>\n</tr>";
     print "<tr><td width=\"280\" align=\"right\" class=\"lbl\">Subordinate of page:</td>";
     print "<td><select size=\"1\" name=\"cmbSubOf\">\n";
@@ -152,7 +186,7 @@
     print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
   }
 
-  if ($btnSubmit == 'Save')
+  if($btnSubmit == 'Save')
   {
     $strTitle = CleanReg(substr(trim($_POST['txtTitle']),0,49));
     $strHeader = CleanReg(substr(trim($_POST['txtHeader']),0,49));
@@ -161,7 +195,7 @@
     $iAdminCatID = intval(substr(trim($_POST['cmbAdminCat']),0,6));
     $iSubOfID = intval(substr(trim($_POST['cmbSubOf']),0,6));
     $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
-    if (isset($_POST['chkSensitive']))
+    if(isset($_POST['chkSensitive']))
     {
       $bSensitive = 1;
     }
@@ -169,7 +203,7 @@
     {
       $bSensitive = 0;
     }
-    if (isset($_POST['chkNewWindow']))
+    if(isset($_POST['chkNewWindow']))
     {
       $bWindow = 1;
     }
@@ -182,17 +216,17 @@
                 " iReadPriv = $iReadPriv, iWritePriv = $iWritePriv, bSecure = $bSensitive, bNewWindow = $bWindow " .
                 " where iMenuID=$iMenuID";
     
-    UpdateSQL ($strQuery,"update");
-    if ($iAdminCatID > 0)
+    UpdateSQL($strQuery,"update");
+    if($iAdminCatID > 0)
     {
       $strQuery = "DELETE FROM tblmenutype WHERE iMenuID=$iMenuID;";
-      UpdateSQL ($strQuery,"delete");
+      UpdateSQL($strQuery,"delete");
     }
     else 
     {
       $strQuery = "UPDATE tblmenutype SET iSubOfMenu = $iSubOfID WHERE iMenuID = $iMenuID;";
-      UpdateSQL ($strQuery,"update");
-      if ($iSubOfID > 0)
+      UpdateSQL($strQuery,"update");
+      if($iSubOfID > 0)
       {
         $NewHeadPos = GetSQLValue("SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = $iSubOfID;");
         $NewHeadPos ++;
@@ -201,7 +235,7 @@
       }
       else 
       {
-        if ($iCurSubOf > 0)
+        if($iCurSubOf > 0)
         {
           $NewHeadPos = GetSQLValue("SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = $iCurSubOf;");
           $NewHeadPos --;
@@ -212,59 +246,39 @@
     }
   }
 
-  if ($btnSubmit == 'Update Position')
+  if($btnSubmit == 'Update Position')
   {
     $NewHeadPos = intval(substr(trim($_POST['NewHeadPos']),0,4));
     $OldHeadPos = intval(substr(trim($_POST['OldHeadPos']),0,4));
     $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
 
-    if ($NewHeadPos > 0)
+    if($NewHeadPos > 0)
     {
       $strQuery = "CALL spMovePos ('$iMenuID', '$NewHeadPos', 'head') ";
       UpdateSQL($strQuery);
     }
   }
 
-  if ($btnSubmit == 'Add to menu')
+  if($btnSubmit == 'Add to menu')
   {
     $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
     $strQuery = "SELECT max(iMenuOrder)+1 AS NextID FROM tblmenutype";
-    if (!$Result = $dbh->query ($strQuery))
-    {
-      error_log ('Failed to fetch menu data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    $rowcount=mysqli_num_rows($Result);
-    if ($rowcount > 0)
-    {
-      $Row = $Result->fetch_assoc();
-      $nextPos = $Row['NextID'];
-    }
+    $nextPos = GetSQLValue($strQuery);
     $strQuery = "INSERT INTO tblmenutype (iMenuID, vcMenuType, iMenuOrder) VALUES ($iMenuID, 'head', $nextPos);";
-    UpdateSQL ($strQuery,"insert");
+    UpdateSQL($strQuery,"insert");
     $strQuery = "UPDATE tblmenu SET bAdmin = 0 WHERE iMenuID=$iMenuID;";
-    UpdateSQL ($strQuery,"delete");
+    UpdateSQL($strQuery,"delete");
   }
 
-  if ($btnSubmit == 'Remove from Menu')
+  if($btnSubmit == 'Remove from Menu')
   {
     $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
     $strQuery = "DELETE FROM tblmenutype WHERE iMenuID=$iMenuID;";
-    UpdateSQL ($strQuery,"delete");
+    UpdateSQL($strQuery,"delete");
   }
 
   print "<p class=\"Header2\">Visible in menu</p>\n";
-  $strQuery = "SELECT * FROM vwmenupriv where bAdmin=0  AND iMenuOrder IS NOT NULL order by iMenuOrder";
   print "<table class=\"MainText\" cellPadding=\"4\" cellSpacing=\"0\">\n";
-  if (!$Result = $dbh->query ($strQuery))
-  {
-    error_log ('Failed to fetch menu data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
-    print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-    exit(2);
-  }
   if ($WritePriv <=  $Priv)
   {
     print "<tr align=\"left\"><th>Menu Title</th><th>Page Title</th><th>Read Priv</th><th>Write Priv</th><th>Sensitive</th>";
@@ -274,76 +288,83 @@
   {
     print "<tr align=\"left\"><th>Menu Title</th><th>Page Title</th><th>Read Priv</th><th>Write Priv</th>th>Sensitive</th><th>New Window</th></tr>\n";
   }
-  while ($Row = $Result->fetch_assoc())
+  $strQuery = "SELECT * FROM vwmenupriv where bAdmin=0  AND iMenuOrder IS NOT NULL order by iMenuOrder";
+  $QueryData = QuerySQL($strQuery);
+  if($QueryData[0] > 0)
   {
-    print "<tr valign=\"top\">\n";
-    if ($Row["iSubOfMenu"] > 0)
+    foreach($QueryData[1] as $Row)
     {
-      print "<td>&nbsp;&nbsp; $Row[vcTitle]</td>\n";
-    }
-    else 
-    {
-      print "<td>$Row[vcTitle]</td>\n";
-    }
-    print "<td>$Row[vcHeader]</td>\n";
-    print "<td>$Row[ReadPriv]</td>\n";
-    print "<td>$Row[WritePriv]</td>\n";
-    if ($Row['bSecure'] == 0)
-    {
-      print "<td align=center><input type=\"checkbox\" disabled></td>\n";
-    }
-    else
-    {
-      print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
-    }
-    if ($Row['bNewWindow'] == 0)
-    {
-      print "<td align=center><input type=\"checkbox\" disabled></td>\n";
-    }
-    else
-    {
-      print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
-    }
-    if ($WritePriv <=  $Priv)
-    {
-      $HeaderPos = $Row['iMenuOrder'];
-      print "<form method=\"POST\">\n";
-      print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";
-      print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
-      print "</form>\n";
-      if ($HeaderPos > 0)
+      print "<tr valign=\"top\">\n";
+      if($Row["iSubOfMenu"] > 0)
       {
+        print "<td>&nbsp;&nbsp; $Row[vcTitle]</td>\n";
+      }
+      else 
+      {
+        print "<td>$Row[vcTitle]</td>\n";
+      }
+      print "<td>$Row[vcHeader]</td>\n";
+      print "<td>$Row[ReadPriv]</td>\n";
+      print "<td>$Row[WritePriv]</td>\n";
+      if($Row['bSecure'] == 0)
+      {
+        print "<td align=center><input type=\"checkbox\" disabled></td>\n";
+      }
+      else
+      {
+        print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
+      }
+      if($Row['bNewWindow'] == 0)
+      {
+        print "<td align=center><input type=\"checkbox\" disabled></td>\n";
+      }
+      else
+      {
+        print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
+      }
+      if($WritePriv <=  $Priv)
+      {
+        $HeaderPos = $Row['iMenuOrder'];
         print "<form method=\"POST\">\n";
-        print "<td>\n";
-        print "<input type=\"text\" value=\"$HeaderPos\" name=\"NewHeadPos\" size=\"3\">\n";
-        print "<input type=\"hidden\" value=\"$HeaderPos\" name=\"OldHeadPos\">\n";
-        print "</td>\n";
-        print "<td>\n";
-        print "<input type=\"Submit\" value=\"Update Position\" name=\"btnSubmit\">\n";
-        print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\">";
-        print "</td>\n";
+        print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";
+        print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
+        print "</form>\n";
+        if($HeaderPos > 0)
+        {
+          print "<form method=\"POST\">\n";
+          print "<td>\n";
+          print "<input type=\"text\" value=\"$HeaderPos\" name=\"NewHeadPos\" size=\"3\">\n";
+          print "<input type=\"hidden\" value=\"$HeaderPos\" name=\"OldHeadPos\">\n";
+          print "</td>\n";
+          print "<td>\n";
+          print "<input type=\"Submit\" value=\"Update Position\" name=\"btnSubmit\">\n";
+          print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\">";
+          print "</td>\n";
+          print "</form>\n";
+        }
+        print "<form method=\"POST\">\n";
+        print "<td><input type=\"Submit\" value=\"Remove from Menu\" name=\"btnSubmit\">";
+        print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
         print "</form>\n";
       }
-      print "<form method=\"POST\">\n";
-      print "<td><input type=\"Submit\" value=\"Remove from Menu\" name=\"btnSubmit\">";
-      print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
-      print "</form>\n";
+      print "</tr>\n";
     }
-    print "</tr>\n";
   }
+  else
+  {
+    if($QueryData[0] < 0)
+    {
+      $strMsg = implode(";",$QueryData[1]);
+      error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg("$ErrMsg","error");
+    }
+  }
+
   print "</table>";
 
   print "<p class=\"Header2\">Administrative Items</p>\n";
-  $strQuery = "SELECT * FROM vwmenupriv where bAdmin>0 order by vcTitle";
   print "<table class=\"MainText\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
-  if (!$Result = $dbh->query ($strQuery))
-  {
-    error_log ('Failed to fetch menu data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
-    print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-    exit(2);
-  }
-  if ($WritePriv <=  $Priv)
+  if($WritePriv <=  $Priv)
   {
     print "<tr align=\"left\"><th>Menu Title</th><th>Page Title</th><th>Read Priv</th><th>Write Priv</th><th>Sensitive</th>";
     print "<th>New Window</th><th></th></tr>\n";
@@ -352,31 +373,35 @@
   {
     print "<tr align=\"left\"><th>Menu Title</th><th>Page Title</th><th>Read Priv</th><th>Write Priv</th>th>Sensitive</th><th>New Window</th></tr>\n";
   }
-  while ($Row = $Result->fetch_assoc())
+  $strQuery = "SELECT * FROM vwmenupriv where bAdmin > 0 order by vcTitle";
+  $QueryData = QuerySQL($strQuery);
+  if($QueryData[0] > 0)
   {
-    print "<tr valign=\"top\">\n";
-    print "<td>$Row[vcTitle]</td>";
-    print "<td>$Row[vcHeader]</td>";
-    print "<td>$Row[ReadPriv]</td>\n";
-    print "<td>$Row[WritePriv]</td>\n";
-    if ($Row['bSecure'] == 0)
+    foreach($QueryData[1] as $Row)
     {
+      print "<tr valign=\"top\">\n";
+      print "<td>$Row[vcTitle]</td>";
+      print "<td>$Row[vcHeader]</td>";
+      print "<td>$Row[ReadPriv]</td>\n";
+      print "<td>$Row[WritePriv]</td>\n";
+      if ($Row['bSecure'] == 0)
+      {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
-    }
-    else
-    {
+      }
+      else
+      {
         print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
-    }
-    if ($Row['bNewWindow'] == 0)
-    {
+      }
+      if ($Row['bNewWindow'] == 0)
+      {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
-    }
-    else
-    {
+      }
+      else
+      {
         print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
-    }
-    if ($WritePriv <=  $Priv)
-    {
+      }
+      if ($WritePriv <=  $Priv)
+      {
         print "<form method=\"POST\">\n";
         print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";
         print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
@@ -388,19 +413,21 @@
         print "</form>\n";
       }
       print "</tr>\n";
+    }
+  }
+  else
+  {
+    if($QueryData[0] < 0)
+    {
+      $strMsg = implode(";",$QueryData[1]);
+      error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg("$ErrMsg","error");
+    }
   }
   print "</table>";
 
   print "<p class=\"Header2\">Other Items</p>\n";
-  $strQuery = "SELECT * FROM vwmenupriv where bAdmin=0 AND iMenuOrder IS NULL order by vcTitle";
   print "<table class=\"MainText\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
-  if (!$Result = $dbh->query ($strQuery))
-  {
-    error_log ('Failed to fetch menu data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
-    print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-    exit(2);
-  }
   if ($WritePriv <=  $Priv)
   {
     print "<tr align=\"left\"><th>Menu Title</th><th>Page Title</th><th>Read Priv</th><th>Write Priv</th><th>Sensitive</th>";
@@ -410,43 +437,56 @@
   {
     print "<tr align=\"left\"><th>Menu Title</th><th>Page Title</th><th>Read Priv</th><th>Write Priv</th>th>Sensitive</th><th>New Window</th></tr>\n";
   }
-  while ($Row = $Result->fetch_assoc())
+  $strQuery = "SELECT * FROM vwmenupriv where bAdmin=0 AND iMenuOrder IS NULL order by vcTitle";
+  $QueryData = QuerySQL($strQuery);
+  if($QueryData[0] > 0)
   {
-    print "<tr valign=\"top\">\n";
-    print "<td>$Row[vcTitle]</td>";
-    print "<td>$Row[vcHeader]</td>";
-    print "<td>$Row[ReadPriv]</td>\n";
-    print "<td>$Row[WritePriv]</td>\n";
-    if ($Row['bSecure'] == 0)
+    foreach($QueryData[1] as $Row)
     {
-      print "<td align=center><input type=\"checkbox\" disabled></td>\n";
-    }
-    else
-    {
-      print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
-    }
-    if ($Row['bNewWindow'] == 0)
-    {
-      print "<td align=center><input type=\"checkbox\" disabled></td>\n";
-    }
-    else
-    {
-      print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
-    }
-    if ($WritePriv <=  $Priv)
-    {
-      print "<form method=\"POST\">\n";
-      print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";
-      print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
-      print "</form>\n";
+      print "<tr valign=\"top\">\n";
+      print "<td>$Row[vcTitle]</td>";
+      print "<td>$Row[vcHeader]</td>";
+      print "<td>$Row[ReadPriv]</td>\n";
+      print "<td>$Row[WritePriv]</td>\n";
+      if ($Row['bSecure'] == 0)
+      {
+        print "<td align=center><input type=\"checkbox\" disabled></td>\n";
+      }
+      else
+      {
+        print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
+      }
+      if ($Row['bNewWindow'] == 0)
+      {
+        print "<td align=center><input type=\"checkbox\" disabled></td>\n";
+      }
+      else
+      {
+        print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
+      }
+      if ($WritePriv <=  $Priv)
+      {
+        print "<form method=\"POST\">\n";
+        print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";
+        print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
+        print "</form>\n";
 
-      print "<form method=\"POST\">\n";
-      print "<td><input type=\"Submit\" value=\"Add to menu\" name=\"btnSubmit\">";
-      print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
-      print "</form>\n";
+        print "<form method=\"POST\">\n";
+        print "<td><input type=\"Submit\" value=\"Add to menu\" name=\"btnSubmit\">";
+        print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
+        print "</form>\n";
+      }
+      print "</tr>\n";
     }
-
-    print "</tr>\n";
+  }
+  else
+  {
+    if($QueryData[0] < 0)
+    {
+      $strMsg = implode(";",$QueryData[1]);
+      error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg("$ErrMsg","error");
+    }
   }
   print "</table>";
 
