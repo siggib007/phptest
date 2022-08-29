@@ -12,7 +12,7 @@
   $QueryData = QuerySQL($strQuery);
   if($QueryData[0] > 0)
   {
-    print "<p class=\"Header2\">Address</p>";
+    printPg("Address","h2");
     foreach($QueryData[1] as $Row)
     {
       print $Row['vcValue'] . "<br>\n";

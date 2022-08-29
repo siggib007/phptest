@@ -7,10 +7,46 @@
   Central collection of various functions
   */
 
+  use PHPMailer\PHPMailer\PHPMailer;
+  use PHPMailer\PHPMailer\Exception;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
+  function printPg($strMsg,$strType="normal")
+  {
+    switch(strtolower($strType))
+    {
+      case "error":
+        print "<p class=\"Error\">$strMsg</p>\n";
+        break;
+      case "note":
+        print "<p class=\"BlueNote\">$strMsg</p>\n";
+        break;
+      case "alert":
+        print "<p class=\"LargeAttnCenter\">$strMsg</p>\n";
+        break;
+      case "attn":
+        print "<p class=\"Attn\">$strMsg</p>\n";
+        break;
+      case "center":
+        print "<p class=\"MainTextCenter\">$strMsg</p>\n";
+        break;
+      case "normal":
+        print "<p class=\"MainText\">$strMsg</p>\n";
+        break;
+      case "h1":
+        print "<p class=\"Header1\">$strMsg</p>\n";
+        break;
+      case "h2":
+        print "<p class=\"Header2\">$strMsg</p>\n";
+        break;
+      case "tmh2":
+        print "<p class=\"MMH2\">$strMsg</p>\n";
+        break;
+      default:
+        error_log("unkown type $strType in printpg, printing as maintext");
+        print "<p class=\"MainText\">$strMsg</p>\n";
+    }
+  }
+  
 function ShowErrHead()
 {
   $ROOTPATH = $GLOBALS['ROOTPATH'];
@@ -35,8 +71,8 @@ function ShowErrHead()
   print "</TD>\n";
   print "</TR>\n";
   print "</TABLE>\n</div>\n</div>\n";
-  print "<p class=\"Header1\">Technical Difficulties</p>\n";
-  print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
+  printPg("Technical Difficulties","h1");
+  printPg("$ErrMsg</p>\n","attn");
   exit;
 }
 
@@ -50,36 +86,6 @@ function printNote($strMsg)
   print "<p class=\"BlueNote\">$strMsg</p>\n";
 }
 
-function printPg($strMsg,$strType="normal")
-{
-  switch(strtolower($strType))
-  {
-    case "error":
-      print "<p class=\"Error\">$strMsg</p>\n";
-      break;
-    case "note":
-      print "<p class=\"BlueNote\">$strMsg</p>\n";
-      break;
-    case "alert":
-      print "<p class=\"LargeAttnCenter\">$strMsg</p>\n";
-      break;
-    case "attn":
-      print "<p class=\"Attn\">$strMsg</p>\n";
-      break;
-    case "center":
-      print "<p class=\"MainTextCenter\">$strMsg</p>\n";
-      break;
-    case "normal":
-      print "<p class=\"MainText\">$strMsg</p>\n";
-      break;
-    case "h1":
-      print "<p class=\"Header1\">$strMsg</p>\n";
-      break;
-    default:
-      error_log("unkown type $strType in printpg, printing as maintext");
-      print "<p class=\"MainText\">$strMsg</p>\n";
-  }
-}
 
 function QuerySQL($strQuery)
 {
@@ -184,15 +190,14 @@ function UpdateSQL($strQuery,$type="call")
       error_log("SQL: $strQuery");
       if(EmailText("$SupportEmail","Automatic Error Report","$strError\n$strQuery",$FromEmail))
       {
-        print "<p class=\"error\">We seem to be experiencing technical difficulties. We have been notified. " .
-        "Please try again later. Thank you.</p>";
+        printPg("We seem to be experiencing technical difficulties. We have been notified. Please try again later. Thank you.","error");
       }
       else
       {
         $strError = str_replace("\n","<br>\n",$strError);
-        print "<p class=\"error\">We seem to be experiencing technical difficulties. " .
+        printPg("We seem to be experiencing technical difficulties. " .
                 "Please send us a message at $SupportEmail with information about " .
-                "what you were doing.</p>";
+                "what you were doing.","error");
       }
     }
     return FALSE;

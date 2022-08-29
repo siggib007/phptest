@@ -1,80 +1,99 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
-  //Copyright © 2009,2015,2022  Siggi Bjarnason.
-  //
-  //This program is free software: you can redistribute it and/or modify
-  //it under the terms of the GNU General Public License as published by
-  //the Free Software Foundation, either version 3 of the License, or
-  //(at your option) any later version.
-  //
-  //This program is distributed in the hope that it will be useful,
-  //but WITHOUT ANY WARRANTY; without even the implied warranty of
-  //MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  //GNU General Public License for more details.
-  //
-  //You should have received a copy of the GNU General Public License
-  //along with this program.  If not, see <http://www.gnu.org/licenses/>
+  Main profile page that gives an overview over your profile
+  */
 
   require("header.php");
 
   $strUserID = $_SESSION["UID"];
 
-  print "<p class=\"Header1\">My Profile</p>\n";
+  printPg("My Profile","h1");
 
   $strQuery = "select * from tblUsers where iUserID = $strUserID;";
-  if (!$Result = $dbh->query ($strQuery))
+  $QueryData = QuerySQL($strQuery);
+  if($QueryData[0] > 0)
   {
-    error_log ('Failed to data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
-    print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-    exit(2);
-}
-  $Row = $Result->fetch_assoc();
-  print "<p class=\"MainTextCenter\">\n";
+    foreach($QueryData[1] as $Row)
+    {
+      $strName = $Row['vcName'];
+      $strAddr1 = $Row['vcAddr1'];
+      $strAddr2 = $Row['vcAddr2'];
+      $strCity = $Row['vcCity'];
+      $strState = $Row['vcState'];
+      $strZip = $Row['vcZip'];
+      $strCountry = $Row['vcCountry'];
+      $strEmail = $Row['vcEmail'];
+      $strCell = $Row['vcCell'];
+      $iPrivLevel = $Row['iPrivLevel'];
+      $strLastLogin = $Row['dtLastLogin'];
+    }
+  }
+  else
+  {
+    if($QueryData[0] == 0)
+    {
+      $strName      = "User with ID of $strUserID not found";
+      $strAddr1     = "";
+      $strAddr2     = "";
+      $strCity      = "";
+      $strState     = "";
+      $strZip       = "";
+      $strCountry   = "";
+      $strEmail     = "";
+      $strCell      = "";
+      $iPrivLevel   = "";
+      $strLastLogin = "";
+    }
+    else
+    {
+      $strMsg = implode(";",$QueryData[1]);
+      error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg("$ErrMsg","error");
+    }
+  }
+
+  print "<div class=\"MainTextCenter\">\n";
   print "RegistrationID: $strUserID<br>\n";
-  print "{$Row['vcName']}<br>\n";
-  if ($Row['vcAddr1'] != "")
+  print "$strName<br>\n";
+  if ($strAddr1 != "")
   {
-    print "{$Row['vcAddr1']}<br>\n";
+    print "$strAddr1<br>\n";
   }
-  if ($Row['vcAddr2'] != "")
+  if ($strAddr2 != "")
   {
-    print "{$Row['vcAddr2']}<br>\n";
+    print "$strAddr2<br>\n";
   }
-  if ($Row['vcCity'] != "")
+  if ($strCity != "")
   {
-    print "{$Row['vcCity']}, {$Row['vcState']} {$Row['vcZip']}<br>\n";
+    print "$strCity, $strState $strZip <br>\n";
   }
-  print "{$Row['vcCountry']}<br>\n";
-  print "{$Row['vcEmail']}<br>\n";
-  print "{$Row['vcCell']}<br>\n";
+  print "$strCountry<br>\n";
+  print "$strEmail<br>\n";
+  print "$strCell<br>\n";
 
-  $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = {$Row['iPrivLevel']};";
-  if (!$PrivResult = $dbh->query ($strQuery))
+  $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = $iPrivLevel;";
+  $PrivName = GetSQLValue($strQuery);
+  if ($PrivName == '' or $PrivName == 0)
   {
-    error_log ('Failed to data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
-    print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-    exit(2);
-}
-  $PrivRow = $PrivResult->fetch_assoc();
-  $PrivName = $PrivRow['vcPrivName'];
-  if ($PrivName == '')
-  {
-    $PrivName = $Row['iPrivLevel'];
+    $PrivName = $iPrivLevel;
   }
 
-  print "<p class=\"MainTextCenter\">Authorization level is set to $PrivName</p>\n";
-
-  if ($Row['dtLastLogin'])
+  print "Authorization level is set to $PrivName<br>\n";
+  
+  if ($strLastLogin)
   {
-    $LastLogin = 'on ' . date('l F jS Y \a\t G:i',strtotime($Row['dtLastLogin']));
+    $LastLogin = 'on ' . date('l F jS Y \a\t G:i',strtotime($strLastLogin));
   }
   else
   {
     $LastLogin = 'never';
   }
-  print "<p class=\"MainTextCenter\">Last logged in $LastLogin</p>\n";
+  print "Last logged in $LastLogin";
+  print "</div>";
 
-  require "footer.php";
+  require("footer.php");
 ?>

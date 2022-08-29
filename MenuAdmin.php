@@ -3,6 +3,8 @@
   Copyright © 2009,2015,2022  Siggi Bjarnason.
   Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+
+  Page to control how the menu is laid out, what's in menu, what admin, etc.
   */
 
   require("header.php");
@@ -33,7 +35,7 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        if ($Row['bSecure'] == 0)
+        if($Row['bSecure'] == 0)
         {
           $strChecked = "";
         }
@@ -41,7 +43,7 @@
         {
           $strChecked = "checked";
         }
-        if ($Row['bNewWindow'] == 0)
+        if($Row['bNewWindow'] == 0)
         {
           $bWindow = "";
         }
@@ -80,7 +82,7 @@
     {
       foreach($QueryData[1] as $Row2)
       {
-        if ($Row2['iPrivLevel'] == $Row['iReadPriv'])
+        if($Row2['iPrivLevel'] == $Row['iReadPriv'])
         {
           print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
         }
@@ -108,7 +110,7 @@
     {
       foreach($QueryData[1] as $Row2)
       {
-        if ($Row2['iPrivLevel'] == $Row['iWritePriv'])
+        if($Row2['iPrivLevel'] == $Row['iWritePriv'])
         {
           print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
         }
@@ -136,7 +138,7 @@
     {
       foreach($QueryData[1] as $Row2)
       {
-        if ($Row2['iCatID'] == $Row['bAdmin'])
+        if($Row2['iCatID'] == $Row['bAdmin'])
         {
           print "<option selected value=\"{$Row2['iCatID']}\">{$Row2['vcCatName']}</option>\n";
         }
@@ -165,7 +167,7 @@
     {
       foreach($QueryData[1] as $MenuItem)
       {
-        if ($MenuItem['iMenuID'] == $Row['iSubOfMenu'])
+        if($MenuItem['iMenuID'] == $Row['iSubOfMenu'])
         {
           print "<option selected value=\"{$MenuItem['iMenuID']}\">{$MenuItem['vcTitle']}</option>\n";
         }
@@ -177,7 +179,7 @@
     }
     else
     {
-      error_log ("Rowcount: $QueryData[0] Msg:$QueryData[1]");
+      error_log("Rowcount: $QueryData[0] Msg:$QueryData[1]");
       print "<option value=\"0\">Failed to fetch list</option>\n";
     }
     print "</select>\n</td>\n</tr>";
@@ -277,9 +279,9 @@
     UpdateSQL($strQuery,"delete");
   }
 
-  print "<p class=\"Header2\">Visible in menu</p>\n";
-  print "<table class=\"MainText\" cellPadding=\"4\" cellSpacing=\"0\">\n";
-  if ($WritePriv <=  $Priv)
+  printPg("Visible in menu","tmh2");
+  print "<table class=\"TextCenterScreen\" cellPadding=\"4\" cellSpacing=\"0\">\n";
+  if($WritePriv <=  $Priv)
   {
     print "<tr align=\"left\"><th>Menu Title</th><th>Page Title</th><th>Read Priv</th><th>Write Priv</th><th>Sensitive</th>";
     print "<th>New Window</th><th></th><th width=\"20\">Header Position</th></tr>\n";
@@ -362,8 +364,8 @@
 
   print "</table>";
 
-  print "<p class=\"Header2\">Administrative Items</p>\n";
-  print "<table class=\"MainText\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
+  printPg("Administrative Items","tmh2");
+  print "<table class=\"TextCenterScreen\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
   if($WritePriv <=  $Priv)
   {
     print "<tr align=\"left\"><th>Menu Title</th><th>Page Title</th><th>Read Priv</th><th>Write Priv</th><th>Sensitive</th>";
@@ -384,7 +386,7 @@
       print "<td>$Row[vcHeader]</td>";
       print "<td>$Row[ReadPriv]</td>\n";
       print "<td>$Row[WritePriv]</td>\n";
-      if ($Row['bSecure'] == 0)
+      if($Row['bSecure'] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }
@@ -392,7 +394,7 @@
       {
         print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
       }
-      if ($Row['bNewWindow'] == 0)
+      if($Row['bNewWindow'] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }
@@ -400,7 +402,7 @@
       {
         print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
       }
-      if ($WritePriv <=  $Priv)
+      if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\">\n";
         print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";
@@ -426,9 +428,9 @@
   }
   print "</table>";
 
-  print "<p class=\"Header2\">Other Items</p>\n";
-  print "<table class=\"MainText\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
-  if ($WritePriv <=  $Priv)
+  printPg("Other Items","tmh2");
+  print "<table class=\"TextCenterScreen\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
+  if($WritePriv <=  $Priv)
   {
     print "<tr align=\"left\"><th>Menu Title</th><th>Page Title</th><th>Read Priv</th><th>Write Priv</th><th>Sensitive</th>";
     print "<th>New Window</th><th></th></tr>\n";
@@ -448,7 +450,7 @@
       print "<td>$Row[vcHeader]</td>";
       print "<td>$Row[ReadPriv]</td>\n";
       print "<td>$Row[WritePriv]</td>\n";
-      if ($Row['bSecure'] == 0)
+      if($Row['bSecure'] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }
@@ -456,7 +458,7 @@
       {
         print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
       }
-      if ($Row['bNewWindow'] == 0)
+      if($Row['bNewWindow'] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }
@@ -464,7 +466,7 @@
       {
         print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
       }
-      if ($WritePriv <=  $Priv)
+      if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\">\n";
         print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";

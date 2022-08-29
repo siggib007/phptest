@@ -444,6 +444,14 @@ ul.nav a:hover {
     margin: 5px;
 }
 
+.MMH2 {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin: 5px;
+  margin-top: 25px;
+}
+
 .Header3 {
     font-size: 18px;
     font-weight: 800;
@@ -617,6 +625,12 @@ table.ClassListing
 {
     font-size:16px;
     text-align: center;
+}
+
+.TextCenterScreen
+{
+  font-size: 14px;
+  margin: auto;
 }
 
 .ClassDescr{

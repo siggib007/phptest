@@ -12,7 +12,7 @@
 
 	if($strReferer != $strPageURL and $PostVarCount > 0)
 	{
-    print "<p class=\"Error\">Invalid operation, Bad Reference!!!</p> ";
+    printPg("Invalid operation, Bad Reference!!!","error");
     exit;
 	}
 	if(isset($_POST['btnSubmit']))

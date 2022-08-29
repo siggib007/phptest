@@ -337,7 +337,7 @@
     print "<tr class=\"header1\">\n";
     print "<td colspan=$MenuNum align=\"center\" vAlign=\"middle\">\n";
     print "</td>\n</tr>\n</table>\n</div>\n</div>\n";
-    print "<p class=\"Header1\">Under maintenance</p>\n";
+    printPg("Under maintenance","h1");
     $ImgFileName = array(
                     "CautionSign.png" => "Under Construction",
                     "Construction2.png" => "Under Construction",
@@ -355,9 +355,8 @@
       print "<img src=\"$Fullimgname\" height=\"$ImgHeight\" alt=\"$tag\"/>";
     }
     print "</center>";
-    print "<p class=\"Attn\" align=center>We are currently updating the website, " .
-            "please try again in 10 minutes. We appologize for inconvenience</p>\n";
-    print "</TR>\n";
+    printPg("We are currently updating the website, please try again in 10 minutes. We appologize for inconvenience","attn");
+    print "</tr>\n";
     exit;
   }
   print "</table>\n";
