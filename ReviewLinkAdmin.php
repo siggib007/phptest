@@ -1,84 +1,95 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+  
+  Manages links to review sites where you want to be reviewed
+  */
+
 	require("header.php");
 
   $DocRoot = "ReviewMedia/";
 
-	if ($strReferer != $strPageURL and $PostVarCount > 0)
+	if($strReferer != $strPageURL and $PostVarCount > 0)
 	{
-		print "<p class=\"Error\">Invalid operation, Bad Reference!!!</p> ";
+		printPg("Invalid operation, Bad Reference!!!","error");
 		exit;
 	}
-	if (isset($_POST['btnSubmit']))
+	if(isset($_POST["btnSubmit"]))
 	{
-		$btnSubmit = $_POST['btnSubmit'];
+		$btnSubmit = $_POST["btnSubmit"];
 	}
 	else
 	{
 		$btnSubmit = "";
 	}
 
-	print "<p class=\"Header1\">Review Site link Administration</p>\n";
+	printPg("Review Site link Administration","h1");
 
-	if ($btnSubmit == 'Save')
+	if($btnSubmit == "Save")
 	{
-		$iSiteID = CleanSQLInput(substr(trim($_POST['iSiteID']),0,9));
-		$strSiteName = CleanSQLInput(substr(trim($_POST['txtSiteName']),0,99));
-		$strSiteURL = CleanSQLInput(substr(trim($_POST['txtSiteURL']),0,99));
-		$strLogoURL= CleanSQLInput(substr(trim($_POST['txtLogoURL']),0,99));
+		$iSiteID = CleanSQLInput(substr(trim($_POST["iSiteID"]),0,9));
+		$strSiteName = CleanSQLInput(substr(trim($_POST["txtSiteName"]),0,99));
+		$strSiteURL = CleanSQLInput(substr(trim($_POST["txtSiteURL"]),0,99));
+		$strLogoURL= CleanSQLInput(substr(trim($_POST["txtLogoURL"]),0,99));
     $strImgPath="";
 
-    if (isset($_FILES['fPict']))
+    if(isset($_FILES["fPict"]))
     {
-      $arrRet = FileUpload($_FILES['fPict'],$DocRoot);
-      error_log(json_encode($arrRet));
-      foreach ($arrRet["err"] as $strErr)
+      if($_FILES["fPict"]["name"] != "")
       {
-        print $strErr;
+        error_log(json_encode($_FILES));
+        $arrRet = FileUpload($_FILES["fPict"],$DocRoot);
+        error_log(json_encode($arrRet));
+        foreach($arrRet["err"] as $strErr)
+        {
+          print "$strErr<br>\n";
+        }
+        foreach($arrRet["msg"] as $strMsg)
+        {
+          print "$strMsg<br>\n";
+        }
+        $strImgPath = $arrRet["FileList"][0];
       }
-      foreach ($arrRet["msg"] as $strMsg)
-      {
-        print $strMsg;
-      }
-      $strImgPath = $arrRet["FileList"][0];
     }
 
-    if ($strImgPath == '')
+    if($strImgPath == "")
     {
       $strImgPath = $strLogoURL;
     }
 
 		$strQuery = "update tblReviewSiteURL set vcSiteName = '$strSiteName', "
               . "vcImgPath = '$strImgPath', vcSiteURL = '$strSiteURL' where iSiteID = $iSiteID;";
-    UpdateSQL ($strQuery,"update");
+    UpdateSQL($strQuery,"update");
 	}
 
-	if ($btnSubmit == 'Delete')
+	if($btnSubmit == "Delete")
 	{
-		$iSiteID = CleanSQLInput(substr(trim($_POST['iSiteID']),0,9));
+		$iSiteID = CleanSQLInput(substr(trim($_POST["iSiteID"]),0,9));
 
 		$strQuery = "delete from tblReviewSiteURL where iSiteID = $iSiteID;";
-		UpdateSQL ($strQuery,"delete");
+		UpdateSQL($strQuery,"delete");
 	}
 
-	if ($btnSubmit == 'Insert')
+	if($btnSubmit == "Insert")
 	{
-		$strSiteName = CleanSQLInput(substr(trim($_POST['txtSiteName']),0,99));
-		$strSiteURL = CleanSQLInput(substr(trim($_POST['txtSiteURL']),0,99));
-		$strLogoURL= CleanSQLInput(substr(trim($_POST['txtLogoURL']),0,99));
+		$strSiteName = CleanSQLInput(substr(trim($_POST["txtSiteName"]),0,99));
+		$strSiteURL = CleanSQLInput(substr(trim($_POST["txtSiteURL"]),0,99));
+		$strLogoURL= CleanSQLInput(substr(trim($_POST["txtLogoURL"]),0,99));
     $strImgPath="";
 
-    error_log(json_encode($_FILES));
-    if (isset($_FILES['fPict']))
+    if(isset($_FILES["fPict"]))
     {
-      $arrRet = FileUpload($_FILES['fPict'],$DocRoot);
+      $arrRet = FileUpload($_FILES["fPict"],$DocRoot);
       error_log(json_encode($arrRet));
-      foreach ($$arrRet["err"] as $strErr)
+      foreach($arrRet["err"] as $strErr)
       {
-        print $strErr;
+        print "$strErr<br>\n";
       }
-      foreach ($arrRet["msg"] as $strMsg)
+      foreach($arrRet["msg"] as $strMsg)
       {
-        print $strMsg;
+        print "$strMsg<br>\n";
       }
       $strImgPath = $arrRet["FileList"][0];
     }
@@ -87,15 +98,15 @@
       $strImgPath = $strLogoURL;
     }
 
-		if ($strSiteName == '')
+		if($strSiteName == "")
 		{
-			print "<p>Please provide a Site name to insert</p>\n";
+			printPg("Please provide a Site name to insert","error");
 		}
 		else
 		{
 			$strQuery = "insert tblReviewSiteURL (vcSiteName, vcImgPath, vcSiteURL) "
                 . "values ('$strSiteName', '$strImgPath', '$strSiteURL ');";
-			UpdateSQL ($strQuery,"insert");
+			UpdateSQL($strQuery,"insert");
 		}
 	}
 
@@ -104,42 +115,53 @@
   print "<tr>\n";
   print "<th>Update existing Review Site link</th>\n";
   print "<th width = 100></th>\n";
-  if ($btnSubmit != 'Edit')
+  if($btnSubmit != "Edit")
   {
-      print "<th class=lbl>Or Insert New one</th>";
+    print "<th class=lbl>Or Insert New one</th>";
   }
 	print "</tr>\n";
   print "<tr>\n";
   print "<td valign=\"top\">\n";
   print "<table border = 0>\n";
 	$strQuery = "select iSiteID, vcSiteName from tblReviewSiteURL;";
-	if (!$Result = $dbh->query ($strQuery))
-	{
-    error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-    error_log ($strQuery);
-    print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-    exit(2);
-	}
-	while ($Row = $Result->fetch_assoc())
-	{
-    $vcSiteName = $Row['vcSiteName'];
-    $iSiteID = $Row['iSiteID'];
-    if ($WritePriv <=  $Priv)
+  $QueryData = QuerySQL($strQuery);
+  if($QueryData[0] > 0)
+  {
+    foreach($QueryData[1] as $Row)
     {
-      print "<form method=\"POST\">\n";
-      print "<tr valign=\"top\">\n";
-      print "<td class=\"lbl\"><input type=\"hidden\" value=\"$iSiteID\" name=\"iSiteID\"></td>\n";
-      print "<td>$vcSiteName</td>\n";
-      print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\"></td>";
-      print "<td><input type=\"Submit\" value=\"Delete\" name=\"btnSubmit\"></td>";
-      print "</tr>\n";
-      print "</form>\n";
+      $vcSiteName = $Row["vcSiteName"];
+      $iSiteID = $Row["iSiteID"];
+      if ($WritePriv <=  $Priv)
+      {
+        print "<form method=\"POST\">\n";
+        print "<tr valign=\"top\">\n";
+        print "<td class=\"lbl\"><input type=\"hidden\" value=\"$iSiteID\" name=\"iSiteID\"></td>\n";
+        print "<td>$vcSiteName</td>\n";
+        print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\"></td>";
+        print "<td><input type=\"Submit\" value=\"Delete\" name=\"btnSubmit\"></td>";
+        print "</tr>\n";
+        print "</form>\n";
+      }
+      else
+      {
+        print "<tr><td>$vcSiteName</td></tr>\n";
+      }
+    }
+  }
+  else
+  {
+    if($QueryData[0] == 0)
+    {
+      printPg("No Records","note");
     }
     else
     {
-      print "<tr><td>$vcSiteName</td></tr>\n";
+      $strMsg = Array2String($QueryData[1]);
+      error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg($ErrMsg,"error");
     }
-	}
+  }
+
 	print "</table>\n";
   print "<form method=\"POST\">\n";
   print "<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\">\n";
@@ -148,22 +170,38 @@
   print "<td>\n";
   print "</td>\n";
   print "<td valign=\"top\">\n";
-  if (isset($_POST['iSiteID']) and $btnSubmit == 'Edit')
+  if(isset($_POST["iSiteID"]) and $btnSubmit == "Edit")
   {
-    $iSiteID = $_POST['iSiteID'];
+    $iSiteID = $_POST["iSiteID"];
     $strQuery = "select iSiteID, vcSiteName, vcSiteURL, vcImgPath from tblReviewSiteURL where iSiteID = $iSiteID;";
-    if (!$Result = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
+      foreach($QueryData[1] as $Row)
+      {
+        $strSiteName = $Row["vcSiteName"];
+        $strSiteURL = $Row["vcSiteURL"];
+        $strLogoURL = $Row["vcImgPath"];
+        $strBtnLabel = "Save";
+      }
     }
-    $Row = $Result->fetch_assoc();
-    $strSiteName = $Row['vcSiteName'];
-    $strSiteURL = $Row['vcSiteURL'];
-    $strLogoURL = $Row['vcImgPath'];
-    $strBtnLabel = "Save";
+    else
+    {
+      if($QueryData[0] == 0)
+      {
+        $strSiteName = "";
+        $iSiteID = "";
+        $strSiteURL = "";
+        $strLogoURL ="";
+        $strBtnLabel = "Insert";
+      }
+      else
+      {
+        $strMsg = Array2String($QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg($ErrMsg,"error");
+      }
+    }
   }
   else
   {
@@ -185,7 +223,7 @@
 	print "<input type=\"text\" name=\"txtLogoURL\" size=\"47\" value=\"$strLogoURL\"><br>\n";
 	print "<div align=\"center\"><input type=\"Submit\" value=\"$strBtnLabel\" name=\"btnSubmit\"></div>\n";
 	print "</form>\n";
-  if (isset($_POST['iSiteID']))
+  if(isset($_POST["iSiteID"]))
   {
     print "<form method=\"POST\">\n";
     print "<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\">\n";

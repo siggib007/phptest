@@ -83,7 +83,7 @@
     }
     else
     {
-      $strMsg = implode(";",$QueryData[1]);
+      $strMsg = Array2String($QueryData[1]);
       error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
       ShowErrHead();
     }
@@ -187,7 +187,7 @@
       }
       else
       {
-        $strMsg = implode(";",$QueryData[1]);
+        $strMsg = Array2String($QueryData[1]);
         error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
         ShowErrHead();
       }
@@ -269,7 +269,7 @@
   {
     if($MetaResult[0] < 0)
     {
-      $strMsg = implode(";",$MetaResult[1]);
+      $strMsg = Array2String($MetaResult[1]);
       error_log("Query of $strQuery did not return data. Rowcount: $MetaResult[0] Msg:$strMsg");
       ShowErrHead();
     }
@@ -441,7 +441,7 @@
     {
       if($QueryData[0] < 0)
       {
-        $strMsg = implode(";",$QueryData[1]);
+        $strMsg = Array2String($QueryData[1]);
         error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
         printPg("$ErrMsg","error");
         exit(2);
@@ -497,7 +497,7 @@
       {
         if($QueryData[0] < 0)
         {
-          $strMsg = implode(";",$QueryData[1]);
+          $strMsg = Array2String($QueryData[1]);
           error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
           printPg("$ErrMsg","error");
           exit(2);
@@ -542,7 +542,7 @@
       {
         if($QueryData[0] < 0)
         {
-          $strMsg = implode(";",$QueryData[1]);
+          $strMsg = Array2String($QueryData[1]);
           error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
           printPg("$ErrMsg","error");
           exit(2);

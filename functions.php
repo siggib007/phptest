@@ -86,6 +86,18 @@ function printNote($strMsg)
   print "<p class=\"BlueNote\">$strMsg</p>\n";
 }
 
+function Array2String($input)
+{
+  if(is_array($input))
+  {
+    $strMsg = Array2String($input);
+  }
+  else 
+  {
+    $strMsg = $input;
+  }
+  return $strMsg;
+}
 
 function QuerySQL($strQuery)
 {
@@ -141,7 +153,7 @@ function GetSQLValue($strQuery)
     }
     else 
     {
-      $strMsg = implode(";",$QueryData[1]);
+      $strMsg = Array2String($QueryData[1]);
       error_log("GetSQL Expected one row, that's not what I got. $strQuery Rowcount: $QueryData[0] Msg:$strMsg");
       return -15;
     }

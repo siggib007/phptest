@@ -527,6 +527,23 @@ table.ClassListing
     margin-right:auto;
 }
 
+th.OutlineCenter
+{
+  margin: auto;
+  border-style: ridge;
+  border-width: thin;
+  border-collapse: collapse;
+  background-color: darkgrey;
+  padding: 10px;
+}
+table.OutlineCenter, td.OutlineCenter
+{
+  margin: auto;
+  border-style: ridge;
+  border-width: thin;
+  border-collapse: collapse;
+  padding: 10px;
+}
 .center
 {
     margin-left: auto;

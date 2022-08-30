@@ -29,7 +29,7 @@
     }
     else
     {
-      $strMsg = implode(";",$QueryData[1]);
+      $strMsg = Array2String($QueryData[1]);
       error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
       printPg($ErrMsg,"error");
     }
