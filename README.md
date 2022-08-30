@@ -1,17 +1,18 @@
 # phptest
 ## PHP Demo Overview and history
-This started out because I wanted something quick and simple to verify that all the components where in place to make a PHP site driven by MySQL/MariaDB database. Then this grew into a demo site to test various functions and features as well as base code for a fully functioning PHP site, except it is lacking all meaningful functionality as it is just a base to be built upon. It does however have all the base authentication, registration, setup and administration functionality. I plan to add more base features as I think of them and have time to implement them. Documentation of all the features is forthcoming.
+This started out because I wanted something quick and simple to verify that all the components where in place to make a PHP site driven by MySQL/MariaDB database. Then this grew into a demo site to test various functions and features as well as base code for a fully functioning PHP site. Except it is lacking all meaningful functionality as it is just a base to be built upon. It does however have all the base authentication, registration, setup and administration functionality. I plan to add more base features as I think of them and have time to implement them. Documentation of all the features is forthcoming.
 
-One thing kind of unique, or weird depending on your point of view, about this site is that there isn't a single <script> element anywhere. This entire site was create without any javascript. This was done on purpose, mostly just to demonstrate that it is possible to create a fully functional and interesting site without any javascript. This is entire pure PHP, HTML and CSS. Yes the CSS needs a lot of work but that is a seperate project that maybe I will solict help from a CSS guru at some point, not something I am worried about right now. 
+One thing kind of unique, or weird depending on your point of view, about this site is that there isn't a single <script> element anywhere. This entire site was create without any JavaScript. This was done on purpose, mostly just to demonstrate that it is possible to create a fully functional and interesting site without any JavaScript. This is entirely pure PHP, HTML and CSS. Yes the CSS needs a lot of work but that is a separate project that maybe I will solicit help from a CSS guru at some point, not something I am worried about right now. 
 
 Another thing is that this was written completely from scratch, there are no frameworks used in this and only two modules that are not inherent in native PHP. So my SBOM is very simple.
 - PHPMailer for handling sending of emails
 - RobThree2FA for TOTP authentication. 
-Everything else was written from scratch by me. Any external service used such as Twilio or Doppler are accessed via REST API using built in curl functions.
+
+Everything else was written from scratch by me. Any external service used, such as Twilio or Doppler are accessed via REST API using built in curl functions.
 
 There are few environment variables needed for both the SQL server and the PHP part. I've tested this with environment variables as well as using Doppler Secrets management (see https://infosechelp.net/secrets-management/ for more info on them) as well as a secret management system from AKEYLESS systems (https://infosechelp.net/secrets-management-a-key-less-edition for more info on them). See ExtVars.php for more details on environment variables required.
 
-One thing to note, I'm not a front end designer. While I would never claim to even be a developer of any kind I'm much more of a backend dev than anything else. I am very utilitarian by nature so this site is very functional and utilitarian, however it will never win any awards or even compliments for aesthetics or anything along those lines. As I said before the CSS and other aspects could use a lot of work, but that is not a focus at this point. Reach out if you want to help with that. 
+As I alluded to above, I'm not a front end designer. While I would never claim to even be a developer of any kind, I'm way more of a backend dev than anything else. I am very utilitarian by nature so this site is very functional and utilitarian. I'm completely focused on functionality, and very little on looks. So I expect it will never win any awards or even compliments for aesthetics or anything along those lines. As I said before the CSS and other aspects could use a lot of work, but that is not a focus at this point. Reach out if you want to show off your CSS skills and help with that. 
 
 If you are deploying this anywhere other than your laptop for testing purposes I strongly recommend you delete EmailTest.php from the server. If an unauthorized person where to gain access to this site they could start sending emails in your name and bypassing DMARC/SPF. 
 
@@ -24,7 +25,7 @@ Run the following commands from your terminal. FYI I'm doing this on a Windows 1
 1. git clone https://github.com/siggib007/phptest.git phpdemo
 2. cd phpdemo
 2. doppler import
-3. Adjust the secrets as necessary for your environment, the doppler key is a service key you generate on the access tab inside the appropriate config. 
+3. Adjust the secrets, either via the cli or via the website, as necessary for your environment, the doppler key is a service key you generate on the access tab inside the appropriate config. 
 4. In ExtVars.php make sure line 34 and 35, matches what you are using for project and config in Doppler. The Template uses phpdemo, while the code might be uses phpdev depending on what I was using for my testing when I last checked the code in. Also adjust next line accordingly
 5. doppler setup -c dev -p phpdemo
 6. doppler run -- docker-compose up -d

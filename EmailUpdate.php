@@ -33,7 +33,7 @@
     {
       $strMsg = implode(";",$QueryData[1]);
       error_log("Query of $strQuery failed to return data. Rowcount: $QueryData[0] Msg:$strMsg");
-      printPg("Error occured fetching admin menu from DB","error");
+      printPg($ErrMsg,"error");
     }
     else 
     {

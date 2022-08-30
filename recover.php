@@ -1,6 +1,14 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+
+  Page to help reset lost password. Required by LoginIncl.php
+  */
+
   $PostVarCount = count($_POST);
-  if ($PostVarCount == 0 )
+  if($PostVarCount == 0 )
   {
     header("Location: index.php" );
   }
@@ -11,65 +19,66 @@
 
   $RecoverAck = $TextArray["RecoverAck"];
 
-  print "Recovering the password for $strEmail<br>\n";
-  if ($strEmail)
+  if($strEmail)
   {
+    printPg("Recovering the password for $strEmail","normal");
     $strQuery = "select * from tblUsers where vcEmail = '$strEmail'";
-    if (!$Result = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      exit(2);
-    }
-    $Row = $Result->fetch_assoc();
-    if ($Row['vcEmail']!=$strEmail)
-    {
-      print $RecoverAck;
+      foreach($QueryData[1] as $Row)
+      {
+        $iUserID = $Row['iUserID'];
+        $strUID =  $Row['vcUID'];
+        $strName =  $Row['vcName'];
+      }
     }
     else
     {
-      $iUserID = $Row['iUserID'];
-      $strUID =  $Row['vcUID'];
-      $strName =  $Row['vcName'];
-      if ($PWDLength%2>0)
+      if($QueryData[0] < 0)
       {
-        $PWDLength = $PWDLength + 1;
+        $strMsg = implode(";",$QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg($ErrMsg,"error");
       }
+    }
 
-      $Password = bin2hex(random_bytes($PWDLength/2));
-      $PWD = password_hash($Password, PASSWORD_DEFAULT);
-      $strQuery = "update tblUsers set vcPWD = '$PWD', bChangePWD=1  where iUserID='$iUserID'";
-      $bUpdate = UpdateSQL ($strQuery,"update");
-      if ($bUpdate)
+    if($PWDLength%2>0)
+    {
+      $PWDLength = $PWDLength + 1;
+    }
+
+    $Password = bin2hex(random_bytes($PWDLength/2));
+    $PWD = password_hash($Password, PASSWORD_DEFAULT);
+    $strQuery = "update tblUsers set vcPWD = '$PWD', bChangePWD=1  where iUserID='$iUserID'";
+    $bUpdate = UpdateSQL($strQuery,"update");
+    if($bUpdate)
+    {
+      $StrMsg = "Per your request login for our site is {$Row['vcUID']} and the new password is $Password";
+      if($OSEnv == "win")
       {
-        $StrMsg = "Per your request login for our site is {$Row['vcUID']} and the new password is $Password";
-//				print "Email body: $StrMsg<br>\n";
-        if ($OSEnv == "win")
-        {
-          $toEmail = "$strEmail";
-          $fromEmail = "From:$eFromAddr";
-        }
-        else
-        {
-          $toEmail = "\"$strName\" <$strEmail>";
-          $fromEmail = "From:$eFromName <$eFromAddr>";
-        }
-
-        if(EmailText($toEmail,"Your Password request",$StrMsg,$fromEmail))
-        {
-          print "<p class=\"MainText\">$RecoverAck</p>\n";
-        }
+        $toEmail = "$strEmail";
+        $fromEmail = "From:$eFromAddr";
       }
       else
       {
-        print "<p class=\"Error\">There was an unknown error when attempting to email your password. " .
-              "Please let us know at $SupportEmail</p>\n";
+        $toEmail = "\"$strName\" <$strEmail>";
+        $fromEmail = "From:$eFromName <$eFromAddr>";
       }
+
+      if(EmailText($toEmail,"Your Password request",$StrMsg,$fromEmail))
+      {
+        printPg($RecoverAck,"normal");
+      }
+    }
+    else
+    {
+      printPg("There was an unknown error when attempting to email your password. Please let us know at $SupportEmail","error");
     }
   }
   else
   {
-    print "email is required to look up your password.";
+    printPg("Email is required to look up your password.","error");
   }
 
   require("footer.php");

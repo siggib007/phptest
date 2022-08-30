@@ -71,7 +71,7 @@
   else
   {
     error_log("Rowcount: $QueryData[0] Msg:$QueryData[1]");
-    printPg("Error occured fetching admin menu from DB","error");
+    printPg($ErrMsg,"error");
   }
 
   print "</td>\n";

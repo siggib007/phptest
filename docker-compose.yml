@@ -12,16 +12,12 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_DB
-      - KEYLESSID
-      - KEYLESSKEY
-      - KEYLESSUID
       - EMAILPORT
       - EMAILPWD
       - EMAILSERVER
       - EMAILUSER
       - USESSL
       - USESTARTTLS
-      - XDEBUG_CONFIG
       - DOPPLERKEY
       - DEVENV
   mysql:
