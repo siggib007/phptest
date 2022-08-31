@@ -156,8 +156,7 @@
         $QueryAdd = "(select max(dtTimeStamp) from tblContent where iMenuID = '$iPageID')";
         $RevTime = "";
       }
-      print "<table class=\"MainText\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
-      print "<tr valign=\"top\">\n<td>\n";
+      print "<div class=CenterBoxLarge>\n";
       print "<form method=\"POST\">\n";
       print "<input type=\"hidden\" name=\"PageID\" size=\"5\" value=\"$iPageID\">";
       print "<span class=\"lbl\">Change to revision from:</span>\n";
@@ -181,23 +180,17 @@
       }
       else
       {
-        if($QueryData[0] == 0)
-        {
-          printPg("No Records","note");
-        }
-        else
+        if($QueryData[0] < 0)
         {
           $strMsg = Array2String($QueryData[1]);
           error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
           printPg($ErrMsg,"error");
         }
       }
-
       print "</select>\n";
       print "<input type=\"Submit\" value=\"Change\" name=\"btnSubmit\" >";
       print "</form>\n";
-      print "</td>\n</tr>\n";
-      print "</table>\n";
+      
       $strQuery = "SELECT * FROM tblContent WHERE iMenuID = '$iPageID' and dtTimeStamp = $QueryAdd;";
 
       $QueryData = QuerySQL($strQuery);
@@ -205,7 +198,7 @@
       {
         foreach($QueryData[1] as $Row)
         {
-          $PageHeader=$Row['vcPageHeader'];
+          $PageHeader = $Row['vcPageHeader'];
           $PageText = $Row['tPageText'];
           $bCRLF = $Row['bLineBreak'];
         }
@@ -214,7 +207,9 @@
       {
         if($QueryData[0] == 0)
         {
-          printPg("No Records","note");
+          $PageHeader = "";
+          $PageText = "";
+          $bCRLF = 0;
         }
         else
         {
@@ -224,13 +219,13 @@
         }
       }
 
-      $strQuery = "SELECT iSubOfMenu FROM tblmenutype WHERE iMenuID = '$iPageID';";
-      $iSubPageID = GetSQLValue($strQuery);
       print "<form method=\"POST\">\n";
       print "<input type=\"hidden\" name=\"PageID\" size=\"5\" value=\"$iPageID\">";
     }
     else
     {
+      $bCRLF = 0;
+      print "<div class=CenterBoxLarge>\n";
       print "<form method=\"POST\">\n";
       print "<input type=\"hidden\" name=\"cmbType\" size=\"5\" value=\"$PageType\">";
       print "<span class=\"lbl\">Page Name:</span>\n";
@@ -242,39 +237,6 @@
     }
     print "<span class=\"lbl\">Page Header:</span>\n";
     print "<input type=\"text\" name=\"txtHeader\" size=\"50\" value=\"$PageHeader\">\n";
-    print "<span class=\"lbl\">Sub Page of:</span>\n";
-    print "<select size=\"1\" name=\"cmbSubPage\">\n";
-    print "<option value=\"0\">Not a sub page</option>\n";
-    $strQuery   = "SELECT iMenuID, vcTitle FROM tblmenu WHERE bCont = '1' AND bdel = '1' AND iMenuID <> $iPageID;";
-    $QueryData = QuerySQL($strQuery);
-    if($QueryData[0] > 0)
-    {
-      foreach($QueryData[1] as $Row)
-      {
-        if($Row['iMenuID'] == $iSubPageID)
-        {
-          print "<option selected value=\"{$Row['iMenuID']}\">{$Row['vcTitle']}</option>\n";
-        }
-        else
-        {
-          print "<option value=\"{$Row['iMenuID']}\">{$Row['vcTitle']}</option>\n";
-        }
-      }
-    }
-    else
-    {
-      if($QueryData[0] == 0)
-      {
-        printPg("No Records","note");
-      }
-      else
-      {
-        $strMsg = Array2String($QueryData[1]);
-        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
-        printPg($ErrMsg,"error");
-      }
-    }
-    print "</select>\n";
     print "<span class=\"lbl\">Maintain Linebreaks:</span>\n";
     if($bCRLF==0)
     {
@@ -285,10 +247,10 @@
       print "<input type=\"checkbox\" name=\"chkCR\" checked>\n";
     }
     print "<div class=\"lbl\">Page Body:</div>\n";
-    print "<textarea name=\"txtBody\" rows=\"20\" cols=\"120\">$PageText </textarea>\n<br>\n";
-    print "<script>CKEDITOR.replace( 'txtBody' );</script>\n";
-    print "<input type=\"Submit\" value=\"Save\" name=\"btnSubmit\">";
+    print "<textarea name=\"txtBody\" class=LargeArea>$PageText </textarea>\n<br>\n";
+    print "<div class=\"Submit\"><input type=\"Submit\" value=\"Save\" name=\"btnSubmit\"></div>";
     print "</form>\n";
+    print "</div>\n";
     print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   }
 

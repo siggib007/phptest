@@ -940,7 +940,7 @@ function FileUpload($arrFiles,$DocRoot)
       {
         if(move_uploaded_file($tmpFile, $newPath))
         {
-          $arrMsg[] = "<div class=\"MainText\">File $DocBaseName uploaded successfully<br></div>";
+          $arrMsg[] = "<div class=\"MainTextCenter\">File $DocBaseName uploaded successfully<br></div>";
           $FileList .= "$DocBaseName, Size: $SizeUnit<br>\n";
           $SizeTotal += $Size;
           $arrFilesList[] = $newPath;
@@ -977,7 +977,7 @@ function FileUpload($arrFiles,$DocRoot)
     {
       if(move_uploaded_file($tmpFile, $newPath))
       {
-        $arrMsg[] = "<div class=\"MainText\">File $DocBaseName uploaded successfully<br></div>";
+        $arrMsg[] = "<div class=\"MainTextCenter\">File $DocBaseName uploaded successfully<br></div>";
         $FileList .= "$DocBaseName, Size: $SizeUnit<br>\n";
         $arrFilesList[] = $newPath;
         $SizeTotal += $Size;
