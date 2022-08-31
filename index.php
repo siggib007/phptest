@@ -4,7 +4,7 @@
   Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
-  Main Landing page
+  Dynamic Text page
   
   */
 
@@ -46,26 +46,6 @@
     $PageText = str_replace("\n\n","\n</p>\n<p class=MainText>\n",$PageText);
 
     printPg("$PageText");
-  }
-  printPg("This is an alert","alert");
-  printPg("This is an error","error");
-  printPg("This is a blue note","note");
-  printPg("This normal centered","center");
-  printPg("This normal text","normal");
-  printPg("This default normal");
-  $strQuery = "SELECT iMenuOrder FROM tblmenutype WHERE iMenuID = 11;";
-  $QueryData = QuerySQL($strQuery);
-  $arrTmp = array_values($QueryData[1][0]);
-  $itmp = $arrTmp[0];
-  $itmp--;
-  printPg($itmp,"note");
-  if(strtolower($DevEnvironment) != "true")
-  {
-    printPg("This is not a dev Env","note");
-  }
-  else 
-  {
-    printPg("Welcome to your Dev Env","note");
   }
 
   require("footer.php");

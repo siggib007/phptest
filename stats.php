@@ -81,10 +81,10 @@
 		$iStatID = intval(trim($_POST['txtStatID']));
 		$strQuery =  "SELECT vcStatName FROM tblstats where iStatID=$iStatID;";
     $strStatName = GetSQLValue($strQuery);
-		printPg("Are you sure you wish to delete statistic with the label \"$strStatName\"? </p>\n" .
+		printPg("Are you sure you wish to delete statistic with the label \"$strStatName\"? <br>" .
 		        "Just leave this page anyway you please if you do not want to delete it.","alert");
 		print "<form method=\"POST\">\n";
-		print "<p><input type=\"Submit\" value=\"Yes I am sure!\" name=\"btnSubmit\"></p>";
+		print "<p class=MainTextCenter><input type=\"Submit\" value=\"Yes I am sure!\" name=\"btnSubmit\"></p>";
 		print "<input type=\"hidden\" value=\"$iStatID\" name=\"txtStatID\"></form>\n</center>\n";
 	}
 

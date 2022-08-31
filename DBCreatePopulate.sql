@@ -279,6 +279,7 @@ CREATE TABLE IF NOT EXISTS `tblAdminCategories` (
 -- Dumping data for table tblAdminCategories: ~5 rows (approximately)
 INSERT INTO `tblAdminCategories` (`iCatID`, `vcCatName`) VALUES
 	(0, 'Not Admin'),
+  (1, 'Misc'), 
 	(3, 'Site Configuration'),
 	(4, 'Users'),
 	(5, 'Reference'),

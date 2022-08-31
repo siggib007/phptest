@@ -88,15 +88,7 @@ function printNote($strMsg)
 
 function Array2String($input)
 {
-  if(is_array($input))
-  {
-    $strMsg = Array2String($input);
-  }
-  else 
-  {
-    $strMsg = $input;
-  }
-  return $strMsg;
+  return json_encode($input);
 }
 
 function QuerySQL($strQuery)
@@ -118,7 +110,7 @@ function QuerySQL($strQuery)
     $errMsg = "Fatal error #$eCode when executing the query on line $eLine in $eFile. ";
     error_log($errMsg. $e->getMessage());
     error_log($strQuery);
-    $errMsg = "Fatal error when executing the query";
+    $errMsg = "Fatal error when executing the query. " . $e->getMessage();
     return [-1,$errMsg];
   }
   if(!$Result)

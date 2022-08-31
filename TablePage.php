@@ -1,25 +1,41 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+  
+  Dynamic Table Page
+  */
+
 	require("header.php");
 	
 	$strQuery = "SELECT * FROM tblPageTable WHERE iMenuID = '$iMenuID'";
-	if (!$Result = $dbh->query ($strQuery))
-	{
-		error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-		error_log ($strQuery);
-		exit(3);
-	}
-	$NumAffected = $Result->num_rows;
-	if ($NumAffected == 0)
-	{
-		print "<p class=\"Error\">Unknown Page ID $iMenuID</p>\n";
-		exit;
-	}		
-	$Row = $Result->fetch_assoc();
-	$PageHeader = $Row['vcPageHeader'];
-	$ColumnList = $Row['vcColumnList'];
-	$TableName  = $Row['vcTableName'];
-	$FilterStr  = $Row['vcFilterStr'];
-	$iLimit     = $Row['iLimit'];
+  $QueryData = QuerySQL($strQuery);
+  if($QueryData[0] > 0)
+  {
+    foreach($QueryData[1] as $Row)
+    {
+      $PageHeader = $Row['vcPageHeader'];
+      $ColumnList = $Row['vcColumnList'];
+      $TableName  = $Row['vcTableName'];
+      $FilterStr  = $Row['vcFilterStr'];
+      $iLimit     = $Row['iLimit'];
+    }
+  }
+  else
+  {
+    if($QueryData[0] == 0)
+    {
+      print "<p class=\"Error\">Unknown Page ID $iMenuID</p>\n";
+      exit;
+    }
+    else
+    {
+      $strMsg = Array2String($QueryData[1]);
+      error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+      printPg($ErrMsg,"error");
+    }
+  }
 	
 	$strQuery = "SELECT $ColumnList FROM $TableName ";
 	if ($FilterStr != "")
@@ -30,39 +46,46 @@
 	
 	print "<p class=Header1>$PageHeader</p>";
 
-	print "<center>\n<table>\n<tr>\n";
-	if (!$Result = $dbh->query ($strQuery))
-	{
-		$strError  = 'Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error . "<br>\n";
-		$strError .= "$strQuery<br>\n";
-		print $strError;
-		exit(3);
-	}
-	$Row = $Result->fetch_assoc();
-	$RowKeys = array_keys($Row);
-	foreach ($RowKeys as $key)
-	{
-		print "<th>$key</th>\n";
-	}
-	print "</tr>\n<tr>";
-	$RowValues = array_values($Row);
-	foreach ($RowValues as $value)
-	{
-		print "<td>$value</td>";
-	}
-	print "</tr>\n";
-	
-	while ($Row = $Result->fetch_assoc())
-	{
-		print "<tr>";
-		foreach($Row as $key => $value)
-		{
-			print "<td>$value</td>";
-		}
-		print "</tr>\n";
-	}
-	print "</table>\n</center>\n";
-	$Result->free();
+  $QueryData = QuerySQL($strQuery);
+  if($QueryData[0] > 0)
+  {
+    print "<table class=OutlineCenter>\n<tr>\n";
+    $RowKeys = array_keys($QueryData[1][0]);
+    foreach ($RowKeys as $key)
+    {
+      print "<th class=OutlineCenter>$key</th>\n";
+    }
+    print "</tr>\n<tr>";
+    foreach($QueryData[1] as $Row)
+    {
+      print "<tr class=OutlineCenter>";
+      foreach($Row as $key => $value)
+      {
+        print "<td class=OutlineCenter>$value</td>";
+      }
+      print "</tr>\n";
+    }
+    print "</table>\n</center>\n";
+  }
+  else
+  {
+    if($QueryData[0] == 0)
+    {
+      printPg("$TableName has no Records","note");
+    }
+    else
+    {
+      if (is_string($QueryData[1]))
+      {
+        $strMsg = $QueryData[1];
+      }
+      else 
+      {
+        $strMsg = Array2String($QueryData[1]);
+      }
+      printPg($strMsg,"error");
+    }
+  }
 	
 	require("footer.php");
 ?>

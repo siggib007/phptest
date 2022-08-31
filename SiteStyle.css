@@ -536,6 +536,7 @@ th.OutlineCenter
   background-color: darkgrey;
   padding: 10px;
 }
+
 table.OutlineCenter, td.OutlineCenter
 {
   margin: auto;
@@ -544,6 +545,12 @@ table.OutlineCenter, td.OutlineCenter
   border-collapse: collapse;
   padding: 10px;
 }
+
+tr.OutlineCenter:nth-child(even)
+{
+  background-color: beige;
+}
+
 .center
 {
     margin-left: auto;

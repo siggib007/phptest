@@ -54,7 +54,7 @@
         break;
     case 2:
         $Templatefile = $TableTemplateFile;
-        $AdminPage = 1;
+        $AdminPage = 7;
         $PrivLevel = 300;
         break;
   }
@@ -63,7 +63,7 @@
 
   if(($btnSubmit == 'Create New') and ($PageType == 2) or (($btnSubmit == 'Edit') and ($PageType == 2)))
   {
-    print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
+    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
     print "<form method=\"POST\">\n";
     if($iPageID > 0)
     {
@@ -138,7 +138,7 @@
       or ($btnSubmit == 'Change')
       )
   {
-    print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
+    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
     $PageHeader="";
     $PageText = "";
 
@@ -289,12 +289,11 @@
     print "<script>CKEDITOR.replace( 'txtBody' );</script>\n";
     print "<input type=\"Submit\" value=\"Save\" name=\"btnSubmit\">";
     print "</form>\n";
-    print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
+    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   }
 
   if($btnSubmit == 'Save')
   {
-    $iSubPage = intval(substr(trim($_POST['cmbSubPage']),0,49));
     if(isset($_POST['txtFile']))
     {
       $FileName = CleanReg(substr(trim($_POST['txtFile']),0,49));
@@ -309,13 +308,14 @@
       if(file_exists($FileName))
       {
         printPg("The filename you specified already exists, please choose another","error");
+        exit(3);
       }
       else
       {
         if(copy($Templatefile, $FileName))
         {
-          $strQuery = "INSERT INTO tblmenu (vcTitle, vcLink, iReadPriv, iWritePriv, vcHeader, bAdmin, bCont, bdel)"
-                    . "VALUES ('$MenuTitle', '$FileName', '$PrivLevel', '$PrivLevel', '$PageName', '$AdminPage', '$PageType', '1');";
+          $strQuery = "INSERT INTO tblmenu (vcTitle, vcLink, iReadPriv, iWritePriv, vcHeader, bAdmin, bCont, bdel, bSecure)"
+                    . "VALUES ('$MenuTitle', '$FileName', '$PrivLevel', '$PrivLevel', '$PageName', '$AdminPage', '$PageType', '1', '0');";
           if(UpdateSQL($strQuery,"insert"))
           {
             $strQuery = "SELECT iMenuID FROM tblmenu WHERE vcLink = '$FileName' LIMIT 1;";
@@ -328,10 +328,14 @@
               if($iPageID > 0)
               {
                 $strQuery = "INSERT INTO tblmenutype (iMenuID, vcMenuType, iMenuOrder, iSubOfMenu)" .
-                            " VALUES ('$iPageID', 'head', '$iMaxHead', '$iSubPage');";
+                            " VALUES ('$iPageID', 'head', '$iMaxHead', 0);";
                 UpdateSQL($strQuery,"insert");
               }
             }
+          }
+          else 
+          {
+            exit(1);
           }
         }
         else
@@ -362,8 +366,6 @@
       switch($PageType)
       {
         case 1:
-          $strQuery = "UPDATE tblmenutype SET iSubOfMenu = '$iSubPage' WHERE iMenuID = '$iPageID';";
-          UpdateSQL($strQuery, "update");
           if(isset($_POST['txtBody']))
           {
             $strBody = CleanSQLInput(trim($_POST['txtBody']));
@@ -434,12 +436,13 @@
           break;
       }
       UpdateSQL($strQuery,"insert");
+      printPg("Page Created or updated Successfully","note");
     }
     else
     {
       printPg("Unable to save due to missing PageID","error");
     }
-    print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
+    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   }
 
   if($btnSubmit == 'Delete')
@@ -450,7 +453,6 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        $Row = $Result->fetch_assoc();
         $FileName = $Row['vcLink'];
         $PageTitle = $Row['vcTitle'];
         $PageHeader = $Row['vcHeader'];
@@ -471,15 +473,14 @@
     }
 
     printPg("Are you sure you want to delete $PageTitle $PageHeader "
-        . "and the associated file $FileName. This action is irreversible.","note");
+        . "and the associated file $FileName. This action is irreversible.","alert");
     print "<center>\n<form method=\"POST\">\n";
     print "<input type=\"Submit\" value=\"Yes I am very sure\" name=\"btnSubmit\">";
     print "<input type=\"hidden\" value=\"$iPageID\" name=\"PageID\">\n";
     print "<input type=\"hidden\" value=\"$FileName\" name=\"FileName\">\n";
     print "</form>\n";
 
-    print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\">\n"
-                    . "</form>\n</center>\n";
+    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";  
   }
 
   if($btnSubmit == 'Yes I am very sure')
@@ -494,12 +495,14 @@
       $strQuery = "DELETE FROM tblmenutype WHERE iMenuID = '$iPageID';";
       UpdateSQL($strQuery,"Delete");
       $strQuery = "DELETE FROM tblContent WHERE iMenuID = '$iPageID';";
-      UpdateSQL($strQuery,"Delete");        }
+      UpdateSQL($strQuery,"Delete");
+      $strQuery = "DELETE FROM tblPageTable WHERE iMenuID = '$iPageID';";     
+    }
     else
     {
       printPg("Failed to deleted $FileName","error");
     }
-    print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
+    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   }
 
   if(($PostVarCount == 0) or ($btnSubmit == 'Go Back'))
