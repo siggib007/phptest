@@ -1,4 +1,12 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+
+  File with all the user specific variables, inserted into users pages
+  */
+
   $strQuery = "select * from tblUsers where iUserID = $strUserID;";
   $QueryData = QuerySQL($strQuery);
 
@@ -48,20 +56,20 @@
   $QueryData = QuerySQL($strQuery);
   $arrValues = $QueryData[1];
 
-  foreach ($arrTypes as $Types)
+  foreach($arrTypes as $Types)
   {
     $bFound = False;
-    foreach ($arrValues as $Values)
+    foreach($arrValues as $Values)
     {
-      if ($Types["iID"] == $Values["iTypeID"])
+      if($Types["iID"] == $Values["iTypeID"])
       {
         $bFound = True;
       }
     }
-    if (!$bFound)
+    if(!$bFound)
     {
       $strQuery = "INSERT INTO tblUsrPrefValues (iTypeID, iUserID) VALUES ($Types[iID],$iUserID );";
-      UpdateSQL ($strQuery, "insert");
+      UpdateSQL($strQuery, "insert");
     }
   }
 ?>

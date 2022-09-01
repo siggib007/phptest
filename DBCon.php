@@ -210,7 +210,6 @@
       printPg($ErrMsg,"error");
     }
   }
-  //Log_Array($ConfArray,"Dumping ConfArray");
   $FromEmail = "From:$eFromName <$eFromAddr>";
   if(!isset($_SESSION))
   {

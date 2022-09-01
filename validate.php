@@ -1,6 +1,12 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+  */
+
 	$PostVarCount = count($_POST);
-	if ($PostVarCount == 0 )
+	if($PostVarCount == 0 )
 	{
 		header("Location: index.php" );
 	}	
@@ -23,14 +29,14 @@
 
 	$strReason = "";
 	$strURLRegx = "#(http://)|(a href)#i";
-	if ($strHost != $strRefServer)
+	if($strHost != $strRefServer)
 	{
 		$bSpam = "Yes";
 		$strReason .= "\n<br>Bad reference";
 		$arrReason["Ref"]["Spam"]="Bad reference. Posting server isn't this server, denied!";
 		$strContent = "";
 	}
-	if (preg_match($strURLRegx,$strName))
+	if(preg_match($strURLRegx,$strName))
 	{
 		$bSpam = "Yes";
 		$strReason .= "\n<br>URL in Name";
@@ -39,7 +45,7 @@
 		$arrReason["Name"]["Cont"]=$strName;
 		error_log("URL in Name: $strName");
 	}
-	if (preg_match($strURLRegx,$strEmail))
+	if(preg_match($strURLRegx,$strEmail))
 	{
 		$bSpam = "Yes";
 		$strReason .= "\n<br>URL in email";
@@ -47,7 +53,7 @@
 		$arrReason["email"]["Spam"]="URL in email";
 		$arrReason["email"]["Cont"]=$strEmail;
 	}
-	if (preg_match($strURLRegx,$strPhone))
+	if(preg_match($strURLRegx,$strPhone))
 	{
 		$bSpam = "Yes";
 		$strReason .= "\n<br>URL in phone";
@@ -55,7 +61,7 @@
 		$arrReason["phone"]["phone"]="URL in phone";
 		$arrReason["phone"]["Cont"]=$strPhone;
 	}
-	if (preg_match($strURLRegx,$strAddr1))
+	if(preg_match($strURLRegx,$strAddr1))
 	{
 		$bSpam = "Yes";
 		$strReason .= "\n<br>URL in Street 1";
@@ -63,7 +69,7 @@
 		$arrReason["Street1"]["Spam"]="URL in Street 1";
 		$arrReason["Street1"]["Cont"]=$strAddr1;
 	}
-	if (preg_match($strURLRegx,$strAddr2))
+	if(preg_match($strURLRegx,$strAddr2))
 	{
 		$bSpam = "Yes";
 		$strReason .= "\n<br>URL in Street 2";
@@ -72,7 +78,7 @@
 		$arrReason["Street2"]["Cont"]=$strAddr2;
 	}
 
-	if (preg_match($strURLRegx,$strCity))
+	if(preg_match($strURLRegx,$strCity))
 	{
 		$bSpam = "Yes";
 		$strReason .= "\n<br>URL in Cisty";
@@ -81,7 +87,7 @@
 		$arrReason["city"]["Cont"]=$strCity;
 	}
 	
-	if (preg_match($strURLRegx,$strZip))
+	if(preg_match($strURLRegx,$strZip))
 	{
 		$bSpam = "Yes";
 		$strReason .= "\n<br>URL in Zip";
@@ -89,7 +95,7 @@
 		$arrReason["zip"]["Spam"]="URL in Zip";
 		$arrReason["zip"]["Cont"]=$strZip;
 	}
-	if (preg_match($strURLRegx,$strPhone))
+	if(preg_match($strURLRegx,$strPhone))
 	{
 		$bSpam = "Yes";
 		$strReason .= "\n<br>URL in Phone";
@@ -98,35 +104,35 @@
 		$arrReason["zip"]["Cont"]=$strZip;
 	}
 	
-	if ($strState == "Please Select State")
+	if($strState == "Please Select State")
 	{
 		$bValid = "no";
 		$strReason = "You failed to select proper value for State.";	
 		$arrReason["State"]["invalid"]="You failed to select proper value for State.";
 		$arrReason["State"]["Cont"]=$strState;
 	}
-	if (!$strName)
+	if(!$strName)
 	{
 		$bValid = "no";
 		$strReason .= "\n<br>You failed to provide name.";
 		$arrReason["Name"]["invalid"]="Name is required";
 		$arrReason["Name"]["Cont"]=$strName;		
 	}
-	if (!$strEmail)
+	if(!$strEmail)
 	{
 		$bValid = "no";
 		$strReason .= "\n<br>You failed to provide email address.";
 		$arrReason["email"]["invalid"]="Email is required";
 		$arrReason["email"]["Cont"]=$strEmail;		
 	}
-	if (!$strAddr1)
+	if(!$strAddr1)
 	{
 		$bValid = "no";
 		$strReason .= "\n<br>You failed to provide Street.";
 		$arrReason["Street1"]["invalid"]="Address is required";
 		$arrReason["Street1"]["Cont"]=$strAddr1;		
 	}
-	if (!$strCity)
+	if(!$strCity)
 	{
 		$bValid = "no";
 		$strReason .= "\n<br>You failed to provide city.";
@@ -134,7 +140,7 @@
 		$arrReason["city"]["Cont"]=$strCity;		
 	}
 
-	if (!$strZip)
+	if(!$strZip)
 	{
 		$bValid = "no";
 		$strReason .= "\n<br>You failed to provide Zip.";
@@ -171,4 +177,4 @@
 	$strEmail = str_replace('"',"&quot;",$strEmail);
 	$_SESSION["POSTArray"] = $_POST;
 
-	?>
+?>

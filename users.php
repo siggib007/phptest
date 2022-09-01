@@ -1,15 +1,21 @@
 <?php
+  /*
+  Copyright © 2009,2015,2022  Siggi Bjarnason.
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
+  */
+
   $PostVarCount = count($_POST);
 
-  if (isset($_POST['btnSubmit']))
+  if(isset($_POST["btnSubmit"]))
   {
-    $btnSubmitValue = $_POST['btnSubmit'];
+    $btnSubmitValue = $_POST["btnSubmit"];
   }
   else
   {
     $btnSubmitValue = "";
   }
-  if ($btnSubmitValue == 'Export user to CSV file')
+  if($btnSubmitValue == "Export user to CSV file")
   {
     require_once("DBCon.php");
     $filename = "Example_Users_".date("Y-m-d_Hi",time()).".csv";
@@ -17,121 +23,145 @@
     header("Content-Disposition: attachment; filename=$filename");
     print "Name,Unit,Phone,Email,Addr1,Addr2,City,State,Zip,Country,AuthCode,UserType,UnitUse\n";
     $strQuery = "SELECT * FROM tblUsers;";
-    if (!$Result = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
+      foreach($QueryData[1] as $Row)
+      {
+        print "$Row[vcName],$Row[vcUnit],$Row[vcCell],$Row[vcEmail],$Row[vcAddr1],$Row[vcAddr2],$Row[vcCity],$Row[vcState],$Row[vcZip],$Row[vcCountry]\n";
+      }
     }
-    while ($Row = $Result->fetch_assoc())
+    else
     {
-      print "$Row[vcName],$Row[vcUnit],$Row[vcCell],$Row[vcEmail],$Row[vcAddr1],$Row[vcAddr2],$Row[vcCity],$Row[vcState],$Row[vcZip],$Row[vcCountry]\n";
+      if($QueryData[0] < 0)
+      {
+        $strMsg = Array2String($QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        print "$ErrMsg\n";
+      }
     }
     exit;
   }
-
 
   require("header.php");
 
-  if ($strReferer != $strPageURL and $PostVarCount > 0)
+  if($strReferer != $strPageURL and $PostVarCount > 0)
   {
-    print "<p class=\"Error\">Invalid operation, Bad Reference!!!</p> ";
+    printPg("Invalid operation, Bad Reference!!!","error");
     exit;
   }
 
-  print "<p class=\"Header1\">User Maintenance</p>\n";
+  printPg("User Maintenance","h1");
 
-  if ($btnSubmitValue == 'Go Back')
+  if($btnSubmitValue == "Go Back")
   {
-    // header("Location: $strPageURL");
     $PostVarCount = 0;
   }
 
-  if ($PostVarCount == 0)
+  if($PostVarCount == 0)
   {
+    print "<div class=\"Submit\">";
     print "<form method=\"POST\">\n";
     print "<input type=\"Submit\" value=\"Add New User\" name=\"btnSubmit\">\n";
     print "</form>\n";
-    print "<p class=\"Header3\">Lookup Existing user</p>\n";
+    print "</div>";
+    printPg("Lookup Existing user","h2");
+    print "<div class=\"Submit\">";
     print "<form method=\"POST\">";
-    print "<table>\n<tr>\n";
-    print "<td class=\"lbl\">Search by name:</td>\n<td><input type=\"text\" name=\"txtName\" size=\"25\">";
-    print "</td>\n</tr>";
-    print "<tr>\n<td colspan=2 align=\"center\"><input type=\"Submit\" value=\"Search\" name=\"btnSubmit\">";
-    print "</td>\n</tr>";
-    print "</table>\n</form>";
+    print "Search by name:<input type=\"text\" name=\"txtName\" size=\"25\">";
+    print "<input type=\"Submit\" value=\"Search\" name=\"btnSubmit\">";
+    print "</form>";
+    print "</div>";
+    print "<div class=\"Submit\">";
     print "<form method=\"POST\">\n";
     print "<input type=\"Submit\" value=\"Export user to CSV file\" name=\"btnSubmit\">\n";
     print "</form>\n";
+    print "</div>";
   }
 
-  if ($btnSubmitValue == 'Search')
+  if($btnSubmitValue == "Search")
   {
-    $strName = CleanReg(substr(trim($_POST['txtName']),0,49));
+    $strName = CleanReg(substr(trim($_POST["txtName"]),0,49));
     $strQuery = "select iUserID, vcName, vcEmail, vcMFASecret from tblUsers ";
     $strQuery .= "where vcName like '%$strName%' order by vcName;";
     $crit = "name contains $strName";
-    if (!$Result = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    $NumAffected = $Result->num_rows;
-    print "<table class=\"MainText\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
-    while ($Row = $Result->fetch_assoc())
-    {
-      print "<tr valign=\"top\">\n";
-      print "<td>$Row[vcName]</td>\n";
-      print "<td>$Row[vcEmail]</td>\n";
-      if ($Row["vcMFASecret"] == "")
+      print "<table class=\"MainText\" border=\"0\" cellPadding=\"4\" cellSpacing=\"0\">\n";
+      foreach($QueryData[1] as $Row)
       {
-        print "<td>No MFA</td>\n";
-        print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"View\" name=\"btnSubmit\">";
-        print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
+        print "<tr valign=\"top\">\n";
+        print "<td>$Row[vcName]</td>\n";
+        print "<td>$Row[vcEmail]</td>\n";
+        if($Row["vcMFASecret"] == "")
+        {
+          print "<td>No MFA</td>\n";
+          print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"View\" name=\"btnSubmit\">";
+          print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
+        }
+        else 
+        {
+          print "<td>MFA Enabled!!!</td>\n";
+          print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"View\" name=\"btnSubmit\">";
+          print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
+          print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"Reset MFA\" name=\"btnSubmit\">";
+          print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
+        }
+        print "</tr>\n";
       }
-      else 
-      {
-        print "<td>MFA Enabled!!!</td>\n";
-        print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"View\" name=\"btnSubmit\">";
-        print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
-        print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"Reset MFA\" name=\"btnSubmit\">";
-        print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
-      }
-
-      print "</tr>\n";
+      print "</table>\n";
     }
-    if ($NumAffected == 0)
+    else
     {
-      print "<tr><td>No registration found where $crit</td></tr>";
+      if($QueryData[0] == 0)
+      {
+        print "<tr><td>No registration found where $crit</td></tr>";
+      }
+      else
+      {
+        $strMsg = Array2String($QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg($ErrMsg,"error");
+      }
     }
-    print "</table>\n";
   }
 
-  if ($btnSubmitValue == 'View')
+  if($btnSubmitValue == "View")
   {
-    $strUserID = intval(substr(trim($_POST['UserID']),0,9));
-    $strQuery = "select * from tblUsers where iUserID = $strUserID;";
-    if (!$Result = $dbh->query ($strQuery))
-    {
-      error_log ('Failed to data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    $Row = $Result->fetch_assoc();
-    print "<p class=\"MainText\">\n";
+    $strUserID = intval(substr(trim($_POST["UserID"]),0,9));
+    print "<div class=\"SmallCenterBox\">\n";
     print "RegistrationID: $strUserID<br>\n";
-    print "{$Row['vcName']}<br>\n";
-    print "{$Row['vcAddr1']}<br>\n";
-    print "{$Row['vcAddr2']}<br>\n";
-    print "{$Row['vcCity']}, {$Row['vcState']} {$Row['vcZip']}<br>\n";
-    print "{$Row['vcCountry']}<br>\n";
-    print "{$Row['vcEmail']}<br>\n";
-    print "{$Row['vcCell']}<br>\n";
-    if ($Row["vcMFASecret"] == "")
+    $strQuery = "select * from tblUsers where iUserID = $strUserID;";
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
+    {
+      foreach($QueryData[1] as $Row)
+      {
+        print "{$Row['vcName']}<br>\n";
+        print "{$Row['vcAddr1']}<br>\n";
+        print "{$Row['vcAddr2']}<br>\n";
+        print "{$Row['vcCity']}, {$Row['vcState']} {$Row['vcZip']}<br>\n";
+        print "{$Row['vcCountry']}<br>\n";
+        print "{$Row['vcEmail']}<br>\n";
+        print "{$Row['vcCell']}<br>\n";
+      }
+    }
+    else
+    {
+      if($QueryData[0] == 0)
+      {
+        printPg("No Records","note");
+      }
+      else
+      {
+        $strMsg = Array2String($QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg($ErrMsg,"error");
+      }
+    }
+
+    if($Row["vcMFASecret"] == "")
     {
       print "No MFA<br>\n";
       $bMFA = false;
@@ -143,87 +173,94 @@
     }
 
     $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = {$Row['iPrivLevel']};";
-    if (!$PrivResult = $dbh->query ($strQuery))
+    $PrivName = GetSQLValue($strQuery);
+    if($PrivName == "")
     {
-      error_log ('Failed to data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    $PrivRow = $PrivResult->fetch_assoc();
-    $PrivName = $PrivRow['vcPrivName'];
-    if ($PrivName == '')
-    {
-      $PrivName = $Row['iPrivLevel'];
+      $PrivName = $Row["iPrivLevel"];
     }
 
     print "<p>Authorization level is set to $PrivName</p>\n";
 
-    if ($Row['dtLastLogin'])
+    if($Row["dtLastLogin"])
     {
-      $LastLogin = 'on ' . date('l F jS Y \a\t G:i',strtotime($Row['dtLastLogin']));
+      $LastLogin = "on " . date("l F jS Y \a\t G:i",strtotime($Row["dtLastLogin"]));
     }
     else
     {
-      $LastLogin = 'never';
+      $LastLogin = "never";
     }
     print "<p>Last logged in $LastLogin</p>\n";
-    if ($WritePriv <=  $Priv)
+    if($WritePriv <=  $Priv)
     {
-      print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";
-      print "<input type=\"Submit\" value=\"Delete Account\" name=\"btnSubmit\">";
-      if ($bMFA)
+      print "<form method=\"POST\">\n";
+      print "<div class=\"Submit\"><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\"></div>\n";
+      print "<div class=\"Submit\"><input type=\"Submit\" value=\"Delete Account\" name=\"btnSubmit\"></div>\n";
+      if($bMFA)
       {
         print "<input type=\"Submit\" value=\"Reset MFA\" name=\"btnSubmit\">";
       }
       print "<input type=\"hidden\" name=\"BeenSubmitted\" value=\"false\">\n";
       print "<input type=\"hidden\" value=\"$strUserID\" name=\"UserID\"></form>\n";
     }
+    print "</div>\n";
   }
 
-  if ($btnSubmitValue == 'Edit')
+  if($btnSubmitValue == "Edit")
   {
-    $strUserID = intval(substr(trim($_POST['UserID']),0,9));
+    $strUserID = intval(substr(trim($_POST["UserID"]),0,9));
     require("UserDBVar.php");
-    print "<p>RegistrationID: $strUserID";
+    printPg("RegistrationID: $strUserID","center");
     print "<form method=\"POST\" accept-charset=\"utf-8\">\n";
     require("UserRegForm.php");
     print "<tr>\n";
     print "<td width=\"280\" align=\"right\" class=\"lbl\">Priviledge Level:</td>\n";
     print "<td>\n";
     $strQuery = "select * from tblprivlevels where iPrivLevel <= $Priv;";
-    print "<select size=\"1\" name=\"cmbPrivLevel\">\n";
-    if (!$Result2 = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
-    }
-    while ($Row2 = $Result2->fetch_assoc())
-    {
-      if ($Row2['iPrivLevel'] == $iPrivLevel)
+      print "<select size=\"1\" name=\"cmbPrivLevel\">\n";
+      foreach($QueryData[1] as $Row2)
       {
-        print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        if($Row2["iPrivLevel"] == $iPrivLevel)
+        {
+          print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        }
+        else
+        {
+          print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        }
+      }
+      print "</select>\n";
+    }
+    else
+    {
+      if($QueryData[0] == 0)
+      {
+        printPg("No Records","note");
       }
       else
       {
-        print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+        $strMsg = Array2String($QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg($ErrMsg,"error");
       }
     }
-    print "</select>\n";
+
     print "</td>\n";
     print "</tr>\n";
-    print "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" value=\"Submit\" name=\"btnSubmit\"></td></tr>";
+    print "<tr><td colspan=\"2\" align=\"center\">\n";
+    print "<div class=\"Submit\"><input type=\"submit\" value=\"Submit\" name=\"btnSubmit\"></div>\n";
+    print "</td></tr>";
     print "<tr><td colspan=\"2\" align=\"center\">";
-    print "<input type=\"submit\" value=\"Delete Account\" name=\"btnSubmit\">";
+    print "<div class=\"Submit\"><input type=\"submit\" value=\"Delete Account\" name=\"btnSubmit\">";
     print "<input type=\"hidden\" name=\"BeenSubmitted\" value=\"false\">\n";
-    print "<input type=\"hidden\" name=\"UserID\" size=\"5\" value=\"$strUserID\">\n";
+    print "<input type=\"hidden\" name=\"UserID\" size=\"5\" value=\"$strUserID\"></div>\n";
     print "</td></tr>";
     print "</table></form>\n";
   }
 
-  if ($btnSubmitValue == 'Add New User')
+  if($btnSubmitValue == "Add New User")
   {
     $strName = "";
     $strAddr1 = "";
@@ -248,120 +285,123 @@
     print "<td width=\"280\" align=\"right\" class=\"lbl\">Priviledge Level:</td>\n";
     print "<td>\n";
     $strQuery = "select * from tblprivlevels where iPrivLevel <= $Priv;";
-    print "<select size=\"1\" name=\"cmbPrivLevel\">\n";
-    if (!$Result2 = $dbh->query ($strQuery))
+    $QueryData = QuerySQL($strQuery);
+    if($QueryData[0] > 0)
     {
-      error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-      error_log ($strQuery);
-      print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-      exit(2);
+      print "<select size=\"1\" name=\"cmbPrivLevel\">\n";
+      foreach($QueryData[1] as $Row2)
+      {
+        print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+      }
+      print "</select>\n";
     }
-    while ($Row2 = $Result2->fetch_assoc())
+    else
     {
-      print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+      if($QueryData[0] == 0)
+      {
+        printPg("No Records","note");
+      }
+      else
+      {
+        $strMsg = Array2String($QueryData[1]);
+        error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+        printPg($ErrMsg,"error");
+      }
     }
-    print "</select>\n";
+    
     print "</td>\n";
     print "</tr>\n";
     print "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" value=\"Add User\" name=\"btnSubmit\"></td></tr>";
     print "</table></form>\n";
   }
 
-  if ($btnSubmitValue == "Reset MFA")
+  if($btnSubmitValue == "Reset MFA")
   {
-    $iRegNum = intval(trim($_POST['UserID']));
+    $iRegNum = intval(trim($_POST["UserID"]));
     $strQuery = "UPDATE tblUsers SET vcMFASecret='' WHERE iUserID=$iRegNum;";
-    if (UpdateSQL($strQuery,"update"))
+    if(UpdateSQL($strQuery,"update"))
     {
-      printNote("MFA Successfully removed");
+      printPg("MFA Successfully removed","note");
     }
     else
     {
-      printErr("Failed to remove MFA");
+      printPg("Failed to remove MFA","error");
     }
     $strQuery = "UPDATE tblUsrPrefValues SET vcValue='True' WHERE iUserID = $iRegNum AND iTypeID = 3;";
-    if (UpdateSQL($strQuery,"update"))
+    if(UpdateSQL($strQuery,"update"))
     {
-      printNote("Email MFA successfully enabled");
+      printPg("Email MFA successfully enabled","note");
     }
     else
     {
-      printErr("Failed to enable Email MFA");
+      printPg("Failed to enable Email MFA","error");
     }
   }
   
-  if ($btnSubmitValue =="Delete Account")
+  if($btnSubmitValue =="Delete Account")
   {
-    $iRegNum = intval(trim($_POST['UserID']));
-    $BeenSubmitted = trim($_POST['BeenSubmitted']);
+    $iRegNum = intval(trim($_POST["UserID"]));
+    $BeenSubmitted = trim($_POST["BeenSubmitted"]);
     
     if($iRegNum)
     {
       if($BeenSubmitted == "True")
       {
         $strQuery = "Delete from tblUsers where iUserID='$iRegNum';";
-        if ($dbh->query ($strQuery))
+        if(UpdateSQL($strQuery,"delete"))
         {
           print "Account Deleted successful<br>\n";
         }
         else
         {
-          $strError = "Database update failed. Error (". $dbh->errno . ") " . $dbh->error . "\n";
+          $strError = "Database update failed. \n";
           $strError .= "$strQuery\n";
           error_log($strError);
           if(EmailText("$SupportEmail","Automatic Error Report", $strError . "\n\n\n" . $strQuery ,"From:$SupportEmail"))
           {
-            print "<p class=\"Error\">We seem to be experiencing technical difficulties. " .
+            printPg("We seem to be experiencing technical difficulties. " .
                   "We have been notified. Please try again later. If you have any " .
-                  "questions you can contact us at $SupportEmail.</p>";
+                  "questions you can contact us at $SupportEmail.","error");
           }
           else
           {
-            print "<p class=\"Error\">We seem to be experiencing technical difficulties. " .
+            printPg("We seem to be experiencing technical difficulties. " .
                   "Please send us a message at $SupportEmail with information about " .
-                  "what you were doing.</p>";
+                  "what you were doing.","error");
           }
         }
       }
       else
       {
-          $strQuery = "select * from tblUsers where iUserID = $iRegNum;";
-          if (!$Result = $dbh->query ($strQuery))
-          {
-              error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-              error_log ($strQuery);
-              print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-              exit(2);
-          }
-          $Row = $Result->fetch_assoc();
-          $strUserName = $Row['vcName'];
-          print "<center>\n<form method=\"post\">\n";
-          print "<p class=\"Error\">Are you sure you want to delete the account for $strUserName? <br>\n";
-          print "Just leave this page anyway you please if you do not want to delete it. ";
-          print "Otherwise press \"Delete Account\" again.</p>\n";
-          print "<input type=\"submit\" value=\"Delete Account\" name=\"btnSubmit\"><br>\n";
-          print "<input type=\"hidden\" name=\"BeenSubmitted\" value=\"True\">\n";
-          print "<input type=\"hidden\" name=\"UserID\" value=\"$iRegNum\">\n";
-          print "</form>\n</center>\n";
+        $strQuery = "select vcName from tblUsers where iUserID = $iRegNum;";
+        $strUserName = GetSQLValue($strQuery);
+        print "<center>\n<form method=\"post\">\n";
+        printPg("Are you sure you want to delete the account for $strUserName? <br>\n".
+                "Just leave this page anyway you please if you do not want to delete it. ".
+                "Otherwise press \"Delete Account\" again.","error");
+        print "<input type=\"submit\" value=\"Delete Account\" name=\"btnSubmit\"><br>\n";
+        print "<input type=\"hidden\" name=\"BeenSubmitted\" value=\"True\">\n";
+        print "<input type=\"hidden\" name=\"UserID\" value=\"$iRegNum\">\n";
+        print "</form>\n</center>\n";
       }
     }
     else
     {
-      print "<p class=\"Error\">Registration number seems to have gotten lost in transport. Please try again" .
-            "<br>Feel free to contact us at $SupportEmail if you have questions.</p>\n";
+      printPg("Registration number seems to have gotten lost in transport. Please try again" .
+            "<br>Feel free to contact us at $SupportEmail if you have questions.","error");
     }
   }
 
-  if ($btnSubmitValue == 'Add User')
+  if($btnSubmitValue == "Add User")
   {
     require_once("CleanReg.php");
-    $iLevel = intval($_POST['cmbPrivLevel']);
+    $iLevel = intval($_POST["cmbPrivLevel"]);
 
-    if ($strEmail)
+    if($strEmail)
     {
-      $strNameParts = explode(' ',$strName);
+      $strNameParts = explode(" ",$strName);
       $HowMany = count($strNameParts);
-      if ($HowMany==1)
+      if($HowMany==1)
       {
         print "Please provide both first and last name";
         print "<form method=\"POST\">\n";
@@ -370,19 +410,29 @@
         print "<td width=\"280\" align=\"right\" class=\"lbl\">Priviledge Level:</td>\n";
         print "<td>\n";
         $strQuery = "select * from tblprivlevels where iPrivLevel <= $Priv;";
-        print "<select size=\"1\" name=\"cmbPrivLevel\">\n";
-        if (!$Result2 = $dbh->query ($strQuery))
+        $QueryData = QuerySQL($strQuery);
+        if($QueryData[0] > 0)
         {
-          error_log ('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
-          error_log ($strQuery);
-          print "<p class=\"Attn\" align=center>$ErrMsg</p>\n";
-          exit(2);
+          print "<select size=\"1\" name=\"cmbPrivLevel\">\n";
+          foreach($QueryData[1] as $Row2)
+          {
+            print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+          }
+          print "</select>\n";
         }
-        while ($Row2 = $Result2->fetch_assoc())
+        else
         {
-          print "<option value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
+          if($QueryData[0] == 0)
+          {
+            printPg("No Records","note");
+          }
+          else
+          {
+            $strMsg = Array2String($QueryData[1]);
+            error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+            printPg($ErrMsg,"error");
+          }
         }
-        print "</select>\n";
         print "</td>\n";
         print "</tr>\n";
         print "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" value=\"Add User\" name=\"btnSubmit\"></td></tr>";
@@ -390,7 +440,7 @@
       }
       else
       {
-        if (!$bSpam)
+        if(!$bSpam)
         {
           require("UserAdd.php");
         }
@@ -402,16 +452,16 @@
     }
     print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
   }
-  if ($btnSubmitValue == 'Submit')
+  if($btnSubmitValue == "Submit")
   {
     require_once("CleanReg.php");
-    $iLevel = intval($_POST['cmbPrivLevel']);
-    if (!$bSpam)
+    $iLevel = intval($_POST["cmbPrivLevel"]);
+    if(!$bSpam)
     {
-        require("UserUpdate.php");
+      require("UserUpdate.php");
+      printPg("Update Successful","note");
     }
-    print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
   }
-  print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
+  print "<div class=\"Submit\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   require("footer.php");
 ?>
