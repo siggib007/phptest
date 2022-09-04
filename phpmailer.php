@@ -11,10 +11,10 @@ $UseStartTLS = getenv("USESTARTTLS");
 
 function StripHTML($content)
 {
-  $unwanted = ['style','script'];
+  $unwanted = ["style","script"];
   foreach( $unwanted as $tag )
   {
-    $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
+    $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", "", $content );
   }
   unset( $tag );
   $content = strip_tags($content);
@@ -39,20 +39,20 @@ function SendHTMLAttach($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFile
 
   // configure an SMTP Settings
   $mail->isSMTP();
-  $mail->Host = $GLOBALS['MailHost'];
-  $mail->Port = $GLOBALS['MailHostPort'];
+  $mail->Host = $GLOBALS["MailHost"];
+  $mail->Port = $GLOBALS["MailHostPort"];
   $mail->SMTPAuth = true;
-  $mail->Username = $GLOBALS['MailUser'];
-  $mail->Password = $GLOBALS['MailPWD'];
-  if(strtolower($GLOBALS['UseSSL'])=="true")
+  $mail->Username = $GLOBALS["MailUser"];
+  $mail->Password = $GLOBALS["MailPWD"];
+  if(strtolower($GLOBALS["UseSSL"])=="true")
   {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
   }
   else
   {
-    if(strtolower($GLOBALS['UseStartTLS'])=="true")
+    if(strtolower($GLOBALS["UseStartTLS"])=="true")
     {
-      $mail->SMTPSecure = 'tls';
+      $mail->SMTPSecure = "tls";
     }
     else
     {
@@ -150,7 +150,7 @@ $strHTMLMsg .= " and have remote pictures turned on as it is a remote inline HTM
 $strHTMLMsg .= "<img src='https://img.xcitefun.net/users/2015/01/371695,xcitefun-cute-animals-pictures-41.jpg' width=100% >\n";
 $strHTMLMsg .= "</body>\n</html>\n";
 
-$resp = SendHTMLAttach($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach, $arrname, '/var/log/alternatives.log');
+$resp = SendHTMLAttach($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach, $arrname, "/var/log/alternatives.log");
 print "<p>$resp</p>\n";
 print "<p>I'm all done at " . date(DATE_RFC1123) . "</p>\n";
 print "</body>\n</html>\n";

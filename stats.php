@@ -13,16 +13,16 @@
 	$col2 = 800;
 	$Tcol = $col1 + $col2 ;
 	$PostVarCount = count($_POST);
-	if(isset($_POST['btnSubmit']))
+	if(isset($_POST["btnSubmit"]))
 	{
-		$btnSubmit = $_POST['btnSubmit'];
+		$btnSubmit = $_POST["btnSubmit"];
 	}
 	else
 	{
 		$btnSubmit = "";
 	}
 
-	if(($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
+	if(($PostVarCount == 1) and ($btnSubmit == "Go Back"))
 	{
 		unset($_POST);
 		$PostVarCount = 0;
@@ -30,7 +30,7 @@
 	require("header.php");
 	printPg("Web site statistics","h1");
 
-	if($btnSubmit == 'New')
+	if($btnSubmit == "New")
 	{
 		if($WritePriv <=  $Priv)
 		{
@@ -76,9 +76,9 @@
 		}
 	}
 
-	if($btnSubmit == 'Delete')
+	if($btnSubmit == "Delete")
 	{
-		$iStatID = intval(trim($_POST['txtStatID']));
+		$iStatID = intval(trim($_POST["txtStatID"]));
 		$strQuery =  "SELECT vcStatName FROM tblstats where iStatID=$iStatID;";
     $strStatName = GetSQLValue($strQuery);
 		printPg("Are you sure you wish to delete statistic with the label \"$strStatName\"? <br>" .
@@ -88,9 +88,9 @@
 		print "<input type=\"hidden\" value=\"$iStatID\" name=\"txtStatID\"></form>\n</center>\n";
 	}
 
-	if($btnSubmit == 'Yes I am sure!')
+	if($btnSubmit == "Yes I am sure!")
 	{
-		$iStatID = intval(trim($_POST['txtStatID']));
+		$iStatID = intval(trim($_POST["txtStatID"]));
 		$strQuery = "Delete from tblstats where iStatID=$iStatID;";
 		$type = "Delete";
 		UpdateSQL($strQuery,$type);
@@ -98,21 +98,21 @@
 		$PostVarCount = 0;
 	}
 
-	if($btnSubmit == 'Edit')
+	if($btnSubmit == "Edit")
 	{
-		$iStatID = intval(trim($_POST['txtStatID']));
+		$iStatID = intval(trim($_POST["txtStatID"]));
 		$strQuery =  "SELECT iStatID,vcFromClause,vcWhereClause,vcGroupByClause,vcUnique,vcStatName, iOrderID FROM tblstats where iStatID=$iStatID;";
     $QueryData = QuerySQL($strQuery);
     if($QueryData[0] > 0)
     {
       foreach($QueryData[1] as $Row)
       {
-        $strStatName = $Row['vcStatName'];
-        $strFrom = $Row['vcFromClause'];
-        $strWhere = $Row['vcWhereClause'];
-        $strGroupBy = $Row['vcGroupByClause'];
-        $strUnique = $Row['vcUnique'];
-        $iOrder = $Row['iOrderID'];
+        $strStatName = $Row["vcStatName"];
+        $strFrom = $Row["vcFromClause"];
+        $strWhere = $Row["vcWhereClause"];
+        $strGroupBy = $Row["vcGroupByClause"];
+        $strUnique = $Row["vcUnique"];
+        $iOrder = $Row["iOrderID"];
       }
     }
     else
@@ -168,15 +168,15 @@
 		print "</form>\n";
 	}
 
-	if($btnSubmit == 'Update')
+	if($btnSubmit == "Update")
 	{
-		$strStatName = substr(CleanSQLInput(trim($_POST['txtStatName'])),0,49);
-		$strFrom = substr(CleanSQLInput(trim($_POST['txtFrom'])),0,299);
-		$strWhere = substr(CleanSQLInput(trim($_POST['txtWhere'])),0,299);
-		$strGroupBy = substr(CleanSQLInput(trim($_POST['txtGroupBy'])),0,99);
-		$strUnique = substr(CleanSQLInput(trim($_POST['txtUnique'])),0,29);
-		$iOrder = substr(CleanSQLInput(trim($_POST['txtOrderID'])),0,9);
-		$iStatID = substr(CleanSQLInput(trim($_POST['txtStatID'])),0,9);
+		$strStatName = substr(CleanSQLInput(trim($_POST["txtStatName"])),0,49);
+		$strFrom = substr(CleanSQLInput(trim($_POST["txtFrom"])),0,299);
+		$strWhere = substr(CleanSQLInput(trim($_POST["txtWhere"])),0,299);
+		$strGroupBy = substr(CleanSQLInput(trim($_POST["txtGroupBy"])),0,99);
+		$strUnique = substr(CleanSQLInput(trim($_POST["txtUnique"])),0,29);
+		$iOrder = substr(CleanSQLInput(trim($_POST["txtOrderID"])),0,9);
+		$iStatID = substr(CleanSQLInput(trim($_POST["txtStatID"])),0,9);
 		if($strStatName != "" and $strFrom != "" and is_numeric($iOrder))
 		{
 			$strQuery =  "update tblstats set vcFromClause='$strFrom', vcWhereClause='$strWhere',vcGroupByClause='$strGroupBy', ";
@@ -229,14 +229,14 @@
 		}
 	}
 
-	if($btnSubmit == 'Insert')
+	if($btnSubmit == "Insert")
 	{
-		$strStatName = substr(CleanSQLInput(trim($_POST['txtStatName'])),0,49);
-		$strFrom = substr(CleanSQLInput(trim($_POST['txtFrom'])),0,299);
-		$strWhere = substr(CleanSQLInput(trim($_POST['txtWhere'])),0,299);
-		$strGroupBy = substr(CleanSQLInput(trim($_POST['txtGroupBy'])),0,99);
-		$strUnique = substr(CleanSQLInput(trim($_POST['txtUnique'])),0,29);
-		$iOrder = substr(CleanSQLInput(trim($_POST['txtOrderID'])),0,9);
+		$strStatName = substr(CleanSQLInput(trim($_POST["txtStatName"])),0,49);
+		$strFrom = substr(CleanSQLInput(trim($_POST["txtFrom"])),0,299);
+		$strWhere = substr(CleanSQLInput(trim($_POST["txtWhere"])),0,299);
+		$strGroupBy = substr(CleanSQLInput(trim($_POST["txtGroupBy"])),0,99);
+		$strUnique = substr(CleanSQLInput(trim($_POST["txtUnique"])),0,29);
+		$iOrder = substr(CleanSQLInput(trim($_POST["txtOrderID"])),0,9);
 		if($strStatName != "" and $strFrom != "" and is_numeric($iOrder))
 		{
 			$strQuery =  "INSERT INTO tblstats (vcFromClause, vcWhereClause, vcGroupByClause, vcUnique, vcStatName, iOrderID, vcModifiedBy, dtModifiedTime) ";
@@ -301,7 +301,7 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        if($Row['vcGroupByClause'] == "")
+        if($Row["vcGroupByClause"] == "")
         {
           $GroupBy = "";
           $GroupOn = "";
@@ -311,17 +311,17 @@
         {
           $GroupBy = " Group by {$Row['vcGroupByClause']}";
           $GroupOn = "{$Row['vcGroupByClause']} 'Group',";
-          $GroupHeader = $Row['vcGroupByClause'];
+          $GroupHeader = $Row["vcGroupByClause"];
         }
-        if($Row['vcWhereClause'] == "")
+        if($Row["vcWhereClause"] == "")
         {
           $Where = "";
         }
         else
         {
-          $Where = " where {$Row['vcWhereClause']}";
+          $Where = " where {$Row["vcWhereClause"]}";
         }
-        if($Row['vcUnique'] == "")
+        if($Row["vcUnique"] == "")
         {
           $Unique = "*";
         }
@@ -329,9 +329,9 @@
         {
           $Unique = " Distinct {$Row['vcUnique']}";
         }
-        $From = $Row['vcFromClause'];
-        $StatName = $Row['vcStatName'];
-        $StatID = $Row['iStatID'];
+        $From = $Row["vcFromClause"];
+        $StatName = $Row["vcStatName"];
+        $StatID = $Row["iStatID"];
         $iLoopCount = 0;
         $strQuery = "select '$StatName' as 'Name', $GroupOn Count($Unique) as 'Count' from $From $Where $GroupBy";
         $StatResult = QuerySQL($strQuery);

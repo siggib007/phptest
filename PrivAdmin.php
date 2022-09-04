@@ -13,27 +13,27 @@
     printPg("Invalid operation, Bad Reference!!!","error");
     exit;
   }
-  if(isset($_POST['cmbUser']))
+  if(isset($_POST["cmbUser"]))
   {
-    $iUserArray = $_POST['cmbUser'];
+    $iUserArray = $_POST["cmbUser"];
   }
   else
   {
     $iUserArray = array();
   }
-  if(isset($_POST['btnSubmit']))
+  if(isset($_POST["btnSubmit"]))
   {
-    $btnSubmit = $_POST['btnSubmit'];
+    $btnSubmit = $_POST["btnSubmit"];
   }
   else
   {
     $btnSubmit = "";
   }
 
-  if($btnSubmit == 'Update')
+  if($btnSubmit == "Update")
   {
-    $iPrivUpdate = CleanSQLInput(substr(trim($_POST['cmbPrivUpdate']),0,4));
-    $iPrivLevel = CleanSQLInput(substr(trim($_POST['iPrivLvl']),0,4));
+    $iPrivUpdate = CleanSQLInput(substr(trim($_POST["cmbPrivUpdate"]),0,4));
+    $iPrivLevel = CleanSQLInput(substr(trim($_POST["iPrivLvl"]),0,4));
     $strUserList = "";
     foreach($iUserArray as $val)
     {
@@ -44,9 +44,9 @@
     UpdateSQL($strQuery,"update");
   }
       
-  if($btnSubmit == 'Change')
+  if($btnSubmit == "Change")
   {
-    $iPrivLevel = CleanSQLInput(substr(trim($_POST['cmbPriv']),0,4));
+    $iPrivLevel = CleanSQLInput(substr(trim($_POST["cmbPriv"]),0,4));
   }
   else
   {
@@ -64,8 +64,8 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $iPrivlvl = $Row['iPrivLevel'];
-      $PrivName = $Row['vcPrivName'];
+      $iPrivlvl = $Row["iPrivLevel"];
+      $PrivName = $Row["vcPrivName"];
 
       if($iPrivlvl == $iPrivLevel)
       {
@@ -152,8 +152,8 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $iPrivlvl = $Row['iPrivLevel'];
-      $PrivName = $Row['vcPrivName'];
+      $iPrivlvl = $Row["iPrivLevel"];
+      $PrivName = $Row["vcPrivName"];
 
       if($iPrivlvl == $iPrivLevel)
       {

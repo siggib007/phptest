@@ -49,10 +49,10 @@
   
   function ShowErrHead()
   {
-    $ROOTPATH = $GLOBALS['ROOTPATH'];
-    $HeadImg = $GLOBALS['HeadImg'];
-    $CSSName = $GLOBALS['CSSName'];
-    $ErrMsg = $GLOBALS['ErrMsg'];
+    $ROOTPATH = $GLOBALS["ROOTPATH"];
+    $HeadImg = $GLOBALS["HeadImg"];
+    $CSSName = $GLOBALS["CSSName"];
+    $ErrMsg = $GLOBALS["ErrMsg"];
     $ImgHeight = "150";
     $imgname = $ROOTPATH . $HeadImg;
     print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n\"http://www.w3.org/TR/html4/loose.dtd\">";
@@ -83,7 +83,7 @@
 
   function QuerySQL($strQuery)
   {
-    $dbh = $GLOBALS['dbh'];
+    $dbh = $GLOBALS["dbh"];
     $arrReturn = array();
     $x = stripos($strQuery,"from");
     $y = stripos($strQuery,"where");
@@ -105,7 +105,7 @@
     }
     if(!$Result)
     {
-      error_log('Failed to fetch data. Error ('. $dbh->errno . ') ' . $dbh->error);
+      error_log("Failed to fetch data. Error (". $dbh->errno . ") " . $dbh->error);
       error_log($strQuery);
       $errMsg = "Failed to fetch data $strFrom";
       return [-1,$errMsg];
@@ -144,10 +144,10 @@
 
   function UpdateSQL($strQuery,$type="call")
   {
-    $DefaultDB = $GLOBALS['DefaultDB'];
-    $dbh = $GLOBALS['dbh'];
-    $SupportEmail = $GLOBALS['SupportEmail'];
-    $FromEmail = $GLOBALS['FromEmail'];
+    $DefaultDB = $GLOBALS["DefaultDB"];
+    $dbh = $GLOBALS["dbh"];
+    $SupportEmail = $GLOBALS["SupportEmail"];
+    $FromEmail = $GLOBALS["FromEmail"];
 
     try
     {
@@ -219,10 +219,10 @@
 
   function SpamDetect($InVar)
   {
-    $dbh = $GLOBALS['dbh'];
-    $SupportEmail = $GLOBALS['SupportEmail'];
-    $FromEmail = $GLOBALS['FromEmail'];
-    $strRemoteIP = $GLOBALS['strRemoteIP'];
+    $dbh = $GLOBALS["dbh"];
+    $SupportEmail = $GLOBALS["SupportEmail"];
+    $FromEmail = $GLOBALS["FromEmail"];
+    $strRemoteIP = $GLOBALS["strRemoteIP"];
     $strURLRegx = "#(http://)|(a href)#i";
     if(preg_match($strURLRegx,$InVar))
     {
@@ -250,12 +250,11 @@
     $iValue = intval($val);
     switch($last)
     {
-      // The 'G' modifier is available since PHP 5.1.0
-      case 'g':
+      case "g":
         $iValue *= 1024;
-      case 'm':
+      case "m":
         $iValue *= 1024;
-      case 'k':
+      case "k":
         $iValue *= 1024;
     }
     return $iValue;
@@ -290,7 +289,7 @@
 
   function codeToMessage($code)
   {
-    $MaxFileSize = ini_get('upload_max_filesize');
+    $MaxFileSize = ini_get("upload_max_filesize");
     switch($code)
     {
       case UPLOAD_ERR_INI_SIZE:
@@ -390,10 +389,10 @@
     $content = str_replace("</th>","",$content);
     $content = str_replace("<td>","|",$content);
     $content = str_replace("</td>","",$content);
-    $unwanted = ['style','script'];
+    $unwanted = ["style","script"];
     foreach( $unwanted as $tag )
     {
-      $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
+      $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", "", $content );
     }
     unset($tag);
     $content = str_replace("\r","",$content);
@@ -422,20 +421,20 @@
 
     // configure an SMTP Settings
     $mail->isSMTP();
-    $mail->Host = $GLOBALS['MailHost'];
-    $mail->Port = $GLOBALS['MailHostPort'];
+    $mail->Host = $GLOBALS["MailHost"];
+    $mail->Port = $GLOBALS["MailHostPort"];
     $mail->SMTPAuth = true;
-    $mail->Username = $GLOBALS['MailUser'];
-    $mail->Password = $GLOBALS['MailPWD'];
-    if(strtolower($GLOBALS['UseSSL'])=="true")
+    $mail->Username = $GLOBALS["MailUser"];
+    $mail->Password = $GLOBALS["MailPWD"];
+    if(strtolower($GLOBALS["UseSSL"])=="true")
     {
       $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     }
     else
     {
-      if(strtolower($GLOBALS['UseStartTLS'])=="true")
+      if(strtolower($GLOBALS["UseStartTLS"])=="true")
       {
-        $mail->SMTPSecure = 'tls';
+        $mail->SMTPSecure = "tls";
       }
       else
       {
@@ -535,9 +534,9 @@
     $APIEndpoint = "https://api.akeyless.io";
 
     $PostData = array();
-    $PostData['access-type'] = 'access_key';
-    $PostData['access-id'] = "$AccessID";
-    $PostData['access-key'] = "$AccessKey";
+    $PostData["access-type"] = "access_key";
+    $PostData["access-id"] = "$AccessID";
+    $PostData["access-key"] = "$AccessKey";
     $jsonPostData = json_encode($PostData);
 
     $Service = "/auth";
@@ -547,7 +546,7 @@
     curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonPostData);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json','Content-Type: application/json'));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json","Content-Type: application/json"));
     $response = curl_exec($curl);
     curl_close($curl);
     $arrResponse = json_decode($response, TRUE);
@@ -571,7 +570,7 @@
     curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonPostData);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json','Content-Type: application/json'));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json","Content-Type: application/json"));
     $response = curl_exec($curl);
     curl_close($curl);
     return json_decode($response, TRUE);
@@ -592,16 +591,16 @@
     $method = "GET";
 
     $Param = array();
-    $Param['project'] = $strProject;
-    $Param['config'] = $strConfig;
+    $Param["project"] = $strProject;
+    $Param["config"] = $strConfig;
 
-    $url = $APIEndpoint.$Service . '?' . http_build_query($Param);
+    $url = $APIEndpoint.$Service . "?" . http_build_query($Param);
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_USERPWD, "$AccessKey:");
     curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json'));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json"));
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
     $response = curl_exec($curl);
     curl_close($curl);
@@ -686,9 +685,9 @@
     $method = "POST";
 
     $Param = array();
-    $Param['From'] = $FromNumber;
-    $Param['Body'] = $msg;
-    $Param['To'] = $number;
+    $Param["From"] = $FromNumber;
+    $Param["Body"] = $msg;
+    $Param["To"] = $number;
 
     $url = $APIEndpoint.$Service;
     $curl = curl_init();
@@ -696,8 +695,8 @@
     curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_ENCODING, '');
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json','Content-Type: application/x-www-form-urlencoded'));
+    curl_setopt($curl, CURLOPT_ENCODING, "");
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json","Content-Type: application/x-www-form-urlencoded"));
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
     curl_setopt($curl,CURLOPT_POSTFIELDS,http_build_query($Param));
     $response = curl_exec($curl);
@@ -729,7 +728,7 @@
     $strRecoveryCode = chunk_split(bin2hex(random_bytes($iCodeLen/2)),4," ");
     printPg("$RecovCode","note");
     printPg("$strRecoveryCode","note");
-    $strCleanRecovery = str_replace(' ','',$strRecoveryCode);
+    $strCleanRecovery = str_replace(" ","",$strRecoveryCode);
     $strECode = password_hash($strCleanRecovery, PASSWORD_DEFAULT);
     $strQuery = "update tblUsers set vcRecovery = '$strECode' where iUserID = $iUserID;";
     UpdateSQL($strQuery, "update");
@@ -748,7 +747,7 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        $strTOTP = $Row['vcMFASecret'];
+        $strTOTP = $Row["vcMFASecret"];
       }
     }
     if($strTOTP != "")
@@ -763,7 +762,7 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        if(strtolower($Row['vcValue']) == "true")
+        if(strtolower($Row["vcValue"]) == "true")
         {
           $bSMSemail = True;
         }
@@ -800,9 +799,9 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        $iTypeID = $Row['iTypeID'];
-        $strValue = $Row['vcValue'];
-        $strEmail = $Row['vcEmail'];
+        $iTypeID = $Row["iTypeID"];
+        $strValue = $Row["vcValue"];
+        $strEmail = $Row["vcEmail"];
         $DataSet[$iTypeID]=array("value"=>$strValue,"email"=>$strEmail);
       }
     }
@@ -831,22 +830,22 @@
     {
       mkdir($DocRoot);
     }
-    if(is_array($arrFiles['name']))
+    if(is_array($arrFiles["name"]))
     {
       $FileList = "";
       $SizeTotal = 0;
       $arrMsg = array();
       $arrError = array();
       $arrFilesList = array();
-      $FilesVarCount = count($arrFiles['name']);
+      $FilesVarCount = count($arrFiles["name"]);
       for($i = 0; $i < $FilesVarCount; $i++)
       {
-        $DocFileName = $arrFiles['name'][$i];
+        $DocFileName = $arrFiles["name"][$i];
         $DocBaseName = basename($DocFileName);
         $newPath = $DocRoot . $DocBaseName;
-        $tmpFile = $arrFiles['tmp_name'][$i];
-        $Error = $arrFiles['error'][$i];
-        $Size =  $arrFiles['size'][$i];
+        $tmpFile = $arrFiles["tmp_name"][$i];
+        $Error = $arrFiles["error"][$i];
+        $Size =  $arrFiles["size"][$i];
         $SizeUnit = with_unit($Size);
         if($Error == UPLOAD_ERR_OK)
         {
@@ -876,12 +875,12 @@
       $arrMsg = array();
       $arrError = array();
       $arrFilesList = array();
-      $DocFileName = $arrFiles['name'];
+      $DocFileName = $arrFiles["name"];
       $DocBaseName = basename($DocFileName);
       $newPath = $DocRoot . $DocBaseName;
-      $tmpFile = $arrFiles['tmp_name'];
-      $Error = $arrFiles['error'];
-      $Size =  $arrFiles['size'];
+      $tmpFile = $arrFiles["tmp_name"];
+      $Error = $arrFiles["error"];
+      $Size =  $arrFiles["size"];
       $SizeUnit = with_unit($Size);
       error_log("tmpfile: $tmpFile  -  newpath: $newPath  - Error: $Error");
 

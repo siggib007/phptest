@@ -9,9 +9,9 @@
     $APIEndpoint = "https://api.akeyless.io";
 
     $PostData = array();
-    $PostData['access-type'] = 'access_key';
-    $PostData['access-id'] = "$AccessID";
-    $PostData['access-key'] = "$AccessKey";
+    $PostData["access-type"] = "access_key";
+    $PostData["access-id"] = "$AccessID";
+    $PostData["access-key"] = "$AccessKey";
     $jsonPostData = json_encode($PostData);
 
     $Service = "/auth";
@@ -21,7 +21,7 @@
     curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonPostData);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json','Content-Type: application/json'));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json","Content-Type: application/json"));
     $response = curl_exec($curl);
     curl_close($curl);
     $arrResponse = json_decode($response, TRUE);
@@ -39,7 +39,7 @@
     curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonPostData);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json','Content-Type: application/json'));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json","Content-Type: application/json"));
     $response = curl_exec($curl);
     curl_close($curl);
     return json_decode($response, TRUE);

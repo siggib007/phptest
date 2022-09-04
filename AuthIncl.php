@@ -7,8 +7,8 @@
   Part of the authentication routine, required in auth.php
   */
   
-  $_SESSION["auth_username"] = $Row['vcName'];
-  $_SESSION["auth_UID"] = $Row['vcUID'];
+  $_SESSION["auth_username"] = $Row["vcName"];
+  $_SESSION["auth_UID"] = $Row["vcUID"];
   $_SESSION["UID"] = $iUserID;
   $_SESSION["dtLogin"] = $dtNow;
   $_SESSION["iPrivLevel"] = $iPrivlvl;
@@ -22,7 +22,7 @@
 
   if($strLastUpdated=="")
   {
-    $strReturn = 'myprofile.php';
+    $strReturn = "myprofile.php";
   }
 
   $strQuery = "update tblUsers set dtLastLogin = '$dtNow' where iUserID='$iUserID'";

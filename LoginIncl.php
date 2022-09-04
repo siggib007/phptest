@@ -8,11 +8,11 @@
   */
 
   $strURI = $_SERVER["REQUEST_URI"];
-  $strPageNameParts = explode('/',$strURI);
+  $strPageNameParts = explode("/",$strURI);
   $HowMany = count($strPageNameParts);
   $LastIndex = $HowMany - 1;
   $strPageName = strtolower($strPageNameParts[$LastIndex]);
-  if($strPageName == 'loginincl.php')
+  if($strPageName == "loginincl.php")
   {
     header("Location: index.php");
     exit;

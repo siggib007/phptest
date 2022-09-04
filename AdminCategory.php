@@ -15,9 +15,9 @@
     printPg("Invalid operation, Bad Reference!!!","error");
     exit;
 	}
-	if(isset($_POST['btnSubmit']))
+	if(isset($_POST["btnSubmit"]))
 	{
-    $btnSubmit = $_POST['btnSubmit'];
+    $btnSubmit = $_POST["btnSubmit"];
 	}
 	else
 	{
@@ -26,28 +26,28 @@
 
 	printPg("Administrative Categories","h1");
 
-	if($btnSubmit == 'Save')
+	if($btnSubmit == "Save")
 	{
-    $strAdminCat = CleanSQLInput(substr(trim($_POST['txtAdminCat']),0,49));
-    $iCatID = CleanSQLInput(substr(trim($_POST['iCatID']),0,49));
+    $strAdminCat = CleanSQLInput(substr(trim($_POST["txtAdminCat"]),0,49));
+    $iCatID = CleanSQLInput(substr(trim($_POST["iCatID"]),0,49));
 
     $strQuery = "update tblAdminCategories set vcCatName = '$strAdminCat' where iCatID = $iCatID;";
     UpdateSQL($strQuery,"update");
 	}
 
-	if($btnSubmit == 'Delete')
+	if($btnSubmit == "Delete")
 	{
-    $iCatID = intval(substr(trim($_POST['iCatID']),0,49));
+    $iCatID = intval(substr(trim($_POST["iCatID"]),0,49));
 
     $strQuery = "delete from tblAdminCategories where iCatID = $iCatID;";
     UpdateSQL($strQuery,"delete");
 	}
 
-	if($btnSubmit == 'Insert')
+	if($btnSubmit == "Insert")
 	{
-    $strAdminCat = CleanSQLInput(substr(trim($_POST['txtAdminCat']),0,49));
+    $strAdminCat = CleanSQLInput(substr(trim($_POST["txtAdminCat"]),0,49));
 
-    if($strAdminCat == '')
+    if($strAdminCat == "")
     {
       printPg("Please provide a administrative catergory name to insert","note");
     }
@@ -80,8 +80,8 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $vcAdminCat = $Row['vcCatName'];
-      $iCatID = $Row['iCatID'];
+      $vcAdminCat = $Row["vcCatName"];
+      $iCatID = $Row["iCatID"];
       if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\">\n";

@@ -18,9 +18,9 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $vcQuestion = $Row['vcQuestion'];
-      $strAnswer = $Row['tAnswer'];
-      $iFAQid = $Row['iFAQid'];
+      $vcQuestion = $Row["vcQuestion"];
+      $strAnswer = $Row["tAnswer"];
+      $iFAQid = $Row["iFAQid"];
       print "<div class=\"ClassName\"><a id=$iFAQid>$vcQuestion</a></div>\n";
       print "<div class=\"ClassDescr\">$strAnswer</div>\n";
     }

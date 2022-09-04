@@ -14,9 +14,9 @@
 		printPg("Invalid operation, Bad Reference!!!","error");
 		exit;
 	}
-	if(isset($_POST['btnSubmit']))
+	if(isset($_POST["btnSubmit"]))
 	{
-		$btnSubmit = $_POST['btnSubmit'];
+		$btnSubmit = $_POST["btnSubmit"];
 	}
 	else
 	{
@@ -25,18 +25,18 @@
 
 	printPg("Link Categories","h1");
 
-	if(($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
+	if(($PostVarCount == 1) and ($btnSubmit == "Go Back"))
 	{
 		header("Location: $strPageURL");
 	}
 
-	if($btnSubmit == 'Save')
+	if($btnSubmit == "Save")
 	{
-		$iSortNum = CleanSQLInput(substr(trim($_POST['iSortNum']),0,49));
-		$strLinkCat = CleanSQLInput(substr(trim($_POST['txtLinkCat']),0,49));
-		$iLinkCatID = CleanSQLInput(substr(trim($_POST['iLinkCatID']),0,49));
+		$iSortNum = CleanSQLInput(substr(trim($_POST["iSortNum"]),0,49));
+		$strLinkCat = CleanSQLInput(substr(trim($_POST["txtLinkCat"]),0,49));
+		$iLinkCatID = CleanSQLInput(substr(trim($_POST["iLinkCatID"]),0,49));
 
-		if($iSortNum == '')
+		if($iSortNum == "")
 		{
 			$iSortNum = 0;
 		}
@@ -45,25 +45,25 @@
 		UpdateSQL($strQuery,"update");
 	}
 
-	if($btnSubmit == 'Delete')
+	if($btnSubmit == "Delete")
 	{
-		$iLinkCatID = intval(substr(trim($_POST['iLinkCatID']),0,49));
+		$iLinkCatID = intval(substr(trim($_POST["iLinkCatID"]),0,49));
 
 		$strQuery = "delete from tbllinkcategory where iCatID = $iLinkCatID;";
 		UpdateSQL($strQuery,"delete");
 	}
 
-	if($btnSubmit == 'Insert')
+	if($btnSubmit == "Insert")
 	{
-		$iSortNum = CleanSQLInput(substr(trim($_POST['iSortNum']),0,49));
-		$strLinkCat = CleanSQLInput(substr(trim($_POST['txtLinkCat']),0,49));
+		$iSortNum = CleanSQLInput(substr(trim($_POST["iSortNum"]),0,49));
+		$strLinkCat = CleanSQLInput(substr(trim($_POST["txtLinkCat"]),0,49));
 
-		if($iSortNum == '')
+		if($iSortNum == "")
 		{
 			$iSortNum = 0;
 		}
 
-		if($strLinkCat == '')
+		if($strLinkCat == "")
 		{
 			printPg("Please provide a document catergory name to insert","note");
 		}
@@ -91,9 +91,9 @@
     print "<tr><th></th><th class=lbl>Category Name</th><th class=lbl>Sort order</th></tr>\n";
     foreach($QueryData[1] as $Row)
     {
-      $vcLinkCat = $Row['vcCategory'];
-      $iSortNum = $Row['iSortNum'];
-      $iLinkCatID = $Row['iCatID'];
+      $vcLinkCat = $Row["vcCategory"];
+      $iSortNum = $Row["iSortNum"];
+      $iLinkCatID = $Row["iCatID"];
       if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\">\n";

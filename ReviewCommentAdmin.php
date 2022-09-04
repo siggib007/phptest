@@ -53,7 +53,7 @@
           }
           else
           {
-            printPg("<p class=\"Error\">Couldn't move file to $newPath","error");
+            printPg("Couldn't move file to $newPath","error");
           }
         }
         else

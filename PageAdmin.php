@@ -12,26 +12,26 @@
   $TextTemplatefile = "TemplatePage.php";
   $TableTemplateFile = "TablePage.php";
 
-  if(isset($_POST['btnSubmit']))
+  if(isset($_POST["btnSubmit"]))
   {
-    $btnSubmit = $_POST['btnSubmit'];
+    $btnSubmit = $_POST["btnSubmit"];
   }
   else
   {
     $btnSubmit = "";
   }
-  if(isset($_POST['PageID']))
+  if(isset($_POST["PageID"]))
   {
-    $iPageID = intval(substr(trim($_POST['PageID']),0,49));
+    $iPageID = intval(substr(trim($_POST["PageID"]),0,49));
   }
   else
   {
     $iPageID = -10;
   }
 
-  if(isset($_POST['cmbType']))
+  if(isset($_POST["cmbType"]))
   {
-    $PageType = intval($_POST['cmbType']);
+    $PageType = intval($_POST["cmbType"]);
   }
   else
   {
@@ -61,7 +61,7 @@
 
   printPg("Page Maintenace","h1");
 
-  if(($btnSubmit == 'Create New') and ($PageType == 2) or (($btnSubmit == 'Edit') and ($PageType == 2)))
+  if(($btnSubmit == "Create New") and ($PageType == 2) or (($btnSubmit == "Edit") and ($PageType == 2)))
   {
     print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
     print "<form method=\"POST\">\n";
@@ -73,12 +73,12 @@
       {
         foreach($QueryData[1] as $Row)
         {
-          $PageHeader = $Row['vcPageHeader'];
-          $strFields  = $Row['vcColumnList'];
-          $strTable   = $Row['vcTableName'];
-          $strFilter  = $Row['vcFilterStr'];
-          $iLimit     = $Row['iLimit'];
-          $RecID      = $Row['iTableID'];
+          $PageHeader = $Row["vcPageHeader"];
+          $strFields  = $Row["vcColumnList"];
+          $strTable   = $Row["vcTableName"];
+          $strFilter  = $Row["vcFilterStr"];
+          $iLimit     = $Row["iLimit"];
+          $RecID      = $Row["iTableID"];
         }
       }
       else
@@ -133,9 +133,9 @@
   }
 
   if(
-      ($btnSubmit == 'Edit' and $PageType == 1)
-      or ($btnSubmit == 'Create New' and $PageType == 1)
-      or ($btnSubmit == 'Change')
+      ($btnSubmit == "Edit" and $PageType == 1)
+      or ($btnSubmit == "Create New" and $PageType == 1)
+      or ($btnSubmit == "Change")
       )
   {
     print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
@@ -146,9 +146,9 @@
             "avoid data loss in case of network error, etc.","note");
     if($iPageID > 0)
     {
-      if(isset($_POST['cmbRevTime']))
+      if(isset($_POST["cmbRevTime"]))
       {
-        $RevTime = CleanReg(substr(trim($_POST['cmbRevTime']),0,49));
+        $RevTime = CleanReg(substr(trim($_POST["cmbRevTime"]),0,49));
         $QueryAdd = "'$RevTime'";
       }
       else
@@ -167,8 +167,8 @@
       {
         foreach($QueryData[1] as $Row)
         {
-          $TimeStamp = date('F jS Y \a\t G:i',strtotime($Row['dtTimeStamp']));
-          if($Row['dtTimeStamp'] == $RevTime)
+          $TimeStamp = date("F jS Y \a\t G:i",strtotime($Row["dtTimeStamp"]));
+          if($Row["dtTimeStamp"] == $RevTime)
           {
             print "<option selected value=\"{$Row['dtTimeStamp']}\">$TimeStamp</option>\n";
           }
@@ -198,9 +198,9 @@
       {
         foreach($QueryData[1] as $Row)
         {
-          $PageHeader = $Row['vcPageHeader'];
-          $PageText = $Row['tPageText'];
-          $bCRLF = $Row['bLineBreak'];
+          $PageHeader = $Row["vcPageHeader"];
+          $PageText = $Row["tPageText"];
+          $bCRLF = $Row["bLineBreak"];
         }
       }
       else
@@ -254,13 +254,13 @@
     print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   }
 
-  if($btnSubmit == 'Save')
+  if($btnSubmit == "Save")
   {
-    if(isset($_POST['txtFile']))
+    if(isset($_POST["txtFile"]))
     {
-      $FileName = CleanReg(substr(trim($_POST['txtFile']),0,49));
-      $PageName = CleanReg(substr(trim($_POST['txtName']),0,49));
-      $MenuTitle = CleanReg(substr(trim($_POST['txtTitle']),0,49));
+      $FileName = CleanReg(substr(trim($_POST["txtFile"]),0,49));
+      $PageName = CleanReg(substr(trim($_POST["txtName"]),0,49));
+      $MenuTitle = CleanReg(substr(trim($_POST["txtTitle"]),0,49));
 
       if(substr($FileName,-4)!=".php")
       {
@@ -308,15 +308,15 @@
     }
     if($iPageID > 0)
     {
-      if(isset($_POST['txtHeader']))
+      if(isset($_POST["txtHeader"]))
       {
-        $strHeader = CleanSQLInput(substr(trim($_POST['txtHeader']),0,79));
+        $strHeader = CleanSQLInput(substr(trim($_POST["txtHeader"]),0,79));
       }
       else
       {
         $strHeader = "";
       }
-      if(isset($_POST['chkCR']))
+      if(isset($_POST["chkCR"]))
       {
         $bCRLF = 1;
       }
@@ -328,9 +328,9 @@
       switch($PageType)
       {
         case 1:
-          if(isset($_POST['txtBody']))
+          if(isset($_POST["txtBody"]))
           {
-            $strBody = CleanSQLInput(trim($_POST['txtBody']));
+            $strBody = CleanSQLInput(trim($_POST["txtBody"]));
           }
           else
           {
@@ -340,41 +340,41 @@
                       "values ('$iPageID','$strHeader','$strBody','$bCRLF');";
           break;
         case 2:
-          if(isset($_POST['txtFields']))
+          if(isset($_POST["txtFields"]))
           {
-            $strFields = CleanSQLInput(substr(trim($_POST['txtFields']),0,799));
+            $strFields = CleanSQLInput(substr(trim($_POST["txtFields"]),0,799));
           }
           else
           {
             $strFields = "";
           }
-          if(isset($_POST['txtFrom']))
+          if(isset($_POST["txtFrom"]))
           {
-            $strTableName = CleanSQLInput(substr(trim($_POST['txtFrom']),0,34));
+            $strTableName = CleanSQLInput(substr(trim($_POST["txtFrom"]),0,34));
           }
           else
           {
             $strTableName = "";
           }
-          if(isset($_POST['txtWhere']))
+          if(isset($_POST["txtWhere"]))
           {
-            $strCrit = CleanSQLInput(substr(trim($_POST['txtWhere']),0,34));
+            $strCrit = CleanSQLInput(substr(trim($_POST["txtWhere"]),0,34));
           }
           else
           {
             $strCrit = "";
           }
-          if(isset($_POST['RecID']))
+          if(isset($_POST["RecID"]))
           {
-            $iRecID = CleanSQLInput(substr(trim($_POST['RecID']),0,5));
+            $iRecID = CleanSQLInput(substr(trim($_POST["RecID"]),0,5));
           }
           else
           {
             $iRecID = "";
           }
-          if(isset($_POST['txtLimit']))
+          if(isset($_POST["txtLimit"]))
           {
-            $iLimit = CleanSQLInput(substr(trim($_POST['txtLimit']),0,5));
+            $iLimit = CleanSQLInput(substr(trim($_POST["txtLimit"]),0,5));
           }
           else
           {
@@ -407,7 +407,7 @@
     print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   }
 
-  if($btnSubmit == 'Delete')
+  if($btnSubmit == "Delete")
   {
     $strQuery = "SELECT * FROM tblmenu WHERE iMenuID = '$iPageID';";
     $QueryData = QuerySQL($strQuery);
@@ -415,9 +415,9 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        $FileName = $Row['vcLink'];
-        $PageTitle = $Row['vcTitle'];
-        $PageHeader = $Row['vcHeader'];
+        $FileName = $Row["vcLink"];
+        $PageTitle = $Row["vcTitle"];
+        $PageHeader = $Row["vcHeader"];
       }
     }
     else
@@ -445,9 +445,9 @@
     print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";  
   }
 
-  if($btnSubmit == 'Yes I am very sure')
+  if($btnSubmit == "Yes I am very sure")
   {
-    $FileName = CleanReg(substr(trim($_POST['FileName']),0,49));
+    $FileName = CleanReg(substr(trim($_POST["FileName"]),0,49));
 
     if(unlink($FileName))
     {
@@ -467,7 +467,7 @@
     print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   }
 
-  if(($PostVarCount == 0) or ($btnSubmit == 'Go Back'))
+  if(($PostVarCount == 0) or ($btnSubmit == "Go Back"))
   {
     print "<center><form method=\"POST\">\n";
     print "<input type=\"Submit\" value=\"Create New\" name=\"btnSubmit\">\n";
@@ -478,7 +478,7 @@
     {
       foreach($QueryData[1] as $Row2)
       {
-        if($Row2['iTypeID'] == $PageType)
+        if($Row2["iTypeID"] == $PageType)
         {
           print "<option selected value=\"{$Row2['iTypeID']}\">{$Row2['vcPageType']}</option>\n";
         }
@@ -520,7 +520,7 @@
       print "<td>\n<input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">\n";
       print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"PageID\"></td>\n";
       print "</form>\n";
-      if($Row['bdel']==1)
+      if($Row["bdel"]==1)
       {
         print "<form method=\"POST\">\n";
         print "<td><input type=\"Submit\" value=\"Delete\" name=\"btnSubmit\">";

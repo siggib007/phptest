@@ -10,7 +10,7 @@
 
   require_once("header.php");
   $arrFiles = array();
-  $handle = opendir('.');
+  $handle = opendir(".");
 
   if($handle) {
     while(($entry = readdir($handle)) !== FALSE) 
@@ -28,7 +28,7 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $KnownFiles[] = $Row['vcLink'];
+      $KnownFiles[] = $Row["vcLink"];
     }
   }
   else

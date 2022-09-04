@@ -12,7 +12,7 @@
   spl_autoload_register(
     function ($className)
     {
-      include_once str_replace(array('RobThree\\Auth', '\\'), array(__DIR__.'/RobThree2FA', '/'), $className) . '.php';
+      include_once str_replace(array("RobThree\\Auth", "\\"), array(__DIR__."/RobThree2FA", "/"), $className) . ".php";
     }
   );
   $tfa = new TwoFactorAuth($HeadAdd . $ProdName);
@@ -22,22 +22,22 @@
     $iUserID = -15;
   }
 
-  if(isset($_POST['btnSubmit']))
+  if(isset($_POST["btnSubmit"]))
   {
-    $btnSubmit = $_POST['btnSubmit'];
+    $btnSubmit = $_POST["btnSubmit"];
   }
   else
   {
     $btnSubmit = "";
   }
 
-  if($btnSubmit == 'Reset' or $btnSubmit == 'Cancel')
+  if($btnSubmit == "Reset" or $btnSubmit == "Cancel")
   {
     unset($_SESSION["2FASecret"]);
     printPg("TOTP MFA Setup has been cancelled.","center");
   }
 
-  if($btnSubmit == 'Delete')
+  if($btnSubmit == "Delete")
   {
     $strQuery = "update tblUsers set vcMFASecret = '' where iUserID = $iUserID;";
     if(UpdateSQL($strQuery, "update"))
@@ -51,12 +51,12 @@
     }
   }
 
-  if($btnSubmit == 'Submit')
+  if($btnSubmit == "Submit")
   {
-    $MFASecret = CleanReg(substr(trim($_POST['txtSecret']),0,20));
+    $MFASecret = CleanReg(substr(trim($_POST["txtSecret"]),0,20));
     $_SESSION["2FASecret"] = $MFASecret;
     printPg("Validating your TOTP MFA");
-    $iUserCode = intval($_POST['txtCode']);
+    $iUserCode = intval($_POST["txtCode"]);
     if($tfa->verifyCode($MFASecret, strval($iUserCode)) === true)
     {
       printPg("OK","note");
@@ -85,9 +85,9 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $strUserEmail = $Row['vcEmail'];
-      $strCurrSecret = $Row['vcMFASecret'];
-      $strUserName = $Row['vcName'];
+      $strUserEmail = $Row["vcEmail"];
+      $strCurrSecret = $Row["vcMFASecret"];
+      $strUserName = $Row["vcName"];
     }
   }
   else
@@ -158,7 +158,7 @@
       unset($_SESSION["2FASecret"]);
     }
 
-    if(isset($_SESSION["2FASecret"]) and $btnSubmit == '')
+    if(isset($_SESSION["2FASecret"]) and $btnSubmit == "")
     {
       print "<div class=\"MainTextCenter\">\n";
       printPg("It seems your TOTP MFA setup is not validated. Please Enter the code from your Authenticator"

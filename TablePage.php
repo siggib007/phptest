@@ -15,11 +15,11 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $PageHeader = $Row['vcPageHeader'];
-      $ColumnList = $Row['vcColumnList'];
-      $TableName  = $Row['vcTableName'];
-      $FilterStr  = $Row['vcFilterStr'];
-      $iLimit     = $Row['iLimit'];
+      $PageHeader = $Row["vcPageHeader"];
+      $ColumnList = $Row["vcColumnList"];
+      $TableName  = $Row["vcTableName"];
+      $FilterStr  = $Row["vcFilterStr"];
+      $iLimit     = $Row["iLimit"];
     }
   }
   else

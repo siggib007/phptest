@@ -11,21 +11,21 @@
 		header("Location: index.php" );
 	}	
 	require_once("DBCon.php");
-	$strReferer = $_SERVER['HTTP_REFERER'];
-	$strPageNameParts = explode('/',$strReferer);
+	$strReferer = $_SERVER["HTTP_REFERER"];
+	$strPageNameParts = explode("/",$strReferer);
 	$strRefServer = "$strPageNameParts[2]";
 
 	$bUpdate = "n/a";
-	$strName = substr(trim($_POST['txtName']),0,49);
-	$strNameParts = explode(' ',$strName);
-	$strEmail = substr(trim($_POST['txtEmail']),0,49);
-	$strAddr1 = substr(trim($_POST['txtAddr1']),0,49);
-	$strAddr2 = substr(trim($_POST['txtAddr2']),0,49);
-	$strCity = substr(trim($_POST['txtCity']),0,49);
-	$strState = substr(trim($_POST['cmbState']),0,49);
-	$strZip = substr(trim($_POST['txtZip']),0,10);
-	$strPhone = substr(trim($_POST['txtPhone']),0,19);
-	$strCountry = substr(trim($_POST['cmbCountry']),0,99);
+	$strName = substr(trim($_POST["txtName"]),0,49);
+	$strNameParts = explode(" ",$strName);
+	$strEmail = substr(trim($_POST["txtEmail"]),0,49);
+	$strAddr1 = substr(trim($_POST["txtAddr1"]),0,49);
+	$strAddr2 = substr(trim($_POST["txtAddr2"]),0,49);
+	$strCity = substr(trim($_POST["txtCity"]),0,49);
+	$strState = substr(trim($_POST["cmbState"]),0,49);
+	$strZip = substr(trim($_POST["txtZip"]),0,10);
+	$strPhone = substr(trim($_POST["txtPhone"]),0,19);
+	$strCountry = substr(trim($_POST["cmbCountry"]),0,99);
 
 	$strReason = "";
 	$strURLRegx = "#(http://)|(a href)#i";

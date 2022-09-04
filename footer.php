@@ -18,7 +18,7 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      print $Row['vcValue'] . "&nbsp;&nbsp;|&nbsp;&nbsp;";
+      print $Row["vcValue"] . "&nbsp;&nbsp;|&nbsp;&nbsp;";
     }
   }
   else

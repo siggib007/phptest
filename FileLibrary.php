@@ -9,9 +9,9 @@
 
   require("header.php");
   $DocRoot = $ConfArray["AdminUploadDir"];
-	if(isset($_POST['btnSubmit']))
+	if(isset($_POST["btnSubmit"]))
 	{
-    $btnSubmit = $_POST['btnSubmit'];
+    $btnSubmit = $_POST["btnSubmit"];
 	}
 	else
 	{

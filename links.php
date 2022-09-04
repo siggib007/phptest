@@ -16,10 +16,10 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $strCategory = $Row['vcCategory'];
-      $strLink     = $Row['vcLink'];
-      $strName     = $Row['vcName'];
-      $strComment  = $Row['vcComment'];
+      $strCategory = $Row["vcCategory"];
+      $strLink     = $Row["vcLink"];
+      $strName     = $Row["vcName"];
+      $strComment  = $Row["vcComment"];
       if($strCat != $strCategory)
       {
         if($strCat != "")

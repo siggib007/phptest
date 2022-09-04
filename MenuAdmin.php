@@ -15,9 +15,9 @@
     exit;
   }
 
-  if(isset($_POST['btnSubmit']))
+  if(isset($_POST["btnSubmit"]))
   {
-    $btnSubmit = $_POST['btnSubmit'];
+    $btnSubmit = $_POST["btnSubmit"];
   }
   else
   {
@@ -25,17 +25,17 @@
   }
   printPg("Menu Maintenace","h1");
 
-  if($btnSubmit == 'Edit')
+  if($btnSubmit == "Edit")
   {
     print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
-    $iMenuID = intval(substr(trim($_POST['MenuID']),0,49));
+    $iMenuID = intval(substr(trim($_POST["MenuID"]),0,49));
     $strQuery = "SELECT * FROM vwMenuPos where iMenuID = $iMenuID;";
     $QueryData = QuerySQL($strQuery);
     if($QueryData[0] > 0)
     {
       foreach($QueryData[1] as $Row)
       {
-        if($Row['bSecure'] == 0)
+        if($Row["bSecure"] == 0)
         {
           $strChecked = "";
         }
@@ -43,7 +43,7 @@
         {
           $strChecked = "checked";
         }
-        if($Row['bNewWindow'] == 0)
+        if($Row["bNewWindow"] == 0)
         {
           $bWindow = "";
         }
@@ -82,7 +82,7 @@
     {
       foreach($QueryData[1] as $Row2)
       {
-        if($Row2['iPrivLevel'] == $Row['iReadPriv'])
+        if($Row2["iPrivLevel"] == $Row["iReadPriv"])
         {
           print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
         }
@@ -110,7 +110,7 @@
     {
       foreach($QueryData[1] as $Row2)
       {
-        if($Row2['iPrivLevel'] == $Row['iWritePriv'])
+        if($Row2["iPrivLevel"] == $Row["iWritePriv"])
         {
           print "<option selected value=\"{$Row2['iPrivLevel']}\">{$Row2['vcPrivName']}</option>\n";
         }
@@ -138,7 +138,7 @@
     {
       foreach($QueryData[1] as $Row2)
       {
-        if($Row2['iCatID'] == $Row['bAdmin'])
+        if($Row2["iCatID"] == $Row["bAdmin"])
         {
           print "<option selected value=\"{$Row2['iCatID']}\">{$Row2['vcCatName']}</option>\n";
         }
@@ -167,7 +167,7 @@
     {
       foreach($QueryData[1] as $MenuItem)
       {
-        if($MenuItem['iMenuID'] == $Row['iSubOfMenu'])
+        if($MenuItem["iMenuID"] == $Row["iSubOfMenu"])
         {
           print "<option selected value=\"{$MenuItem['iMenuID']}\">{$MenuItem['vcTitle']}</option>\n";
         }
@@ -188,16 +188,16 @@
     print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
   }
 
-  if($btnSubmit == 'Save')
+  if($btnSubmit == "Save")
   {
-    $strTitle = CleanReg(substr(trim($_POST['txtTitle']),0,49));
-    $strHeader = CleanReg(substr(trim($_POST['txtHeader']),0,49));
-    $iReadPriv = intval(substr(trim($_POST['cmbReadPrivLevel']),0,6));
-    $iWritePriv = intval(substr(trim($_POST['cmbWritePrivLevel']),0,6));
-    $iAdminCatID = intval(substr(trim($_POST['cmbAdminCat']),0,6));
-    $iSubOfID = intval(substr(trim($_POST['cmbSubOf']),0,6));
-    $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
-    if(isset($_POST['chkSensitive']))
+    $strTitle = CleanReg(substr(trim($_POST["txtTitle"]),0,49));
+    $strHeader = CleanReg(substr(trim($_POST["txtHeader"]),0,49));
+    $iReadPriv = intval(substr(trim($_POST["cmbReadPrivLevel"]),0,6));
+    $iWritePriv = intval(substr(trim($_POST["cmbWritePrivLevel"]),0,6));
+    $iAdminCatID = intval(substr(trim($_POST["cmbAdminCat"]),0,6));
+    $iSubOfID = intval(substr(trim($_POST["cmbSubOf"]),0,6));
+    $iMenuID = intval(substr(trim($_POST["MenuID"]),0,4));
+    if(isset($_POST["chkSensitive"]))
     {
       $bSensitive = 1;
     }
@@ -248,11 +248,11 @@
     }
   }
 
-  if($btnSubmit == 'Update Position')
+  if($btnSubmit == "Update Position")
   {
-    $NewHeadPos = intval(substr(trim($_POST['NewHeadPos']),0,4));
-    $OldHeadPos = intval(substr(trim($_POST['OldHeadPos']),0,4));
-    $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
+    $NewHeadPos = intval(substr(trim($_POST["NewHeadPos"]),0,4));
+    $OldHeadPos = intval(substr(trim($_POST["OldHeadPos"]),0,4));
+    $iMenuID = intval(substr(trim($_POST["MenuID"]),0,4));
 
     if($NewHeadPos > 0)
     {
@@ -261,9 +261,9 @@
     }
   }
 
-  if($btnSubmit == 'Add to menu')
+  if($btnSubmit == "Add to menu")
   {
-    $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
+    $iMenuID = intval(substr(trim($_POST["MenuID"]),0,4));
     $strQuery = "SELECT max(iMenuOrder)+1 AS NextID FROM tblmenutype";
     $nextPos = GetSQLValue($strQuery);
     $strQuery = "INSERT INTO tblmenutype (iMenuID, vcMenuType, iMenuOrder) VALUES ($iMenuID, 'head', $nextPos);";
@@ -272,9 +272,9 @@
     UpdateSQL($strQuery,"delete");
   }
 
-  if($btnSubmit == 'Remove from Menu')
+  if($btnSubmit == "Remove from Menu")
   {
-    $iMenuID = intval(substr(trim($_POST['MenuID']),0,4));
+    $iMenuID = intval(substr(trim($_POST["MenuID"]),0,4));
     $strQuery = "DELETE FROM tblmenutype WHERE iMenuID=$iMenuID;";
     UpdateSQL($strQuery,"delete");
   }
@@ -308,7 +308,7 @@
       print "<td>$Row[vcHeader]</td>\n";
       print "<td>$Row[ReadPriv]</td>\n";
       print "<td>$Row[WritePriv]</td>\n";
-      if($Row['bSecure'] == 0)
+      if($Row["bSecure"] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }
@@ -316,7 +316,7 @@
       {
         print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
       }
-      if($Row['bNewWindow'] == 0)
+      if($Row["bNewWindow"] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }
@@ -326,7 +326,7 @@
       }
       if($WritePriv <=  $Priv)
       {
-        $HeaderPos = $Row['iMenuOrder'];
+        $HeaderPos = $Row["iMenuOrder"];
         print "<form method=\"POST\">\n";
         print "<td><input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">";
         print "<input type=\"hidden\" value=\"$Row[iMenuID]\" name=\"MenuID\"></td>\n";
@@ -386,7 +386,7 @@
       print "<td>$Row[vcHeader]</td>";
       print "<td>$Row[ReadPriv]</td>\n";
       print "<td>$Row[WritePriv]</td>\n";
-      if($Row['bSecure'] == 0)
+      if($Row["bSecure"] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }
@@ -394,7 +394,7 @@
       {
         print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
       }
-      if($Row['bNewWindow'] == 0)
+      if($Row["bNewWindow"] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }
@@ -450,7 +450,7 @@
       print "<td>$Row[vcHeader]</td>";
       print "<td>$Row[ReadPriv]</td>\n";
       print "<td>$Row[WritePriv]</td>\n";
-      if($Row['bSecure'] == 0)
+      if($Row["bSecure"] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }
@@ -458,7 +458,7 @@
       {
         print "<td align=center><input type=\"checkbox\" checked disabled></td>\n";
       }
-      if($Row['bNewWindow'] == 0)
+      if($Row["bNewWindow"] == 0)
       {
         print "<td align=center><input type=\"checkbox\" disabled></td>\n";
       }

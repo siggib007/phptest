@@ -11,7 +11,7 @@
   $iAdminCat = 0;
 
   require_once("DBCon.php");
-  if(isset($_SERVER['HTTPS']) and $strSecOpt =="prevent")
+  if(isset($_SERVER["HTTPS"]) and $strSecOpt =="prevent")
   {
     $strUnSecure = "http://$strHost$strScriptName";
     header("Location: $strUnSecure");
@@ -20,7 +20,7 @@
   $iMenuID = 0;
   $iLastSlash = strrpos($strURI, "/");
   $strPagePath = substr($strURI, 0,$iLastSlash+1);
-  $strPageNameParts = explode('/',$strURI);
+  $strPageNameParts = explode("/",$strURI);
   $FirstPart = "/$strPageNameParts[1]/";
   $iSubOfID = 0;
   $bChangePWD = 0;
@@ -34,16 +34,16 @@
   $HowMany = count($strPageNameParts);
 
   $LastIndex = $HowMany - 1;
-  $strPageArgs = explode('?',$strPageNameParts[$LastIndex]);
+  $strPageArgs = explode("?",$strPageNameParts[$LastIndex]);
   $strPageName = $strPageArgs[0];
   if($strPageName =="" and $strURI == $ROOTPATH)
   {
-    $strPageName = 'index.php';
+    $strPageName = "index.php";
   }
   if(($strPageName =="" or $strPageName =="index.php") and $strPagePath != $ROOTPATH)
   {
     $LastIndex = $HowMany - 2;
-    $strPageArgs = explode('?',$strPageNameParts[$LastIndex]);
+    $strPageArgs = explode("?",$strPageNameParts[$LastIndex]);
     $strPageName = $strPageArgs[0];
   }
   if($DBError == "true")
@@ -62,12 +62,12 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $PrivReq = $Row['iReadPriv'];
-      $iMenuID = $Row['iMenuID'];
-      $WritePriv = $Row['iWritePriv'];
-      $iAdminCat = $Row['bAdmin'];
-      $dbHead = $Row['vcHeader'];
-      $bSecure = $Row['bSecure'];
+      $PrivReq = $Row["iReadPriv"];
+      $iMenuID = $Row["iMenuID"];
+      $WritePriv = $Row["iWritePriv"];
+      $iAdminCat = $Row["bAdmin"];
+      $dbHead = $Row["vcHeader"];
+      $bSecure = $Row["bSecure"];
     }
   }
   else
@@ -89,7 +89,7 @@
     }
   }
 
-  if(!isset($_SERVER['HTTPS'])and $strSecOpt =="force" and $bSecure == 1)
+  if(!isset($_SERVER["HTTPS"])and $strSecOpt =="force" and $bSecure == 1)
   {
     $strSecureHost = $ConfArray["SecureURL"];
     $strSecure = "https://$strSecureHost/$strScriptName";
@@ -107,20 +107,20 @@
   }
 
 
-  if($PrivReq == '')
+  if($PrivReq == "")
   {
     $PrivReq = 0;
   }
 
-  if($WritePriv == '')
+  if($WritePriv == "")
   {
     $WritePriv = 0;
   }
   $strHeader = $HeadAdd . $dbHead;
   $ShowPort = strtolower($GLOBALS["ConfArray"]["ShowPort"]);
-  if($_SERVER['SERVER_PORT'] != 80 and $_SERVER['SERVER_PORT'] != 443 and $ShowPort == "true")
+  if($_SERVER["SERVER_PORT"] != 80 and $_SERVER["SERVER_PORT"] != 443 and $ShowPort == "true")
   {
-    $strHeader = "[p" . $_SERVER['SERVER_PORT'] . "] " . $strHeader;
+    $strHeader = "[p" . $_SERVER["SERVER_PORT"] . "] " . $strHeader;
   }
 
   if($iMenuID)
@@ -172,9 +172,9 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        $dtLastLogin = $Row['dtLastLogin'];
-        $dbiPrivLevel = $Row['iPrivLevel'];
-        $bChangePWD = $Row['bChangePWD'];
+        $dtLastLogin = $Row["dtLastLogin"];
+        $dbiPrivLevel = $Row["iPrivLevel"];
+        $bChangePWD = $Row["bChangePWD"];
       }
     }
     else
@@ -247,7 +247,7 @@
       header("Location: $LoginPage" );
     }
   }
-  header('Content-Type: text/html; charset=utf-8');
+  header("Content-Type: text/html; charset=utf-8");
   print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n\"http://www.w3.org/TR/html4/loose.dtd\">\n";
   print "<html>\n";
   print "<head>\n";
@@ -259,9 +259,9 @@
   {
     foreach($MetaResult[1] as $MetaRow)
     {
-      $AttrName = $MetaRow['vcAttrName'];
-      $MetaName = $MetaRow['vcMetaName'];
-      $MetaValue = $MetaRow['vcMetaValue'];
+      $AttrName = $MetaRow["vcAttrName"];
+      $MetaName = $MetaRow["vcMetaName"];
+      $MetaValue = $MetaRow["vcMetaValue"];
       print "<meta $AttrName=\"$MetaName\" content=\"$MetaValue\" />\n";
     }
   }
@@ -367,10 +367,10 @@
     $QueryData = QuerySQL($strQuery);
     foreach($QueryData[1] as $Row)
     {
-      $key = str_replace(" ", "&nbsp;", $Row['vcTitle']);
-      $value = $Row['vcLink'];
+      $key = str_replace(" ", "&nbsp;", $Row["vcTitle"]);
+      $value = $Row["vcLink"];
       $FileName = $ROOTPATH . $value;
-      if($Row['bNewWindow'] == 1)
+      if($Row["bNewWindow"] == 1)
       {
         $target = "_blank";
       }
@@ -414,10 +414,10 @@
       print "<ul class=\"nav\">\n";
       foreach($QueryData[1] as $Row)
       {
-        $key = str_replace(" ", "&nbsp;", $Row['vcTitle']);
-        $value = $Row['vcLink'];
+        $key = str_replace(" ", "&nbsp;", $Row["vcTitle"]);
+        $value = $Row["vcLink"];
         $FileName = $ROOTPATH . $value;
-        if($Row['bNewWindow'] == 1)
+        if($Row["bNewWindow"] == 1)
         {
           $target = "_blank";
         }
@@ -453,9 +453,9 @@
   {
     if($strPageName == "admin.php" or $iAdminCat > 0)
     {
-      if(isset($_GET['cat']))
+      if(isset($_GET["cat"]))
       {
-        $strCatID = intval($_GET['cat']);
+        $strCatID = intval($_GET["cat"]);
       }
       else
       {
@@ -478,8 +478,8 @@
         print "<ul class=\"nav\">\n";
         foreach($QueryData[1] as $Row)
         {
-          $key = str_replace(" ", "&nbsp;", $Row['vcCatName']);
-          $value = $Row['iCatID'];
+          $key = str_replace(" ", "&nbsp;", $Row["vcCatName"]);
+          $value = $Row["iCatID"];
           $FileName = "admin.php?cat=$value";
           if($strCatID == $value)
           {
@@ -515,10 +515,10 @@
         print "<ul class=\"nav\">\n";
         foreach($QueryData[1] as $Row)
         {
-          $key = str_replace(" ", "&nbsp;", $Row['vcTitle']);
-          $value = $Row['vcLink'];
+          $key = str_replace(" ", "&nbsp;", $Row["vcTitle"]);
+          $value = $Row["vcLink"];
           $FileName = $ROOTPATH . $value;
-          if($Row['bNewWindow'] == 1)
+          if($Row["bNewWindow"] == 1)
           {
             $target = "_blank";
           }

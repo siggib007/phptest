@@ -17,9 +17,9 @@
 	}
 	$strFileName = "";
 	$strAttach = "";
-  if(isset($_POST['btnSubmit']))
+  if(isset($_POST["btnSubmit"]))
   {
-    $btnSubmit = $_POST['btnSubmit'];
+    $btnSubmit = $_POST["btnSubmit"];
   }
   else
   {
@@ -32,18 +32,18 @@
 
 	print "<center>\n";
 	printPg("Fill out this form and hit send and your message will be sent through your configured email service","normal");
-	if($btnSubmit == 'Send')
+	if($btnSubmit == "Send")
 	{
-		$strFromName = CleanReg(substr(trim($_POST['txtFromName']),0,25));
-		$strToName = CleanReg(substr(trim($_POST['txtToName']),0,25));
-		$strFromEmail = CleanReg(substr(trim($_POST['txtFromEmail']),0,25));
-		$strToEmail = CleanReg(substr(trim($_POST['txtToEmail']),0,25));
-		$strSubject = CleanReg(substr(trim($_POST['txtSubject']),0,75));
+		$strFromName = CleanReg(substr(trim($_POST["txtFromName"]),0,25));
+		$strToName = CleanReg(substr(trim($_POST["txtToName"]),0,25));
+		$strFromEmail = CleanReg(substr(trim($_POST["txtFromEmail"]),0,25));
+		$strToEmail = CleanReg(substr(trim($_POST["txtToEmail"]),0,25));
+		$strSubject = CleanReg(substr(trim($_POST["txtSubject"]),0,75));
 		$FromEmail = "$strFromName|$strFromEmail";
 		$toEmail = "$strToName|$strToEmail";
 
-		$strAddHeader = CleanReg($_POST['txtHeader']);
-		$strHTMLMsg = $_POST['txtBody'];
+		$strAddHeader = CleanReg($_POST["txtHeader"]);
+		$strHTMLMsg = $_POST["txtBody"];
 
 		$arrAddHeader = explode("\n",$strAddHeader);
 

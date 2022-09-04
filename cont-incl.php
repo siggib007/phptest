@@ -15,7 +15,7 @@
     printPg("Address","tmh2");
     foreach($QueryData[1] as $Row)
     {
-      print $Row['vcValue'] . "<br>\n";
+      print $Row["vcValue"] . "<br>\n";
     }
   }
   else
@@ -32,8 +32,8 @@
     printPg("Electronic mail","tmh2");
     foreach($QueryData[1] as $Row)
     {
-      print $Row['vcLabel'] . ": <a href=\"mailto:" . $Row['vcValue'] . "\">" .
-            $Row['vcValue'] . "</a><br>\n";
+      print $Row["vcLabel"] . ": <a href=\"mailto:" . $Row["vcValue"] . "\">" .
+            $Row["vcValue"] . "</a><br>\n";
     }
   }
   else
@@ -50,7 +50,7 @@
     printPg("Phone Numbers","tmh2");
     foreach($QueryData[1] as $Row)
     {
-      print $Row['vcLabel'] . ": " . $Row['vcValue'] . "<br>\n";
+      print $Row["vcLabel"] . ": " . $Row["vcValue"] . "<br>\n";
     }
   }
   else

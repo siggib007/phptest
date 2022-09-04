@@ -30,10 +30,10 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $strLink     = $Row['vcLink'];
-      $strName     = $Row['vcTitle'];
-      $bNewWindow  = $Row['bNewWindow'];
-      $strCategory = $Row['vcCatName'];
+      $strLink     = $Row["vcLink"];
+      $strName     = $Row["vcTitle"];
+      $bNewWindow  = $Row["bNewWindow"];
+      $strCategory = $Row["vcCatName"];
       if($strCat != $strCategory)
       {
         if($strCat != "")

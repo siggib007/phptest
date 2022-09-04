@@ -16,8 +16,8 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $strEmail = $Row['vcNewEmail'];
-      $iUserID = $Row['iClientID'];
+      $strEmail = $Row["vcNewEmail"];
+      $iUserID = $Row["iClientID"];
       print "Updating email in record $iUserID to $strEmail<br>\n";
       $strQuery = "update tblUsers set vcEmail = '$strEmail' where `iUserID`= $iUserID";
       if(UpdateSQL($strQuery, "update"))

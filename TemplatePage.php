@@ -16,9 +16,9 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $PageHeader = $Row['vcPageHeader'];
-      $PageText = $Row['tPageText'];
-      $bCRLF = $Row['bLineBreak'];
+      $PageHeader = $Row["vcPageHeader"];
+      $PageText = $Row["tPageText"];
+      $bCRLF = $Row["bLineBreak"];
     }
   }
   else

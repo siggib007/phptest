@@ -121,8 +121,8 @@
               }
               if($Password == $PWDConf and $strUID != $strUID2)
               {
-                printPg("<p class=\"Error\">Requested username is already in use could not be changed, however the password will been changed. " .
-                      "To change the username use a different username that is not in use. For example $strUID2 is available.</p>\n","error");
+                printPg("Requested username is already in use could not be changed, however the password will been changed. " .
+                      "To change the username use a different username that is not in use. For example $strUID2 is available.","error");
                 $strQuery = "UPDATE tblUsers SET vcPWD = '$PWD', bChangePWD = 0 WHERE iUserID = '$iUserID'";
               }
               if($Password != $PWDConf and $strUID != $strUID2)

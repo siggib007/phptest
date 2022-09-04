@@ -20,28 +20,28 @@
     $PageHeader = "Contribute your photo's here";
     $ConfirmationMsg = "Thank you $UsersName for your contribution of the following files";
   }
-  $MaxConLen = return_bytes(ini_get('post_max_size'));
-  $MaxSize = ini_get('post_max_size');
-  $MaxFileSize = ini_get('upload_max_filesize');
-  $MaxFileCount = ini_get('max_file_uploads');
-  if(isset($_FILES['Docfile']))
+  $MaxConLen = return_bytes(ini_get("post_max_size"));
+  $MaxSize = ini_get("post_max_size");
+  $MaxFileSize = ini_get("upload_max_filesize");
+  $MaxFileCount = ini_get("max_file_uploads");
+  if(isset($_FILES["Docfile"]))
   {
-    $FilesVarCount = count($_FILES['Docfile']['name']);
-    if($FilesVarCount == 1 and $_FILES['Docfile']['name'][0]=="")
+    $FilesVarCount = count($_FILES["Docfile"]["name"]);
+    if($FilesVarCount == 1 and $_FILES["Docfile"]["name"][0]=="")
     {
       printPg("You didn't select any files.","error");
-      $_POST['btnSubmit'] = "Go Back";
+      $_POST["btnSubmit"] = "Go Back";
     }
   }
-  if(isset($_SERVER['CONTENT_LENGTH']))
+  if(isset($_SERVER["CONTENT_LENGTH"]))
   {
-    $ContLen = $_SERVER['CONTENT_LENGTH'];
+    $ContLen = $_SERVER["CONTENT_LENGTH"];
     if($ContLen > $MaxConLen)
     {
       $strMsg = "Your upload was " . with_unit($ContLen ) . ". ";
       $strMsg .= "This exceeds the content limit of $MaxSize. Please do your upload in smaller chunks.";
       printPg($strMsg,"error");
-      $_POST['btnSubmit'] = "Go Back";
+      $_POST["btnSubmit"] = "Go Back";
     }
   }
   $dtNow = date("Y-m-d H:i:s");
@@ -58,7 +58,7 @@
     exit;
   }
 
-  if($PostVarCount == 0 or ($_POST['btnSubmit'] == 'Go Back'))
+  if($PostVarCount == 0 or ($_POST["btnSubmit"] == "Go Back"))
   {
     printPg("$PageHeader","h1");
     printPg("Please note the following limits in place:<br>\n" .
@@ -76,11 +76,11 @@
   }
   else
   {
-    if($_POST['btnSubmit'] == 'Upload')
+    if($_POST["btnSubmit"] == "Upload")
     {
-      if(isset($_FILES['Docfile']))
+      if(isset($_FILES["Docfile"]))
       {
-        $arrRet = FileUpload($_FILES['Docfile'],$DocRoot);
+        $arrRet = FileUpload($_FILES["Docfile"],$DocRoot);
         $FileList = $arrRet["Files"];
         $SizeTotal = $arrRet["size"];
         $arrErrors = $arrRet["err"];

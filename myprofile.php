@@ -19,17 +19,17 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $strName = $Row['vcName'];
-      $strAddr1 = $Row['vcAddr1'];
-      $strAddr2 = $Row['vcAddr2'];
-      $strCity = $Row['vcCity'];
-      $strState = $Row['vcState'];
-      $strZip = $Row['vcZip'];
-      $strCountry = $Row['vcCountry'];
-      $strEmail = $Row['vcEmail'];
-      $strCell = $Row['vcCell'];
-      $iPrivLevel = $Row['iPrivLevel'];
-      $strLastLogin = $Row['dtLastLogin'];
+      $strName = $Row["vcName"];
+      $strAddr1 = $Row["vcAddr1"];
+      $strAddr2 = $Row["vcAddr2"];
+      $strCity = $Row["vcCity"];
+      $strState = $Row["vcState"];
+      $strZip = $Row["vcZip"];
+      $strCountry = $Row["vcCountry"];
+      $strEmail = $Row["vcEmail"];
+      $strCell = $Row["vcCell"];
+      $iPrivLevel = $Row["iPrivLevel"];
+      $strLastLogin = $Row["dtLastLogin"];
     }
   }
   else
@@ -77,7 +77,7 @@
 
   $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = $iPrivLevel;";
   $PrivName = GetSQLValue($strQuery);
-  if($PrivName == '' or $PrivName == 0)
+  if($PrivName == "" or $PrivName == 0)
   {
     $PrivName = $iPrivLevel;
   }
@@ -86,11 +86,11 @@
   
   if($strLastLogin)
   {
-    $LastLogin = 'on ' . date('l F jS Y \a\t G:i',strtotime($strLastLogin));
+    $LastLogin = "on " . date("l F jS Y \a\t G:i",strtotime($strLastLogin));
   }
   else
   {
-    $LastLogin = 'never';
+    $LastLogin = "never";
   }
   print "Last logged in $LastLogin";
   print "</div>";

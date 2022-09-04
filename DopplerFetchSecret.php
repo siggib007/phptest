@@ -16,16 +16,16 @@
     $method = "GET";
 
     $Param = array();
-    $Param['project'] = $strProject;
-    $Param['config'] = $strConfig;
+    $Param["project"] = $strProject;
+    $Param["config"] = $strConfig;
     
-    $url = $APIEndpoint.$Service . '?' . http_build_query($Param);
+    $url = $APIEndpoint.$Service . "?" . http_build_query($Param);
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_USERPWD, "$AccessKey:");
     curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('accept: application/json'));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json"));
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
     $response = curl_exec($curl);
     curl_close($curl);

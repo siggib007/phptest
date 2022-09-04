@@ -15,7 +15,7 @@
 
   require("header.php");
 
-  $strEmail = CleanReg(trim($_POST['txtRecEmail']));
+  $strEmail = CleanReg(trim($_POST["txtRecEmail"]));
 
   $RecoverAck = $TextArray["RecoverAck"];
 
@@ -28,9 +28,9 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        $iUserID = $Row['iUserID'];
-        $strUID =  $Row['vcUID'];
-        $strName =  $Row['vcName'];
+        $iUserID = $Row["iUserID"];
+        $strUID =  $Row["vcUID"];
+        $strName =  $Row["vcName"];
       }
     }
     else
@@ -50,7 +50,7 @@
 
     $Password = bin2hex(random_bytes($PWDLength/2));
     $PWD = password_hash($Password, PASSWORD_DEFAULT);
-    $strQuery = "update tblUsers set vcPWD = '$PWD', bChangePWD=1  where iUserID='$iUserID'";
+    $strQuery = "update tblUsers set vcPWD = '$PWD', bChangePWD=1 where iUserID='$iUserID'";
     $bUpdate = UpdateSQL($strQuery,"update");
     if($bUpdate)
     {

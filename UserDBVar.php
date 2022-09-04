@@ -14,19 +14,19 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $strName = $Row['vcName'];
-      $strAddr1 = $Row['vcAddr1'];
-      $strAddr2 = $Row['vcAddr2'];
-      $strCity = $Row['vcCity'];
-      $strState = $Row['vcState'];
-      $strZip = $Row['vcZip'];
-      $strCountry = $Row['vcCountry'];
-      $iPrivLevel = $Row['iPrivLevel'];
-      $strEmail = $Row['vcEmail'];
-      $strCell = $Row['vcCell'];
-      $strUID = $Row['vcUID'];
-      $dtUpdated = $Row['dtUpdated'];
-      $strTOTP = $Row['vcMFASecret'];
+      $strName = $Row["vcName"];
+      $strAddr1 = $Row["vcAddr1"];
+      $strAddr2 = $Row["vcAddr2"];
+      $strCity = $Row["vcCity"];
+      $strState = $Row["vcState"];
+      $strZip = $Row["vcZip"];
+      $strCountry = $Row["vcCountry"];
+      $iPrivLevel = $Row["iPrivLevel"];
+      $strEmail = $Row["vcEmail"];
+      $strCell = $Row["vcCell"];
+      $strUID = $Row["vcUID"];
+      $dtUpdated = $Row["dtUpdated"];
+      $strTOTP = $Row["vcMFASecret"];
     }
   }
   else

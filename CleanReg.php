@@ -9,16 +9,16 @@
   */
 
   $bSpam = FALSE;
-  $strName = substr(trim($_POST['txtName']),0,49);
-  $strAddr1 = substr(trim($_POST['txtAddr1']),0,49);
-  $strAddr2 = substr(trim($_POST['txtAddr2']),0,49);
-  $strCity = substr(trim($_POST['txtCity']),0,49);
-  $strState = substr(trim($_POST['cmbState']),0,49);
-  $strZip = substr(trim($_POST['txtZip']),0,9);
-  $strCountry = substr(trim($_POST['cmbCountry']),0,99);
-  $strEmail = substr(trim($_POST['txtEmail']),0,49);
-  $strOEmail = substr(trim($_POST['txtOEmail']),0,49);
-  $strCell = substr(trim($_POST['txtCell']),0,19);
+  $strName = substr(trim($_POST["txtName"]),0,49);
+  $strAddr1 = substr(trim($_POST["txtAddr1"]),0,49);
+  $strAddr2 = substr(trim($_POST["txtAddr2"]),0,49);
+  $strCity = substr(trim($_POST["txtCity"]),0,49);
+  $strState = substr(trim($_POST["cmbState"]),0,49);
+  $strZip = substr(trim($_POST["txtZip"]),0,9);
+  $strCountry = substr(trim($_POST["cmbCountry"]),0,99);
+  $strEmail = substr(trim($_POST["txtEmail"]),0,49);
+  $strOEmail = substr(trim($_POST["txtOEmail"]),0,49);
+  $strCell = substr(trim($_POST["txtCell"]),0,19);
   if(SpamDetect($strName))
   {
     printPg("URL detected in Name field","error");

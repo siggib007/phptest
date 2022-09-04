@@ -12,7 +12,7 @@
   require_once("functions.php");
 
   // default_charset = "utf-8";
-  ini_set( 'default_charset', 'UTF-8' );
+  ini_set( "default_charset", "UTF-8" );
   set_time_limit(30);
   $DevEnvironment = getenv("DEVENV");
   $ROOTPATH = "/";
@@ -36,13 +36,13 @@
         ShowErrHead();
       }
 
-  date_default_timezone_set('UTC');
+  date_default_timezone_set("UTC");
   $strRemoteIP = $_SERVER["REMOTE_ADDR"];
   $Priv = 0; // Default Privledge level is public or 0
   $strHost = $_SERVER["SERVER_NAME"];
-  if($_SERVER['SERVER_PORT'] != 80 and $_SERVER['SERVER_PORT'] != 443)
+  if($_SERVER["SERVER_PORT"] != 80 and $_SERVER["SERVER_PORT"] != 443)
   {
-    $strHost .= ":".$_SERVER['SERVER_PORT'];
+    $strHost .= ":".$_SERVER["SERVER_PORT"];
   }
   $strScriptName = $_SERVER["SCRIPT_NAME"];
   $gFileName = __FILE__;
@@ -50,7 +50,7 @@
   $HeadAdd = "";
   $strSiteLabel = "";
   $DBError = "false";
-  $strHostNameParts = explode('.',$strHost);
+  $strHostNameParts = explode(".",$strHost);
   $HostnamePartCount = count($strHostNameParts);
   $OSEnv = "not used";
 
@@ -92,113 +92,113 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        $ConfArray[$Row['vcValueName']] = $Row['vcValue'];
-        switch($Row['vcValueName'])
+        $ConfArray[$Row["vcValueName"]] = $Row["vcValue"];
+        switch($Row["vcValueName"])
         {
           case "SupportEmail":
-              $SupportEmail = $Row['vcValue'];
+              $SupportEmail = $Row["vcValue"];
               break;
           case "HeadKeyLen":
-              $HKeyLen = $Row['vcValue'];
+              $HKeyLen = $Row["vcValue"];
               break;
           case "FootKeyLen":
-              $FKeyLen = $Row['vcValue'];
+              $FKeyLen = $Row["vcValue"];
               break;
           case "ImgHeight":
-              $ImgHeight = $Row['vcValue'];
+              $ImgHeight = $Row["vcValue"];
               break;
           case "Owner":
-              $Owner = $Row['vcValue'];
+              $Owner = $Row["vcValue"];
               break;
           case "Address1":
-              $Address1 = $Row['vcValue'];
+              $Address1 = $Row["vcValue"];
               break;
           case "Address2":
-              $Address2 = $Row['vcValue'];
+              $Address2 = $Row["vcValue"];
               break;
           case "Phone":
-              $Phone = $Row['vcValue'];
+              $Phone = $Row["vcValue"];
               break;
           case "ProfileNotify":
-              $ProfileNotify = $Row['vcValue'];
+              $ProfileNotify = $Row["vcValue"];
               break;
           case "Copyright":
-              $Copyright = $Row['vcValue'];
+              $Copyright = $Row["vcValue"];
               break;
           case "Maintenance":
-              $Maintenance = $Row['vcValue'];
+              $Maintenance = $Row["vcValue"];
               break;
           case "EmailFromAddr":
-              $eFromAddr = $Row['vcValue'];
+              $eFromAddr = $Row["vcValue"];
               break;
           case "EmailFromName":
-              $eFromName = $Row['vcValue'];
+              $eFromName = $Row["vcValue"];
               break;
           case "ShowLinkURL":
-              $ShowLinkURL = $Row['vcValue'];
+              $ShowLinkURL = $Row["vcValue"];
               break;
           case "SiteMessage":
-              $strSiteLabel = $Row['vcValue'];
+              $strSiteLabel = $Row["vcValue"];
               break;
           case "HeadAdd":
-              $HeadAdd = $Row['vcValue'];
+              $HeadAdd = $Row["vcValue"];
               break;
           case "DefNumWeeks":
-              $DefNumWeeks = $Row['vcValue'];
+              $DefNumWeeks = $Row["vcValue"];
               break;
           case "DefClassLen":
-              $DefClassLen = $Row['vcValue'];
+              $DefClassLen = $Row["vcValue"];
               break;
           case "defClassPrice":
-              $DefClassPrice = $Row['vcValue'];
+              $DefClassPrice = $Row["vcValue"];
               break;
           case "ShowLast":
-              $ShowLastClass = $Row['vcValue'];
+              $ShowLastClass = $Row["vcValue"];
               break;
           case "ClassDur":
-              $ClassDuration = $Row['vcValue'];
+              $ClassDuration = $Row["vcValue"];
               break;
           case "CTUnit":
-              $CTUnit = $Row['vcValue'];
+              $CTUnit = $Row["vcValue"];
               break;
           case "TimeFormat":
-              $strTimeFormat = $Row['vcValue'];
+              $strTimeFormat = $Row["vcValue"];
               break;
           case "DateFormat":
-              $strDateFormat = $Row['vcValue'];
+              $strDateFormat = $Row["vcValue"];
               break;
           case "PDFBase":
-              $strPDFBaseName = $Row['vcValue'];
+              $strPDFBaseName = $Row["vcValue"];
               break;
           case "DefMaxStudent":
-              $DefMaxStudent = $Row['vcValue'];
+              $DefMaxStudent = $Row["vcValue"];
               break;
           case "minRegLevel":
-              $minRegLevel = $Row['vcValue'];
+              $minRegLevel = $Row["vcValue"];
               break;
           case "SecureOpt":
-              $strSecOpt = $Row['vcValue'];
+              $strSecOpt = $Row["vcValue"];
               break;
           case "NumAdminCol":
-              $iNumCol = $Row['vcValue'];
+              $iNumCol = $Row["vcValue"];
               break;
           case "ShowAdminSub":
-              $ShowAdminSub = $Row['vcValue'];
+              $ShowAdminSub = $Row["vcValue"];
               break;
           case "UserTimeout":
-              $Timeout = $Row['vcValue'] * 60;
+              $Timeout = $Row["vcValue"] * 60;
               break;
           case "NewPWDLen":
-              $PWDLength = $Row['vcValue'];
+              $PWDLength = $Row["vcValue"];
               break;
           case "MinPWDLen":
-              $MinPWDLen = $Row['vcValue'];
+              $MinPWDLen = $Row["vcValue"];
               break;
           case "ProductName":
-            $ProdName = $Row['vcValue'];
+            $ProdName = $Row["vcValue"];
             break;
           case "USOnly":
-            $bUSOnly = $Row['vcValue'];
+            $bUSOnly = $Row["vcValue"];
             break;
         }
       }
@@ -216,15 +216,15 @@
     session_start();
   }
 
-  if(isset($_SERVER['HTTP_REFERER']))
+  if(isset($_SERVER["HTTP_REFERER"]))
   {
-    $strReferer = $_SERVER['HTTP_REFERER'];
+    $strReferer = $_SERVER["HTTP_REFERER"];
   }
   else
   {
     $strReferer = "";
   }
-  if(isset($_SERVER['HTTPS']))
+  if(isset($_SERVER["HTTPS"]))
   {
     $strProto = "https://";
   }
@@ -242,7 +242,7 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $TextArray[$Row['vcTextName']] = str_replace("\n","<br>\n",$Row['tPageTexts']);
+      $TextArray[$Row["vcTextName"]] = str_replace("\n","<br>\n",$Row["tPageTexts"]);
     }
   }
   else

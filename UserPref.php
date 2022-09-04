@@ -12,9 +12,9 @@
     exit;
   }
 
-  if(isset($_POST['btnSubmit']))
+  if(isset($_POST["btnSubmit"]))
   {
-    $btnSubmit = $_POST['btnSubmit'];
+    $btnSubmit = $_POST["btnSubmit"];
   }
   else
   {
@@ -23,9 +23,9 @@
 
   if($btnSubmit == "Validate")
   {
-    if(isset($_POST['txtCode']))
+    if(isset($_POST["txtCode"]))
     {
-      $strCode =  CleanReg($_POST['txtCode']);
+      $strCode =  CleanReg($_POST["txtCode"]);
     }
     else
     {
@@ -62,17 +62,17 @@
 
   if($btnSubmit =="Disabled")
   {
-    if(isset($_POST['txtKey']))
+    if(isset($_POST["txtKey"]))
     {
-      $strKey =  CleanReg($_POST['txtKey']);
+      $strKey =  CleanReg($_POST["txtKey"]);
     }
     else
     {
       $strKey = "";
     }
-    if(isset($_POST['txtLabel']))
+    if(isset($_POST["txtLabel"]))
     {
-      $strLabel = CleanReg($_POST['txtLabel']);
+      $strLabel = CleanReg($_POST["txtLabel"]);
     }
     else
     {
@@ -141,7 +141,7 @@
       $strQuery = "update tblUsrPrefValues set vcValue = 'True' where iUserID = $iUserID and iTypeID = $strKey ;";
       if(UpdateSQL($strQuery, "update"))
       {
-        printPg("<p class=\"BlueAttn\">Update for $strLabel successful</p>","note");
+        printPg("Update for $strLabel successful","note");
       }
       else
       {
@@ -161,17 +161,17 @@
 
   if($btnSubmit =="Enabled")
   {
-    if(isset($_POST['txtKey']))
+    if(isset($_POST["txtKey"]))
     {
-      $strKey =  CleanReg($_POST['txtKey']);
+      $strKey =  CleanReg($_POST["txtKey"]);
     }
     else
     {
       $strKey = "";
     }
-    if(isset($_POST['txtLabel']))
+    if(isset($_POST["txtLabel"]))
     {
-      $strLabel = CleanReg($_POST['txtLabel']);
+      $strLabel = CleanReg($_POST["txtLabel"]);
     }
     else
     {
@@ -187,7 +187,7 @@
       {
         foreach($QueryData[1] as $Row)
         {
-          $arrTypeIDs[] = $Row['iID'];
+          $arrTypeIDs[] = $Row["iID"];
         }
       }
       else
@@ -229,10 +229,10 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $Key = $Row['iID'];
-      $Value = $Row['vcValue'];
-      $ValueDescr = $Row['vcLabel'];
-      $ValueType = $Row['vcType'];
+      $Key = $Row["iID"];
+      $Value = $Row["vcValue"];
+      $ValueDescr = $Row["vcLabel"];
+      $ValueType = $Row["vcType"];
       print "<form method=\"POST\">\n";
       print "<input type=\"hidden\" value=\"$Key\" name=\"txtKey\">";
       print "<input type=\"hidden\" value=\"$ValueDescr\" name=\"txtLabel\">";

@@ -18,29 +18,29 @@
 
   printPg("Site Configuration","h1");
 
-  if(($PostVarCount == 1) and ($_POST['btnSubmit'] == 'Go Back'))
+  if(($PostVarCount == 1) and ($_POST["btnSubmit"] == "Go Back"))
   {
     header("Location: $strPageURL");
   }
 
-  if(isset($_POST['btnSubmit']))
+  if(isset($_POST["btnSubmit"]))
   {
-    $btnSubmit = $_POST['btnSubmit'];
+    $btnSubmit = $_POST["btnSubmit"];
   }
   else
   {
     $btnSubmit = "";
   }
 
-  if($btnSubmit == 'Save')
+  if($btnSubmit == "Save")
   {
-    $strValueName = CleanSQLInput(substr(trim($_POST['txtValueName']),0,49));
+    $strValueName = CleanSQLInput(substr(trim($_POST["txtValueName"]),0,49));
     $strValue = "False";
-    if(isset($_POST['txtValue']))
+    if(isset($_POST["txtValue"]))
     {
-      $strValue = CleanSQLInput(substr(trim($_POST['txtValue']),0,49));
+      $strValue = CleanSQLInput(substr(trim($_POST["txtValue"]),0,49));
     }
-    if(isset($_POST['chkValue']))
+    if(isset($_POST["chkValue"]))
     {
       $strValue = "True";
     }
@@ -56,10 +56,10 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $Key = $Row['vcValueName'];
-      $Value = $Row['vcValue'];
-      $ValueDescr = $Row['vcValueDescr'];
-      $ValueType = $Row['vcValueType'];
+      $Key = $Row["vcValueName"];
+      $Value = $Row["vcValue"];
+      $ValueDescr = $Row["vcValueDescr"];
+      $ValueType = $Row["vcValueType"];
       if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\">\n";
@@ -92,7 +92,7 @@
             {
               foreach($QueryData[1] as $Row2)
               {
-                if($Row2['vcType'] == $Value)
+                if($Row2["vcType"] == $Value)
                 {
                   print "<option selected value=\"{$Row2['vcType']}\">{$Row2['vcText']}</option>\n";
                 }

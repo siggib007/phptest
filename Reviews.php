@@ -18,12 +18,12 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $vcSiteName = $Row['vcSiteName'];
-      $vcSiteURL = $Row['vcSiteURL'];
-      $vcMMURL = $Row['vcImgPath'];
+      $vcSiteName = $Row["vcSiteName"];
+      $vcSiteURL = $Row["vcSiteURL"];
+      $vcMMURL = $Row["vcImgPath"];
       print "<td class=\"ReviewLinks\">";
       print "<a href=\"$vcSiteURL\" target=\"_blank\">";
-      if($vcMMURL!='')
+      if($vcMMURL!="")
       {
         print "<img style=\"border:0;\" src=\"$vcMMURL\" alt=\"$vcSiteName\" height=75>\n";
       }
@@ -58,12 +58,12 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $vcFeedbackName = $Row['vcFeedbackName'];
-      $vcFeedbackDescr = $Row['tFeedbackDescr'];
-      $vcMMURL = $Row['vcImgPath'];
+      $vcFeedbackName = $Row["vcFeedbackName"];
+      $vcFeedbackDescr = $Row["tFeedbackDescr"];
+      $vcMMURL = $Row["vcImgPath"];
       printPg($vcFeedbackName,"tmh2");
       printPg($vcFeedbackDescr,"normal");
-      if($vcMMURL!='')
+      if($vcMMURL!="")
       {
         print "<img src=\"$vcMMURL\" height=200><br>\n";
       }

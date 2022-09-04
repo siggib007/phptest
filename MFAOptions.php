@@ -21,11 +21,11 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        if(strtolower($Row['vcValue']) == "true" && strtolower($Row['iTypeID']) == "2")
+        if(strtolower($Row["vcValue"]) == "true" && strtolower($Row["iTypeID"]) == "2")
         {
           SendUserSMS($strMsg,$iUserID);
         }
-        if(strtolower($Row['vcValue']) == "true" && strtolower($Row['iTypeID']) == "3")
+        if(strtolower($Row["vcValue"]) == "true" && strtolower($Row["iTypeID"]) == "3")
         {
           EmailText($strEmail,"Login Verification Code",$strMsg,$FromEmail);
         }

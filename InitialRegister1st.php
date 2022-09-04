@@ -9,9 +9,9 @@
   */
 
   require("header.php");
-  if(isset($_POST['btnSubmit']))
+  if(isset($_POST["btnSubmit"]))
   {
-    $btnSubmitValue = $_POST['btnSubmit'];
+    $btnSubmitValue = $_POST["btnSubmit"];
   }
   else
   {
@@ -55,12 +55,12 @@
   $bSuccess = FALSE;
   $bRegOK = FALSE;
 
-  if($btnSubmitValue == 'Submit')
+  if($btnSubmitValue == "Submit")
   {
     require_once("CleanReg.php");
     if($strEmail)
     {
-      $strNameParts = explode(' ',$strName);
+      $strNameParts = explode(" ",$strName);
       $HowMany = count($strNameParts);
       if($HowMany==1)
       {

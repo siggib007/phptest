@@ -17,55 +17,55 @@
 
 	printPg("Link Administration","h1");
 
-	if(($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
+	if(($PostVarCount == 1) and ($btnSubmit == "Go Back"))
 	{
 		header("Location: $strPageURL");
 	}
 
-	if(isset($_POST['btnSubmit']))
+	if(isset($_POST["btnSubmit"]))
 	{
-		$btnSubmit = $_POST['btnSubmit'];
+		$btnSubmit = $_POST["btnSubmit"];
 	}
 	else
 	{
 		$btnSubmit = "";
 	}
 
-	if($btnSubmit == 'Save')
+	if($btnSubmit == "Save")
 	{
-		$iLinkID = intval(substr(trim($_POST['iLinkID']),0,49));
-		$vcLink = CleanSQLInput(substr(trim($_POST['txtLink']),0,499));
-		$vcLinkName = CleanSQLInput(substr(trim($_POST['txtName']),0,49));
-		$vcComment = CleanSQLInput(substr(trim($_POST['txtComment']),0,499));
-		$iLinkCat = substr(trim($_POST['cmbCategory']),0,49);
+		$iLinkID = intval(substr(trim($_POST["iLinkID"]),0,49));
+		$vcLink = CleanSQLInput(substr(trim($_POST["txtLink"]),0,499));
+		$vcLinkName = CleanSQLInput(substr(trim($_POST["txtName"]),0,49));
+		$vcComment = CleanSQLInput(substr(trim($_POST["txtComment"]),0,499));
+		$iLinkCat = substr(trim($_POST["cmbCategory"]),0,49);
 
 		$strQuery = "update tbllinks set iCategory ='$iLinkCat', vcLink='$vcLink', vcName='$vcLinkName', vcComment='$vcComment' where iLinkID=$iLinkID;";
 		UpdateSQL($strQuery,"update");
 	}
 
-	if($btnSubmit == 'Delete')
+	if($btnSubmit == "Delete")
 	{
-		$iLinkID = intval(substr(trim($_POST['iLinkID']),0,49));
+		$iLinkID = intval(substr(trim($_POST["iLinkID"]),0,49));
 
 		$strQuery = "delete from tbllinks where iLinkID = $iLinkID;";
 		UpdateSQL($strQuery,"delete");
 	}
 
-	if($btnSubmit == 'Insert')
+	if($btnSubmit == "Insert")
 	{
-		$vcLink = CleanSQLInput(substr(trim($_POST['txtLink']),0,499));
-		$vcLinkName = CleanSQLInput(substr(trim($_POST['txtName']),0,49));
-		$vcComment = CleanSQLInput(substr(trim($_POST['txtComment']),0,49));
-    if(isset($_POST['cmbCategory']))
+		$vcLink = CleanSQLInput(substr(trim($_POST["txtLink"]),0,499));
+		$vcLinkName = CleanSQLInput(substr(trim($_POST["txtName"]),0,49));
+		$vcComment = CleanSQLInput(substr(trim($_POST["txtComment"]),0,49));
+    if(isset($_POST["cmbCategory"]))
     {
-      $iLinkCat = intval(substr(trim($_POST['cmbCategory']),0,49));
+      $iLinkCat = intval(substr(trim($_POST["cmbCategory"]),0,49));
     }
     else 
     {
       $iLinkCat = 0;
     }
 
-		if($vcLink == '' or $vcLinkName == '')
+		if($vcLink == "" or $vcLinkName == "")
 		{
 			printPg("Please provide the link and a link name to insert","error");
 		}

@@ -13,9 +13,9 @@
 		printPg("Invalid operation, Bad Reference!!!","error");
 		exit;
 	}
-	if(isset($_POST['btnSubmit']))
+	if(isset($_POST["btnSubmit"]))
 	{
-		$btnSubmit = $_POST['btnSubmit'];
+		$btnSubmit = $_POST["btnSubmit"];
 	}
 	else
 	{
@@ -24,10 +24,10 @@
 
 	printPg("Miscelaneous text administration","h1");
 
-	if($btnSubmit == 'Save')
+	if($btnSubmit == "Save")
 	{
-    $strTextName = CleanSQLInput(substr(trim($_POST['TextName']),0,49));
-    $strContent = CleanSQLInput($_POST['txtDescr']);
+    $strTextName = CleanSQLInput(substr(trim($_POST["TextName"]),0,49));
+    $strContent = CleanSQLInput($_POST["txtDescr"]);
 
     $strQuery = "update tblPageTexts set tPageTexts = '$strContent' WHERE vcTextName = '$strTextName';";
     UpdateSQL($strQuery,"update");
@@ -45,8 +45,8 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $strTextDescr = $Row['vcTextDescr'];
-      $strTextName = $Row['vcTextName'];
+      $strTextDescr = $Row["vcTextDescr"];
+      $strTextName = $Row["vcTextName"];
       if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\">\n";
@@ -80,17 +80,17 @@
 	print "</table>\n";
   print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
 	print "</td>\n<td>\n</td>\n<td valign=\"top\">\n";
-  if(isset($_POST['TextName']) and $_POST['btnSubmit'] == 'Edit')
+  if(isset($_POST["TextName"]) and $_POST["btnSubmit"] == "Edit")
   {
-    $TextName = CleanReg($_POST['TextName']);
+    $TextName = CleanReg($_POST["TextName"]);
     $strQuery = "SELECT tPageTexts, vcTextDescr FROM tblPageTexts WHERE vcTextName = '$TextName';";
     $QueryData = QuerySQL($strQuery);
     if($QueryData[0] > 0)
     {
       foreach($QueryData[1] as $Row)
       {
-        $strPageText  = $Row['tPageTexts'];
-        $strPageDescr = $Row['vcTextDescr'];
+        $strPageText  = $Row["tPageTexts"];
+        $strPageDescr = $Row["vcTextDescr"];
       }
     }
     else
@@ -113,7 +113,7 @@
     print "<textarea name=\"txtDescr\" rows=\"20\" cols=\"90\">$strPageText</textarea>\n<br>\n";
     print "<div align=\"center\"><input type=\"Submit\" value=\"Save\" name=\"btnSubmit\"></div>\n";
     print "</form>\n";
-    if(isset($_POST['iClassid']))
+    if(isset($_POST["iClassid"]))
     {
         print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
     }

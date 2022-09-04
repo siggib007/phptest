@@ -14,9 +14,9 @@
 		printPg("Invalid operation, Bad Reference!!!","error");
 		exit;
 	}
-	if(isset($_POST['btnSubmit']))
+	if(isset($_POST["btnSubmit"]))
 	{
-		$btnSubmit = $_POST['btnSubmit'];
+		$btnSubmit = $_POST["btnSubmit"];
 	}
 	else
 	{
@@ -25,24 +25,24 @@
 
 	printPg("Contact information","h1");
 
-	if(($PostVarCount == 1) and ($btnSubmit == 'Go Back'))
+	if(($PostVarCount == 1) and ($btnSubmit == "Go Back"))
 	{
 		header("Location: $strPageURL");
 	}
 
-	if($btnSubmit == 'Save')
+	if($btnSubmit == "Save")
 	{
-    $iSortNum  = CleanSQLInput(substr(trim($_POST['iSortNum']),0,49));
-    $strValue  = CleanSQLInput(substr(trim($_POST['txtValue']),0,49));
-    $strType   = CleanSQLInput(substr(trim($_POST['cmbType']),0,49));
-    $strLabel  = CleanSQLInput(substr(trim($_POST['txtLabel']),0,49));
-    $ContactID = CleanSQLInput(substr(trim($_POST['iContactID']),0,49));
+    $iSortNum  = CleanSQLInput(substr(trim($_POST["iSortNum"]),0,49));
+    $strValue  = CleanSQLInput(substr(trim($_POST["txtValue"]),0,49));
+    $strType   = CleanSQLInput(substr(trim($_POST["cmbType"]),0,49));
+    $strLabel  = CleanSQLInput(substr(trim($_POST["txtLabel"]),0,49));
+    $ContactID = CleanSQLInput(substr(trim($_POST["iContactID"]),0,49));
 
-    if($iSortNum == '')
+    if($iSortNum == "")
     {
       $iSortNum = 0;
     }
-    if($strValue== '')
+    if($strValue== "")
     {
       printPg("Contact Value is requried","note");
     }
@@ -53,27 +53,27 @@
     }
 	}
 
-	if($btnSubmit == 'Delete')
+	if($btnSubmit == "Delete")
 	{
-		$ContactID = substr(trim($_POST['iContactID']),0,49);
+		$ContactID = substr(trim($_POST["iContactID"]),0,49);
 
 		$strQuery = "delete from tblContactInfo where iContactID = $ContactID;";
 		UpdateSQL($strQuery,"delete");
 	}
 
-	if($btnSubmit == 'Insert')
+	if($btnSubmit == "Insert")
 	{
-    $iSortNum = CleanSQLInput(substr(trim($_POST['iSortNum']),0,49));
-    $strValue = CleanSQLInput(substr(trim($_POST['txtValue']),0,49));
-    $strType  = CleanSQLInput(substr(trim($_POST['cmbType']),0,49));
-    $strLabel = CleanSQLInput(substr(trim($_POST['txtLabel']),0,49));
+    $iSortNum = CleanSQLInput(substr(trim($_POST["iSortNum"]),0,49));
+    $strValue = CleanSQLInput(substr(trim($_POST["txtValue"]),0,49));
+    $strType  = CleanSQLInput(substr(trim($_POST["cmbType"]),0,49));
+    $strLabel = CleanSQLInput(substr(trim($_POST["txtLabel"]),0,49));
 
-    if($iSortNum == '')
+    if($iSortNum == "")
     {
       $iSortNum = 0;
     }
 
-    if($strValue== '')
+    if($strValue== "")
     {
       printPg("Please provide a contact value to insert","note");
     }
@@ -109,11 +109,11 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $strValue  = $Row['vcValue'];
-      $iSortNum  = $Row['iSequence'];
-      $ContactID = $Row['iContactID'];
-      $strType   = $Row['vcType'];
-      $strLabel  = $Row['vcLabel'];
+      $strValue  = $Row["vcValue"];
+      $iSortNum  = $Row["iSequence"];
+      $ContactID = $Row["iContactID"];
+      $strType   = $Row["vcType"];
+      $strLabel  = $Row["vcLabel"];
       if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\">\n";
@@ -128,7 +128,7 @@
         {
           foreach($QueryData2[1] as $Row2)
           {
-            $vcTypes = $Row2['vcTypes'];
+            $vcTypes = $Row2["vcTypes"];
             if($vcTypes == $strType)
             {
               print "<option selected value=\"$vcTypes\">$vcTypes</option>\n";
@@ -178,7 +178,7 @@
   {
     foreach($QueryData2[1] as $Row2)
     {
-      $vcTypes = $Row2['vcTypes'];
+      $vcTypes = $Row2["vcTypes"];
       if($vcTypes == $strType)
       {
         print "<option selected value=\"$vcTypes\">$vcTypes</option>\n";

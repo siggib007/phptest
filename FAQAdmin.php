@@ -47,8 +47,8 @@
 	if($btnSubmit == "Insert")
 	{
 
-    $strQuestion = CleanSQLInput(substr(trim($_POST['txtQuestion']),0,49));
-		$strAnswer = CleanSQLInput($_POST['txtAnswer']);
+    $strQuestion = CleanSQLInput(substr(trim($_POST["txtQuestion"]),0,49));
+		$strAnswer = CleanSQLInput($_POST["txtAnswer"]);
     
 		if($strQuestion == "" or $strAnswer = "")
 		{
@@ -64,7 +64,7 @@
 	//Print the normal form after update is complete.
 	print "<table>\n<tr><th class=lbl>Update existing FAQ</th>";
   print "<th width = 100></th>";
-  if(!isset($_POST['iFAQid']))
+  if(!isset($_POST["iFAQid"]))
   {
     print "<th class=lbl>Or Insert New one</th>";
   }
@@ -77,8 +77,8 @@
   {
     foreach($QueryData[1] as $Row)
     {
-      $vcQuestion = $Row['vcQuestion'];
-      $iFAQid = $Row['iFAQid'];
+      $vcQuestion = $Row["vcQuestion"];
+      $iFAQid = $Row["iFAQid"];
       if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\" accept-charset=\"utf-8\">\n";
@@ -114,9 +114,9 @@
   print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
 	print "</td>\n<td>\n</td>\n<td valign=\"top\">\n";
   
-  if(isset($_POST['iFAQid']) and $_POST['btnSubmit'] == 'Edit')
+  if(isset($_POST["iFAQid"]) and $_POST["btnSubmit"] == "Edit")
   {
-    $iFAQid = intval($_POST['iFAQid']);
+    $iFAQid = intval($_POST["iFAQid"]);
     $strQuery = "select iFAQid, vcQuestion, tAnswer from tblFAQ where iFAQid = $iFAQid;";
 
     $QueryData = QuerySQL($strQuery);
@@ -125,8 +125,8 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        $strQuestion = $Row['vcQuestion'];
-        $strAnswer = $Row['tAnswer'];
+        $strQuestion = $Row["vcQuestion"];
+        $strAnswer = $Row["tAnswer"];
         $strBtnLabel = "Save";
       }
     }
@@ -162,7 +162,7 @@
   print "<textarea name=\"txtAnswer\" rows=\"20\" cols=\"80\">$strAnswer</textarea>\n<br>\n";
 	print "<div align=\"center\"><input type=\"Submit\" value=\"$strBtnLabel\" name=\"btnSubmit\"></div>\n";
 	print "</form>\n";
-  if(isset($_POST['iFAQid']))
+  if(isset($_POST["iFAQid"]))
   {
     print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
   }
