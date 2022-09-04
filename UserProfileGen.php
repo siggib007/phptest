@@ -113,7 +113,7 @@
               }
               if($Password =="" and $strOUID != $strUID and $strUID == $strUID2)
               {
-                printPg("Please provide password to change your user name.","error");
+                printPg("Please change your password when you change your user name.","error");
               }
               if($Password != $PWDConf and $strUID == $strUID2)
               {
@@ -187,17 +187,17 @@
     require("UserRegForm.php");
     print "<tr>";
     print "<td colspan=2 align=\"center\" >";
-    printPg("Username and password","h2");
+    printPg("Change username and password","h2");
     print "You can change your username and password here,<br>\n";
     print "Only letters a-z and numbers 0-9 are allowed in usernames!<br>\n";
-    print "Just make sure you provide password and confirm it when changing your username.<br>";
+    print "To change your username you have to change your password too<br>";
     print "Also the following characters are stripped out of the password = \ \" '";
     print "</td>";
     print "</tr>";
     print "<tr><td align=\"right\" class=\"lbl\">UserName:</td>\n";
     print "<input type=\"hidden\" name=\"txtOUID\" value=\"$strUID\">";
     print "<td><input type=\"text\" name=\"txtUID\" size=\"50\" value=\"$strUID\"><span class=\"Attn\">Required</span></td></tr>\n";
-    print "<tr><td align=\"right\" class=\"lbl\">Password:</td>\n";
+    print "<tr><td align=\"right\" class=\"lbl\">New Password:</td>\n";
     print "<td><input type=\"password\" name=\"txtPWD\" size=\"50\"><span class=\"Attn\">Required</span></td></tr>\n";
     print "<tr><td align=\"right\" class=\"lbl\">Confirm Password:</td>\n";
     print "<td><input type=\"password\" name=\"txtPWDConf\" size=\"50\"><span class=\"Attn\">Required</span></td></tr>\n";

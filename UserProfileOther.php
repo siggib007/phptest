@@ -89,6 +89,7 @@
     if($_SESSION["bMFA_active"])
     {
       printPg("Reset Recovery Code","tmh2");
+      print "<div class=\"MainTextCenter\">\n";
       print "To reset your recovery code, click this button.<br>\n";
       print "<form method=\"post\">\n";
       print "<input type=\"submit\" value=\"Reset Recovery Code\" name=\"btnSubmit\">\n";
