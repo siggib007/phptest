@@ -9,10 +9,10 @@ $MailPWD = getenv("EMAILPWD");
 $UseSSL = getenv("USESSL");
 $UseStartTLS = getenv("USESTARTTLS");
 
-function StripHTML ($content)
+function StripHTML($content)
 {
   $unwanted = ['style','script'];
-  foreach ( $unwanted as $tag )
+  foreach( $unwanted as $tag )
   {
     $content = preg_replace( "/(<$tag>.*?<\/$tag>)/is", '', $content );
   }
@@ -21,7 +21,7 @@ function StripHTML ($content)
   return trim($content);
 }
 
-function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName = "", $strAttach = "", $strAddHeader = "", $strFile2Attach = "")
+function SendHTMLAttach($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName = "", $strAttach = "", $strAddHeader = "", $strFile2Attach = "")
 {
 
   require_once("PHPMailer/Exception.php");
@@ -44,13 +44,13 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   $mail->SMTPAuth = true;
   $mail->Username = $GLOBALS['MailUser'];
   $mail->Password = $GLOBALS['MailPWD'];
-  if (strtolower($GLOBALS['UseSSL'])=="true")
+  if(strtolower($GLOBALS['UseSSL'])=="true")
   {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
   }
   else
   {
-    if (strtolower($GLOBALS['UseStartTLS'])=="true")
+    if(strtolower($GLOBALS['UseStartTLS'])=="true")
     {
       $mail->SMTPSecure = 'tls';
     }
@@ -69,29 +69,29 @@ function SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFil
   $mail->AltBody = $strTxtMsg;
 
   // add string attachment
-  if ($strAttach != "" and $strFileName != "")
+  if($strAttach != "" and $strFileName != "")
   {
     $mail->addStringAttachment($strAttach, $strFileName);
   }
 
   // Process any custom headers
-  if (is_array($strAddHeader))
+  if(is_array($strAddHeader))
   {
-    foreach ($strAddHeader as $header)
+    foreach($strAddHeader as $header)
     {
       $mail->addCustomHeader($header);
     }
   }
   else
   {
-    if ($strAddHeader != "")
+    if($strAddHeader != "")
     {
       $mail->addCustomHeader($strAddHeader);
     }
   }
 
   // Attach file attachment
-  if ($strFile2Attach != "")
+  if($strFile2Attach != "")
   {
     $mail->addAttachment($strFile2Attach);
   }
@@ -150,7 +150,7 @@ $strHTMLMsg .= " and have remote pictures turned on as it is a remote inline HTM
 $strHTMLMsg .= "<img src='https://img.xcitefun.net/users/2015/01/371695,xcitefun-cute-animals-pictures-41.jpg' width=100% >\n";
 $strHTMLMsg .= "</body>\n</html>\n";
 
-$resp = SendHTMLAttach ($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach, $arrname, '/var/log/alternatives.log');
+$resp = SendHTMLAttach($strHTMLMsg, $FromEmail, $toEmail, $strSubject, $strFileName, $strAttach, $arrname, '/var/log/alternatives.log');
 print "<p>$resp</p>\n";
 print "<p>I'm all done at " . date(DATE_RFC1123) . "</p>\n";
 print "</body>\n</html>\n";

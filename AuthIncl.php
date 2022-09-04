@@ -18,7 +18,7 @@
   $strActivity = "Login";
   $arrTypes = array("SMS"=>"5","email"=>"4");
 
-  NotifyActivity ($strActivity,$arrTypes);
+  NotifyActivity($strActivity,$arrTypes);
 
   if($strLastUpdated=="")
   {
@@ -26,7 +26,7 @@
   }
 
   $strQuery = "update tblUsers set dtLastLogin = '$dtNow' where iUserID='$iUserID'";
-  if (UpdateSQL($strQuery,"update"))
+  if(UpdateSQL($strQuery,"update"))
   {
     header("Location: " . $strReturn );
   }

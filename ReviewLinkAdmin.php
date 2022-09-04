@@ -131,7 +131,7 @@
     {
       $vcSiteName = $Row["vcSiteName"];
       $iSiteID = $Row["iSiteID"];
-      if ($WritePriv <=  $Priv)
+      if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\">\n";
         print "<tr valign=\"top\">\n";

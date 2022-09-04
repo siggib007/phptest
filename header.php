@@ -89,7 +89,7 @@
     }
   }
 
-  if (!isset($_SERVER['HTTPS'])and $strSecOpt =="force" and $bSecure == 1)
+  if(!isset($_SERVER['HTTPS'])and $strSecOpt =="force" and $bSecure == 1)
   {
     $strSecureHost = $ConfArray["SecureURL"];
     $strSecure = "https://$strSecureHost/$strScriptName";
@@ -117,7 +117,7 @@
     $WritePriv = 0;
   }
   $strHeader = $HeadAdd . $dbHead;
-  $ShowPort = strtolower ($GLOBALS["ConfArray"]["ShowPort"]);
+  $ShowPort = strtolower($GLOBALS["ConfArray"]["ShowPort"]);
   if($_SERVER['SERVER_PORT'] != 80 and $_SERVER['SERVER_PORT'] != 443 and $ShowPort == "true")
   {
     $strHeader = "[p" . $_SERVER['SERVER_PORT'] . "] " . $strHeader;
@@ -290,7 +290,7 @@
   {
     print "<center><span class=SiteLabel>$strSiteLabel</span></center>\n";
   }
-  $AllowReg = strtolower ($GLOBALS["ConfArray"]["AllowReg"]);
+  $AllowReg = strtolower($GLOBALS["ConfArray"]["AllowReg"]);
   print "<table width=\"100%\">\n<tr>\n";
   if( ! isset($_SESSION["auth_username"] ) )
   {
@@ -370,7 +370,7 @@
       $key = str_replace(" ", "&nbsp;", $Row['vcTitle']);
       $value = $Row['vcLink'];
       $FileName = $ROOTPATH . $value;
-      if ($Row['bNewWindow'] == 1)
+      if($Row['bNewWindow'] == 1)
       {
         $target = "_blank";
       }
@@ -378,15 +378,15 @@
       {
         $target = "_self";
       }
-      if ($strURI == $ROOTPATH and $key == "Home")
+      if($strURI == $ROOTPATH and $key == "Home")
       {
         print "<li class=\"HL\"><a href=\"$FileName\" target=\"$target\">Home</a></li>\n";
       }
-      elseif ($strSubOfLink == $value)
+      elseif($strSubOfLink == $value)
       {
         print "<li class=\"HL\"><a href=\"$FileName\" target=\"$target\">$key</a></li>\n";
       }
-      elseif ($value == "admin.php" and $iAdminCat > 0)
+      elseif($value == "admin.php" and $iAdminCat > 0)
       {
         print "<li class=\"HL\"><a href=\"$FileName\" target=\"$target\">$key</a></li>\n";
       }
@@ -399,9 +399,9 @@
   }
   print "</div>\n</div>\n";
 
-  if ($iMenuID)
+  if($iMenuID)
   {
-    if ($iSubOfID == 0)
+    if($iSubOfID == 0)
     {
       $iSubOfID = $iMenuID;
     }
@@ -504,7 +504,7 @@
         }
       }
     }
-    if ($iAdminCat > 0)
+    if($iAdminCat > 0)
     {
       $strQuery = "SELECT * FROM tblmenu where bAdmin = '$iAdminCat' and iReadPriv <= $Priv order by vcTitle";
       $QueryData = QuerySQL($strQuery);

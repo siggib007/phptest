@@ -179,7 +179,7 @@
       $PrivName = $Row["iPrivLevel"];
     }
 
-    print "<p>Authorization level is set to $PrivName</p>\n";
+    printPg("Authorization level is set to $PrivName","normal");
 
     if($Row["dtLastLogin"])
     {
@@ -189,7 +189,7 @@
     {
       $LastLogin = "never";
     }
-    print "<p>Last logged in $LastLogin</p>\n";
+    printPg("Last logged in $LastLogin\n","normal");
     if($WritePriv <=  $Priv)
     {
       print "<form method=\"POST\">\n";

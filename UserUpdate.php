@@ -27,7 +27,7 @@
       $EmailCount = GetSQLValue($strQuery);
       if($EmailCount>0)
       {
-        print "<p class=\"Attn\" align=center>The new email address specified is registered to a different user</p>\n";
+        printPg("The new email address specified is registered to a different user","attn");
       }
       else
       {
@@ -46,9 +46,9 @@
                   "confirm your request by going to $strURL\nIf you no longer wish to make the change " .
                   "or you didn't request this, just delete this message as no action will be taken without you visiting that page.";
           EmailText($toEmail,"Change of email address has been requested",$strEmailText,$FromEmail);
-          print "<p>Before we can process your change of email address you need to confirm the new email. " .
+          printPg("Before we can process your change of email address you need to confirm the new email. " .
                   "Please check your new email and follow the instructions in it.<br>\nIf you don't receive the mail " .
-                  "please contact $SupportEmail with changeid $iChangeNum.<br>\nPlease note your IP has been recorded.</p>\n";
+                  "please contact $SupportEmail with changeid $iChangeNum.<br>\nPlease note your IP has been recorded.</p>","normal");
         }
       }
     }

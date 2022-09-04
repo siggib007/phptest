@@ -1,7 +1,7 @@
 <?php
   print "<h1>Fetching secret from Doppler secret management system at doppler.com</h1>\n";
   
-  function FetchDopplerStatic ($strProject,$strConfig)
+  function FetchDopplerStatic($strProject,$strConfig)
   {
     # $strProject is a simple string with the name of the Doppler Project holding your secret
     # $strConfig is a simple string with the name of the configuration to use
@@ -38,19 +38,19 @@
 
   print "<p>Here are the secret names and corrensponding values</p>\n";
 
-  if (array_key_exists("secrets",$arrSecretValues))
+  if(array_key_exists("secrets",$arrSecretValues))
   {
-    foreach ($arrSecretValues["secrets"] as $key => $value) 
+    foreach($arrSecretValues["secrets"] as $key => $value) 
     {
       print "$key: " . $value["computed"] . "<br>\n";
     }
   }
   else
   {
-    if (array_key_exists("messages",$arrSecretValues))
+    if(array_key_exists("messages",$arrSecretValues))
     {
       print "<p>There was an issue fetching the secrets:</p>\n";
-      foreach ($arrSecretValues["messages"] as $msg)
+      foreach($arrSecretValues["messages"] as $msg)
       {
         print "$msg<br>\n";
       }

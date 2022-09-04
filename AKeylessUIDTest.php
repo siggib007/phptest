@@ -2,7 +2,7 @@
   require_once("secrets.php");
   print "<h1>Fetching secret from AKEYLESS secret management system at akeyless.io</h1>\n";
   
-  function FetchKeylessStatic ($SecretName)
+  function FetchKeylessStatic($SecretName)
   {
     $token = getenv("KEYLESSUID");
     $token = $GLOBALS ["UIDKey"];

@@ -20,7 +20,7 @@
       $iUserID = $Row['iClientID'];
       print "Updating email in record $iUserID to $strEmail<br>\n";
       $strQuery = "update tblUsers set vcEmail = '$strEmail' where `iUserID`= $iUserID";
-      if(UpdateSQL ($strQuery, "update"))
+      if(UpdateSQL($strQuery, "update"))
       {
         $strQuery = "update tblemailupdate set dtConfirmed = now() where vcGUID= '$uuid';";
         UpdateSQL($strQuery, "update");

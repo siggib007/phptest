@@ -27,9 +27,9 @@
   if(isset($_FILES['Docfile']))
   {
     $FilesVarCount = count($_FILES['Docfile']['name']);
-    if ($FilesVarCount == 1 and $_FILES['Docfile']['name'][0]=="")
+    if($FilesVarCount == 1 and $_FILES['Docfile']['name'][0]=="")
     {
-      print "<p class=\"Error\">You didn't select any files. ";
+      printPg("You didn't select any files.","error");
       $_POST['btnSubmit'] = "Go Back";
     }
   }
@@ -69,10 +69,10 @@
             "If you try to upload more than $MaxFileCount files, only $MaxFileCount of them will be uploaded.</p>\n","note");
     
     print "<form enctype=\"multipart/form-data\" method=\"POST\">\n";
-    print "<p class=\"MainTextCenter\">File name: \n";
+    print "<div class=\"MainTextCenter\">File name: \n";
     print "<input type=\"file\" name=\"Docfile[]\" size=\"50\" multiple><br><br>\n";
     print "<input type=\"Submit\" value=\"Upload\" name=\"btnSubmit\">\n";
-    print "</form></p>\n";
+    print "</form></div>\n";
   }
   else
   {
@@ -101,9 +101,9 @@
       {
         print $strMsg;
       }
-      print "<p class=\"MainTextCenter\">$ConfirmationMsg. <br>\n";
+      print "<div class=\"MainTextCenter\">$ConfirmationMsg. <br>\n";
       print $FileList;
-      print "Total size uploaded " .with_unit($SizeTotal) . "</p>\n";
+      print "Total size uploaded " .with_unit($SizeTotal) . "</div>\n";
       if($WritePriv >  $Priv)
       {
         $strEmailBody = "$UsersName has submitted the following files for the photo gallary\n";
@@ -111,7 +111,7 @@
         $strEmailBody .= "Total size uploaded " .with_unit($SizeTotal) . "\n";
         if(EmailText("$SupportEmail","File upload Notification",$strEmailBody,$FromEmail))
         {
-          print "<p class=\"MainText\">We have been notified of your contribution</p>\n";
+          printPg("We have been notified of your contribution","normal");
         }
         else
         {

@@ -24,7 +24,7 @@
     $btnSubmit = "";
 	}
 
-	printPg ("Administrative Categories","h1");
+	printPg("Administrative Categories","h1");
 
 	if($btnSubmit == 'Save')
 	{
@@ -82,7 +82,7 @@
     {
       $vcAdminCat = $Row['vcCatName'];
       $iCatID = $Row['iCatID'];
-      if ($WritePriv <=  $Priv)
+      if($WritePriv <=  $Priv)
       {
         print "<form method=\"POST\">\n";
         print "<tr valign=\"top\">\n";

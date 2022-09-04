@@ -26,7 +26,7 @@
   {
     if($QueryData[0] == 0)
     {
-      print "<p class=\"Error\">Unknown Page ID $iMenuID</p>\n";
+      printPg("Unknown Page ID $iMenuID","error");
       exit;
     }
     else
@@ -38,20 +38,20 @@
   }
 	
 	$strQuery = "SELECT $ColumnList FROM $TableName ";
-	if ($FilterStr != "")
+	if($FilterStr != "")
 	{
 		$strQuery .= "WHERE $FilterStr ";
 	}
 	$strQuery .= "LIMIT $iLimit;";
 	
-	print "<p class=Header1>$PageHeader</p>";
+	printPg("$PageHeader","h1");
 
   $QueryData = QuerySQL($strQuery);
   if($QueryData[0] > 0)
   {
     print "<table class=OutlineCenter>\n<tr>\n";
     $RowKeys = array_keys($QueryData[1][0]);
-    foreach ($RowKeys as $key)
+    foreach($RowKeys as $key)
     {
       print "<th class=OutlineCenter>$key</th>\n";
     }
@@ -75,7 +75,7 @@
     }
     else
     {
-      if (is_string($QueryData[1]))
+      if(is_string($QueryData[1]))
       {
         $strMsg = $QueryData[1];
       }

@@ -1,5 +1,5 @@
 <?php
-  function FetchKeylessStatic_old ($arrNames)
+  function FetchKeylessStatic_old($arrNames)
   {
     # $arrNames is an array of the secret names to be fetched
     # Returns an associated array with the secret name as key and the secret as the value
@@ -57,7 +57,7 @@
   $arrSecretValues = FetchKeylessStatic($arrname);
 
   print "<p>Here are the secret names and corrensponding values</p>\n";
-  foreach ($arrSecretValues as $key => $value)
+  foreach($arrSecretValues as $key => $value)
   {
     print "$key: $value <br>\n";
   }

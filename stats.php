@@ -76,7 +76,7 @@
 		}
 	}
 
-	if ($btnSubmit == 'Delete')
+	if($btnSubmit == 'Delete')
 	{
 		$iStatID = intval(trim($_POST['txtStatID']));
 		$strQuery =  "SELECT vcStatName FROM tblstats where iStatID=$iStatID;";
@@ -84,11 +84,11 @@
 		printPg("Are you sure you wish to delete statistic with the label \"$strStatName\"? <br>" .
 		        "Just leave this page anyway you please if you do not want to delete it.","alert");
 		print "<form method=\"POST\">\n";
-		print "<p class=MainTextCenter><input type=\"Submit\" value=\"Yes I am sure!\" name=\"btnSubmit\"></p>";
+		print "<div class=MainTextCenter><input type=\"Submit\" value=\"Yes I am sure!\" name=\"btnSubmit\"></div>";
 		print "<input type=\"hidden\" value=\"$iStatID\" name=\"txtStatID\"></form>\n</center>\n";
 	}
 
-	if ($btnSubmit == 'Yes I am sure!')
+	if($btnSubmit == 'Yes I am sure!')
 	{
 		$iStatID = intval(trim($_POST['txtStatID']));
 		$strQuery = "Delete from tblstats where iStatID=$iStatID;";
@@ -98,7 +98,7 @@
 		$PostVarCount = 0;
 	}
 
-	if ($btnSubmit == 'Edit')
+	if($btnSubmit == 'Edit')
 	{
 		$iStatID = intval(trim($_POST['txtStatID']));
 		$strQuery =  "SELECT iStatID,vcFromClause,vcWhereClause,vcGroupByClause,vcUnique,vcStatName, iOrderID FROM tblstats where iStatID=$iStatID;";
@@ -170,13 +170,13 @@
 
 	if($btnSubmit == 'Update')
 	{
-		$strStatName = substr(CleanSQLInput (trim($_POST['txtStatName'])),0,49);
-		$strFrom = substr(CleanSQLInput (trim($_POST['txtFrom'])),0,299);
-		$strWhere = substr(CleanSQLInput (trim($_POST['txtWhere'])),0,299);
-		$strGroupBy = substr(CleanSQLInput (trim($_POST['txtGroupBy'])),0,99);
-		$strUnique = substr(CleanSQLInput (trim($_POST['txtUnique'])),0,29);
-		$iOrder = substr(CleanSQLInput (trim($_POST['txtOrderID'])),0,9);
-		$iStatID = substr(CleanSQLInput (trim($_POST['txtStatID'])),0,9);
+		$strStatName = substr(CleanSQLInput(trim($_POST['txtStatName'])),0,49);
+		$strFrom = substr(CleanSQLInput(trim($_POST['txtFrom'])),0,299);
+		$strWhere = substr(CleanSQLInput(trim($_POST['txtWhere'])),0,299);
+		$strGroupBy = substr(CleanSQLInput(trim($_POST['txtGroupBy'])),0,99);
+		$strUnique = substr(CleanSQLInput(trim($_POST['txtUnique'])),0,29);
+		$iOrder = substr(CleanSQLInput(trim($_POST['txtOrderID'])),0,9);
+		$iStatID = substr(CleanSQLInput(trim($_POST['txtStatID'])),0,9);
 		if($strStatName != "" and $strFrom != "" and is_numeric($iOrder))
 		{
 			$strQuery =  "update tblstats set vcFromClause='$strFrom', vcWhereClause='$strWhere',vcGroupByClause='$strGroupBy', ";
@@ -189,7 +189,7 @@
 		}
 		else
 		{
-			print "<p class=error>Invalid data submitted. Required entries missing or Order number is not a number</p>";
+			printPg("Invalid data submitted. Required entries missing or Order number is not a number","error");
 			print "<form method=\"POST\">\n";
 			print "<table border=\"0\" width=\"$Tcol\">\n";
 			print "<tr>\n<td width=\"$col0\">&nbsp;</td>\n";
@@ -231,12 +231,12 @@
 
 	if($btnSubmit == 'Insert')
 	{
-		$strStatName = substr(CleanSQLInput (trim($_POST['txtStatName'])),0,49);
-		$strFrom = substr(CleanSQLInput (trim($_POST['txtFrom'])),0,299);
-		$strWhere = substr(CleanSQLInput (trim($_POST['txtWhere'])),0,299);
-		$strGroupBy = substr(CleanSQLInput (trim($_POST['txtGroupBy'])),0,99);
-		$strUnique = substr(CleanSQLInput (trim($_POST['txtUnique'])),0,29);
-		$iOrder = substr(CleanSQLInput (trim($_POST['txtOrderID'])),0,9);
+		$strStatName = substr(CleanSQLInput(trim($_POST['txtStatName'])),0,49);
+		$strFrom = substr(CleanSQLInput(trim($_POST['txtFrom'])),0,299);
+		$strWhere = substr(CleanSQLInput(trim($_POST['txtWhere'])),0,299);
+		$strGroupBy = substr(CleanSQLInput(trim($_POST['txtGroupBy'])),0,99);
+		$strUnique = substr(CleanSQLInput(trim($_POST['txtUnique'])),0,29);
+		$iOrder = substr(CleanSQLInput(trim($_POST['txtOrderID'])),0,9);
 		if($strStatName != "" and $strFrom != "" and is_numeric($iOrder))
 		{
 			$strQuery =  "INSERT INTO tblstats (vcFromClause, vcWhereClause, vcGroupByClause, vcUnique, vcStatName, iOrderID, vcModifiedBy, dtModifiedTime) ";
@@ -248,7 +248,7 @@
 		}
 		else
 		{
-			print "<p class=error>Invalid data submitted. Required entries missing or Order number is not a number</p>";
+			printPg("Invalid data submitted. Required entries missing or Order number is not a number","error");
 			print "<form method=\"POST\">\n";
 			print "<table border=\"0\" width=\"$Tcol\">\n";
 			print "<tr>\n<td width=\"$col0\">&nbsp;</td>\n";
@@ -288,9 +288,9 @@
 	}
 
 
-	if ($PostVarCount == 0)
+	if($PostVarCount == 0)
 	{
-		if ($WritePriv <=  $Priv)
+		if($WritePriv <=  $Priv)
 		{
 			print "<center><form method=\"POST\">\n<input type=\"Submit\" value=\"New\" name=\"btnSubmit\"></form></center>";
 		}
@@ -342,12 +342,12 @@
           {
             print "<tr>\n";
             print "<td>{$SRow['Name']} ";
-            if ($GroupHeader != "")
+            if($GroupHeader != "")
             {
               print " - {$SRow['Group']}";
             }
             print " : {$SRow['Count']}</td>\n";
-            if (($WritePriv <=  $Priv) and ($iLoopCount < 1))
+            if(($WritePriv <=  $Priv) and ($iLoopCount < 1))
             {
               print "<td align=right width=200 rowspan=$NumAffected><form method=\"POST\">\n";
               print "<input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">\n";
@@ -371,7 +371,7 @@
             error_log("Query of $strQuery did not return data. Rowcount: $StatResult[0] Msg:$strMsg");
             print "<tr>\n";
             print "<td>$StatName : error</td>\n";
-            if (($WritePriv <=  $Priv) and ($iLoopCount < 1))
+            if(($WritePriv <=  $Priv) and ($iLoopCount < 1))
             {
               print "<td align=right width=200 rowspan=$NumAffected><form method=\"POST\">\n";
               print "<input type=\"Submit\" value=\"Edit\" name=\"btnSubmit\">\n";

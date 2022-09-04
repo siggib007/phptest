@@ -59,15 +59,15 @@
   print "<div class=\"MainTextCenter\">\n";
   print "RegistrationID: $strUserID<br>\n";
   print "$strName<br>\n";
-  if ($strAddr1 != "")
+  if($strAddr1 != "")
   {
     print "$strAddr1<br>\n";
   }
-  if ($strAddr2 != "")
+  if($strAddr2 != "")
   {
     print "$strAddr2<br>\n";
   }
-  if ($strCity != "")
+  if($strCity != "")
   {
     print "$strCity, $strState $strZip <br>\n";
   }
@@ -77,14 +77,14 @@
 
   $strQuery = "SELECT vcPrivName FROM tblprivlevels where iPrivLevel = $iPrivLevel;";
   $PrivName = GetSQLValue($strQuery);
-  if ($PrivName == '' or $PrivName == 0)
+  if($PrivName == '' or $PrivName == 0)
   {
     $PrivName = $iPrivLevel;
   }
 
   print "Authorization level is set to $PrivName<br>\n";
   
-  if ($strLastLogin)
+  if($strLastLogin)
   {
     $LastLogin = 'on ' . date('l F jS Y \a\t G:i',strtotime($strLastLogin));
   }

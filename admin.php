@@ -8,11 +8,11 @@
   */
 
   require("header.php");
-  printPg ("Administration tasks","h1");
+  printPg("Administration tasks","h1");
   
   $strCat = "";
   $i=1;
-  if ($strCatID > 0)
+  if($strCatID > 0)
   {
     $strWhere = "WHERE iReadPriv <= $Priv and iCatID = $strCatID";
   }
@@ -34,12 +34,12 @@
       $strName     = $Row['vcTitle'];
       $bNewWindow  = $Row['bNewWindow'];
       $strCategory = $Row['vcCatName'];
-      if ($strCat != $strCategory)
+      if($strCat != $strCategory)
       {
-        if ($strCat != "")
+        if($strCat != "")
         {
           print "</td>\n";
-          if ($i<$iNumCol)
+          if($i<$iNumCol)
           {
             $i++;
           }
@@ -58,7 +58,7 @@
         print "<p class=\"AdminCategoryHeader\">$strCategory</p>\n";
         $strCat = $strCategory;
       }
-      if ($bNewWindow == 1)
+      if($bNewWindow == 1)
       {
         print "<div class=\"MainText\"> <a href=\"$strLink\" target=\"_blank\">$strName</a></div>\n";
       }

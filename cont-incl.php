@@ -12,7 +12,7 @@
   $QueryData = QuerySQL($strQuery);
   if($QueryData[0] > 0)
   {
-    printPg("Address","h2");
+    printPg("Address","tmh2");
     foreach($QueryData[1] as $Row)
     {
       print $Row['vcValue'] . "<br>\n";
@@ -29,7 +29,7 @@
   $QueryData = QuerySQL($strQuery);
   if($QueryData[0] > 0)
   {
-    print "<p></p><p class=\"Header2\">Electronic mail</p>";
+    printPg("Electronic mail","tmh2");
     foreach($QueryData[1] as $Row)
     {
       print $Row['vcLabel'] . ": <a href=\"mailto:" . $Row['vcValue'] . "\">" .
@@ -47,7 +47,7 @@
   $QueryData = QuerySQL($strQuery);
   if($QueryData[0] > 0)
   {
-    print "<p></p><p class=\"Header2\">Phone Numbers</p>";
+    printPg("Phone Numbers","tmh2");
     foreach($QueryData[1] as $Row)
     {
       print $Row['vcLabel'] . ": " . $Row['vcValue'] . "<br>\n";

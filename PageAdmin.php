@@ -478,7 +478,7 @@
     {
       foreach($QueryData[1] as $Row2)
       {
-        if ($Row2['iTypeID'] == $PageType)
+        if($Row2['iTypeID'] == $PageType)
         {
           print "<option selected value=\"{$Row2['iTypeID']}\">{$Row2['vcPageType']}</option>\n";
         }

@@ -31,7 +31,7 @@
 	printPg("$TestWarn","note");
 
 	print "<center>\n";
-	print "<p>Fill out this form and hit send and your message will be sent through your configured email service<p/>\n";
+	printPg("Fill out this form and hit send and your message will be sent through your configured email service","normal");
 	if($btnSubmit == 'Send')
 	{
 		$strFromName = CleanReg(substr(trim($_POST['txtFromName']),0,25));

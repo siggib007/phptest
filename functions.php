@@ -239,24 +239,8 @@
 
   function Log_Array($array, $msg)
   {
-    error_log("");
-    error_log("$msg start dump of array");
-    foreach($array as $key => $value)
-    {
-      if(is_array($value))
-      {
-        $pre = $key;
-        foreach($value as $key => $value)
-        {
-          error_log("$pre [$key] : $value");
-        }
-      }
-      else
-      {
-        error_log("$key : $value");
-      }
-    }
-    error_log("$msg ending dump of array");
+    $errMsg = json_encode($array);
+    error_log("$msg: $errMsg");
   }
 
   function return_bytes($val)

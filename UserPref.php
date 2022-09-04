@@ -43,7 +43,7 @@
     if($strCode == $ConfCode)
     {
       $strQuery = "update tblUsrPrefValues set vcValue = 'True' where iUserID = $iUserID and iTypeID = 1 ;";
-      if(UpdateSQL ($strQuery, "update"))
+      if(UpdateSQL($strQuery, "update"))
       {
         printPg("Update for Enable Sending SMS Messages successful","note");
       }
@@ -88,11 +88,11 @@
       {
         $_SESSION["ConfCode"]=$ConfCode;
         print "<form method=\"POST\">\n";
-        print "<p>Please enter the confirmation code we just sent you:\n";
+        print "<div>Please enter the confirmation code we just sent you:\n";
         print "<input type=\"text\" name=\"txtCode\" size=\"10\">\n";
         print "<input type=\"Submit\" value=\"Validate\" name=\"btnSubmit\">\n";
         print "<input type=\"Submit\" value=\"Cancel\" name=\"btnSubmit\">\n";
-        print "</p>\n";
+        print "</div>\n";
         print "</form>\n";
         $bSMSOK = False;
       }
@@ -100,7 +100,7 @@
       {
         $arrResponse = json_decode($response[1], TRUE);
         $errmsg = "";
-        if (array_key_exists("message",$arrResponse))
+        if(array_key_exists("message",$arrResponse))
         {
           $errmsg .= $arrResponse["message"];
         }
@@ -136,10 +136,10 @@
       }
     }
 
-    if ($bSMSOK)
+    if($bSMSOK)
     {
       $strQuery = "update tblUsrPrefValues set vcValue = 'True' where iUserID = $iUserID and iTypeID = $strKey ;";
-      if(UpdateSQL ($strQuery, "update"))
+      if(UpdateSQL($strQuery, "update"))
       {
         printPg("<p class=\"BlueAttn\">Update for $strLabel successful</p>","note");
       }
@@ -206,7 +206,7 @@
     }
     $strTypeList = implode(",",$arrTypeIDs);
     $strQuery = "update tblUsrPrefValues set vcValue = 'False' where iUserID = $iUserID and iTypeID IN ($strTypeList) ;";
-    if(UpdateSQL ($strQuery, "update"))
+    if(UpdateSQL($strQuery, "update"))
     {
       printPg("Update for $strLabel successful","note");
     }
@@ -236,11 +236,11 @@
       print "<form method=\"POST\">\n";
       print "<input type=\"hidden\" value=\"$Key\" name=\"txtKey\">";
       print "<input type=\"hidden\" value=\"$ValueDescr\" name=\"txtLabel\">";
-      print "<p>$ValueDescr: ";
-      switch ($ValueType)
+      print "<div>$ValueDescr: ";
+      switch($ValueType)
       {
         case "Boolean":
-          if (strtolower($Value)=="true")
+          if(strtolower($Value)=="true")
           {
             $btnValue = "Enabled";
           }
@@ -255,7 +255,7 @@
           $btnValue = "Save";
           break;
       }
-      print "<input type=\"Submit\" value=\"$btnValue\" name=\"btnSubmit\"></p>\n";
+      print "<input type=\"Submit\" value=\"$btnValue\" name=\"btnSubmit\"></div>\n";
       print "</form>\n";
     }
   }
