@@ -126,7 +126,6 @@
     $_SESSION["2FASecret"] = $MFASecret;
     $code = $tfa->getCode($MFASecret);
     $iUserCode = intval($_POST["txtCode"]);
-    error_log("Secret: $MFASecret - User Code: $iUserCode Correct Code: $code");
     if($tfa->verifyCode($MFASecret, strval($iUserCode)) === true)
     {
       printPg("OK","note");
@@ -151,7 +150,6 @@
   if(isset($_SESSION["2FASecret"]) and $btnSubmit == "")
   {
     $MFASecret = $_SESSION["2FASecret"];
-    error_log("Secret: $MFASecret");
     $btnSubmit = "x";
     print "<div class=\"MainTextCenter\">\n";
     printPg("It seems your TOTP MFA setup is not validated. Please Enter the code from your Authenticator"
