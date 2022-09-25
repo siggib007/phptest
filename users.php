@@ -20,8 +20,8 @@
     require_once("DBCon.php");
     $SiteURL = $ConfArray["SecureURL"];
     $filename = "{$SiteURL}_Users_".date('Y-m-d_Hi',time()).".csv";
-    header("Content-type: application/vnd.ms-excel; charset=utf-8");
-    header("Content-Disposition: attachment; filename=$filename; charset=utf-8");
+    header("Content-type: text/csv; charset=utf-8");
+    header("Content-Disposition: attachment; filename=\"$filename\"; charset=utf-8");
     print "Name,Unit,Phone,Email,Addr1,Addr2,City,State,Zip,Country,AuthCode,UserType,UnitUse\n";
     $strQuery = "SELECT * FROM tblUsers;";
     $QueryData = QuerySQL($strQuery);
