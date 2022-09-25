@@ -1,7 +1,7 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
   Page to control how the menu is laid out, what's in menu, what admin, etc.
@@ -23,11 +23,11 @@
   {
     $btnSubmit = "";
   }
-  printPg("Menu Maintenace","h1");
+  printPg("Menu Maintenance","h1");
 
   if($btnSubmit == "Edit")
   {
-    print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
+    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
     $iMenuID = intval(substr(trim($_POST["MenuID"]),0,49));
     $strQuery = "SELECT * FROM vwMenuPos where iMenuID = $iMenuID;";
     $QueryData = QuerySQL($strQuery);
@@ -179,13 +179,14 @@
     }
     else
     {
-      error_log("Rowcount: $QueryData[0] Msg:$QueryData[1]");
+      $strMsg = Array2String($QueryData[1]);
+      trigger_error("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
       print "<option value=\"0\">Failed to fetch list</option>\n";
     }
     print "</select>\n</td>\n</tr>";
     print "<tr><td colspan=\"2\" align=\"center\"><input type=\"Submit\" value=\"Save\" name=\"btnSubmit\"></td></tr>";
     print "</table></form>\n";
-    print "<form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form>";
+    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   }
 
   if($btnSubmit == "Save")
@@ -217,14 +218,14 @@
     $strQuery = "update tblmenu set vcTitle = '$strTitle', vcHeader = '$strHeader', bAdmin = '$iAdminCatID', " .
                 " iReadPriv = $iReadPriv, iWritePriv = $iWritePriv, bSecure = $bSensitive, bNewWindow = $bWindow " .
                 " where iMenuID=$iMenuID";
-    
+
     UpdateSQL($strQuery,"update");
     if($iAdminCatID > 0)
     {
       $strQuery = "DELETE FROM tblmenutype WHERE iMenuID=$iMenuID;";
       UpdateSQL($strQuery,"delete");
     }
-    else 
+    else
     {
       $strQuery = "UPDATE tblmenutype SET iSubOfMenu = $iSubOfID WHERE iMenuID = $iMenuID;";
       UpdateSQL($strQuery,"update");
@@ -235,7 +236,7 @@
         $strQuery = "CALL spMovePos ('$iMenuID', '$NewHeadPos', 'head') ";
         UpdateSQL($strQuery);
       }
-      else 
+      else
       {
         if($iCurSubOf > 0)
         {
@@ -301,7 +302,7 @@
       {
         print "<td>&nbsp;&nbsp; $Row[vcTitle]</td>\n";
       }
-      else 
+      else
       {
         print "<td>$Row[vcTitle]</td>\n";
       }

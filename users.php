@@ -1,7 +1,7 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
   */
 
@@ -18,9 +18,10 @@
   if($btnSubmitValue == "Export user to CSV file")
   {
     require_once("DBCon.php");
-    $filename = "Example_Users_".date("Y-m-d_Hi",time()).".csv";
-    header("Content-type: application/vnd.ms-excel");
-    header("Content-Disposition: attachment; filename=$filename");
+    $SiteURL = $ConfArray["SecureURL"];
+    $filename = "{$SiteURL}_Users_".date('Y-m-d_Hi',time()).".csv";
+    header("Content-type: application/vnd.ms-excel; charset=utf-8");
+    header("Content-Disposition: attachment; filename=$filename; charset=utf-8");
     print "Name,Unit,Phone,Email,Addr1,Addr2,City,State,Zip,Country,AuthCode,UserType,UnitUse\n";
     $strQuery = "SELECT * FROM tblUsers;";
     $QueryData = QuerySQL($strQuery);
@@ -28,7 +29,7 @@
     {
       foreach($QueryData[1] as $Row)
       {
-        print "$Row[vcName],$Row[vcUnit],$Row[vcCell],$Row[vcEmail],$Row[vcAddr1],$Row[vcAddr2],$Row[vcCity],$Row[vcState],$Row[vcZip],$Row[vcCountry]\n";
+        print "$Row[vcName],$Row[vcCell],$Row[vcEmail],$Row[vcAddr1],$Row[vcAddr2],$Row[vcCity],$Row[vcState],$Row[vcZip],$Row[vcCountry]\n";
       }
     }
     else
@@ -100,7 +101,7 @@
           print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"View\" name=\"btnSubmit\">";
           print "<input type=\"hidden\" value=\"$Row[iUserID]\" name=\"UserID\"></form>\n</td>\n";
         }
-        else 
+        else
         {
           print "<td>MFA Enabled!!!</td>\n";
           print "<td><form method=\"POST\">\n<input type=\"Submit\" value=\"View\" name=\"btnSubmit\">";
@@ -166,7 +167,7 @@
       print "No MFA<br>\n";
       $bMFA = false;
     }
-    else 
+    else
     {
       print "MFA Enabled!!!<br>\n";
       $bMFA = true;
@@ -183,7 +184,7 @@
 
     if($Row["dtLastLogin"])
     {
-      $LastLogin = "on " . date("l F jS Y \a\t G:i",strtotime($Row["dtLastLogin"]));
+      $LastLogin = "on " . date('l F jS Y \a\t G:i',strtotime($Row["dtLastLogin"]));
     }
     else
     {
@@ -308,7 +309,7 @@
         printPg($ErrMsg,"error");
       }
     }
-    
+
     print "</td>\n";
     print "</tr>\n";
     print "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" value=\"Add User\" name=\"btnSubmit\"></td></tr>";
@@ -337,12 +338,12 @@
       printPg("Failed to enable Email MFA","error");
     }
   }
-  
+
   if($btnSubmitValue =="Delete Account")
   {
     $iRegNum = intval(trim($_POST["UserID"]));
     $BeenSubmitted = trim($_POST["BeenSubmitted"]);
-    
+
     if($iRegNum)
     {
       if($BeenSubmitted == "True")

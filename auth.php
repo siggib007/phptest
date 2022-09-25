@@ -1,7 +1,7 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
   Main authentication code.
@@ -133,7 +133,7 @@
 	{
     $strMFAType ="na";
 	}
-	$dtNow = date("Y-m-d H:i:s");
+	$dtNow = date('Y-m-d H:i:s');
   $tfa = new TwoFactorAuth();
 	if($strLogin and $strPWD)
 	{

@@ -1,7 +1,7 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
   Creates or edits administrative categories.
@@ -101,7 +101,8 @@
   }
   else
   {
-    error_log("Rowcount: $QueryData[0] Msg:$QueryData[1]");
+    $strMsg = Array2String($QueryData[1]);
+    trigger_error("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
     printPg("Error occured fetching data from DB","error");
   }
 

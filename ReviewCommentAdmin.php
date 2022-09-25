@@ -1,9 +1,9 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
-  
+
   Manages the Review Comments
   */
 
@@ -198,7 +198,7 @@
   print "<td>\n";
   print "</td>\n";
   print "<td valign=\"top\">\n";
-  
+
   if(isset($_POST["iFeedbackID"]) and $btnSubmit == "Edit")
   {
     $iFeedbackID = $_POST["iFeedbackID"];
@@ -250,7 +250,7 @@
   print "<span class=\"lbl\">Or specify a URL to picture or video:</span>\n";
 	print "<input type=\"text\" name=\"txtMMURL\" size=\"47\" value=\"$strMMURL\"><br>\n";
   print "<div class=\"lbl\">Description:</div>\n";
-  print "<textarea name=\"txtDescr\" rows=\"20\" cols=\"80\">$strClassDescr</textarea>\n<br>\n";
+  print "<textarea name=\"txtDescr\" rows=\"10\" cols=\"80\">$strClassDescr</textarea>\n<br>\n";
 	print "<div align=\"center\"><input type=\"Submit\" value=\"$strBtnLabel\" name=\"btnSubmit\"></div>\n";
 	print "</form>\n";
   if(isset($_POST["iFeedbackID"]))

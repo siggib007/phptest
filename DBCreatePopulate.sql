@@ -279,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `tblAdminCategories` (
 -- Dumping data for table tblAdminCategories: ~5 rows (approximately)
 INSERT INTO `tblAdminCategories` (`iCatID`, `vcCatName`) VALUES
 	(0, 'Not Admin'),
-  (1, 'Misc'), 
+  (1, 'Misc'),
 	(3, 'Site Configuration'),
 	(4, 'Users'),
 	(5, 'Reference'),
@@ -354,8 +354,10 @@ INSERT INTO `tblconf` (`vcValueName`, `vcValue`, `vcValueDescr`, `vcValueType`) 
   ('RecoverCodeLen', '32', 'Length of Recovery Code, must be even, ideally multiple of 4', 'text'),
   ('MinPWDLen', '12', 'Minimum length of any password', 'int'),
 	('InitSetup', 'True', 'Initial Setup Mode is active. This should not exists past setup', 'Boolean'),
-  ('UserUploadDir', 'upload', 'Upload Directory for normal users', 'text'), 
-  ('AdminUploadDir', 'lib', 'Upload Directory for admin users', 'text');
+  ('UserUploadDir', 'upload', 'Upload Directory for normal users', 'text'),
+  ('AdminUploadDir', 'lib', 'Upload Directory for admin users', 'text'),
+  ('MaxSpamLog', '300', 'Show max spam log entry', 'int'),
+  ('SecureURL', 'example.com', 'Hostname used for HTTPS connections', 'text');
 
 -- Dumping structure for table tblContactInfo
 CREATE TABLE IF NOT EXISTS `tblContactInfo` (
@@ -490,7 +492,7 @@ INSERT INTO `tblmenu` (`iMenuID`, `vcTitle`, `vcLink`, `iReadPriv`, `iWritePriv`
 	(12, 'Log Out', 'logout.php', 0, 0, 'Log Out', 0, 0, 0, 0, 0),
 	(14, 'recover', 'recover.php', 0, 0, 'Password Recovery', 0, 0, 0, 0, 0),
 	(15, 'Users Administration', 'users.php', 300, 300, 'User Administration', 4, 0, 0, 0, 1),
-	(16, 'Menu  Admin', 'MenuAdmin.php', 300, 300, 'Menu Priviledge and name administration', 3, 0, 0, 0, 0),
+	(16, 'Menu Administration', 'MenuAdmin.php', 300, 300, 'Menu Admin', 3, 0, 0, 0, 0),
 	(17, 'Configurations', 'conf.php', 300, 300, 'Configurations', 3, 0, 0, 0, 0),
 	(18, 'Link Administration', 'LinkAdmin.php', 300, 300, 'Link Administration', 7, 0, 0, 0, 0),
 	(19, 'Registration Spam Log', 'spamlog.php', 300, 300, 'Registration Spam Log', 5, 0, 0, 0, 0),
@@ -539,7 +541,7 @@ INSERT INTO `tblmenu` (`iMenuID`, `vcTitle`, `vcLink`, `iReadPriv`, `iWritePriv`
 	(115,	'User Preference',	'UserPref.php',	1,	1,	'Preferences',	0,	0,	0,	0,	0),
 	(118,	'General Info',	'UserProfileGen.php',	1,	1,	'General Info',	0,	0,	0,	0,	1),
 	(119,	'Other',	'UserProfileOther.php',	1,	1,	'Other',	0,	0,	0,	0,	0);
-	
+
 
 -- Dumping structure for table tblmenutype
 CREATE TABLE IF NOT EXISTS `tblmenutype` (
@@ -820,9 +822,9 @@ CREATE VIEW `vwAdminCat` AS select `m`.`vcTitle` AS `vcTitle`,`m`.`vcLink` AS `v
 CREATE VIEW `vwemailupdate` AS select `e`.`iChangeID` AS `iChangeID`,`u`.`vcName` AS `vcName`,`e`.`vcGUID` AS `vcGUID`,`e`.`vcNewEmail` AS `vcNewEmail`,`e`.`vcReqIPAdd` AS `vcReqIPAdd`,`e`.`dtTimeStamp` AS `dtTimeStamp` from (`tblemailupdate` `e` join `tblUsers` `u` on((`e`.`iClientID` = `u`.`iUserID`))) order by `e`.`dtTimeStamp` desc;
 CREATE VIEW `vwPrivLevels` AS select `tblprivlevels`.`iPrivLevel` AS `iOrder`,`tblprivlevels`.`iPrivLevel` AS `vcType`,`tblprivlevels`.`vcPrivName` AS `vcText` from `tblprivlevels` where (`tblprivlevels`.`iPrivLevel` > 0);
 
-CREATE OR REPLACE VIEW vwmenupriv AS 
+CREATE OR REPLACE VIEW vwmenupriv AS
 SELECT m.iMenuID, m.vcTitle, r.vcPrivName ReadPriv, w.vcPrivName WritePriv, m.vcHeader, m.bAdmin, m.bSecure, t.iMenuOrder, m.bNewWindow, t.iSubOfMenu
-FROM tblmenu m 
+FROM tblmenu m
 LEFT JOIN tblmenutype t ON m.iMenuID = t.iMenuID
 JOIN tblprivlevels r ON m.iReadPriv = r.iPrivLevel
 JOIN tblprivlevels w ON m.iWritePriv = w.iPrivLevel;
@@ -838,7 +840,7 @@ SELECT  m.*,t.vcMenuType,t.iMenuOrder,t.iSubOfMenu
 FROM tblmenu m
 JOIN tblmenutype t ON m.iMenuID = t.iMenuID
 WHERE t.iSubOfMenu = 0 AND m.iMenuID != 21
-UNION 
+UNION
 SELECT 0,"None",NULL,0,0,NULL,0,0,0,0,0,"head",0,0
 ORDER BY iMenuID;
 
@@ -847,7 +849,7 @@ SELECT  m.*,t.vcMenuType,t.iMenuOrder,t.iSubOfMenu
 FROM tblmenu m
 LEFT JOIN tblmenutype t ON m.iMenuID = t.iMenuID;
 
-CREATE OR REPLACE VIEW vwLinks AS 
+CREATE OR REPLACE VIEW vwLinks AS
 	SELECT vcLink, vcName, vcComment, iCatId, vcCategory, iSortNum
 	FROM  tbllinks L
-	LEFT JOIN  tbllinkcategory C on  C.iCatId = L.iCategory; 
+	LEFT JOIN  tbllinkcategory C on  C.iCatId = L.iCategory;

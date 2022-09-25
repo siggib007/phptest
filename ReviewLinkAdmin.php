@@ -1,9 +1,9 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
-  
+
   Manages links to review sites where you want to be reviewed
   */
 
@@ -79,7 +79,7 @@
 		$strLogoURL= CleanSQLInput(substr(trim($_POST["txtLogoURL"]),0,99));
     $strImgPath="";
 
-    if(isset($_FILES["fPict"]))
+    if((isset($_FILES["fPict"])) && ($_FILES["fPict"]["name"]!=""))
     {
       $arrRet = FileUpload($_FILES["fPict"],$DocRoot);
       error_log(json_encode($arrRet));

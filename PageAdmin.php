@@ -1,7 +1,7 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
   Page to manage and maintain dynamic pages
@@ -167,7 +167,7 @@
       {
         foreach($QueryData[1] as $Row)
         {
-          $TimeStamp = date("F jS Y \a\t G:i",strtotime($Row["dtTimeStamp"]));
+          $TimeStamp = date('F jS Y \a\t G:i',strtotime($Row["dtTimeStamp"]));
           if($Row["dtTimeStamp"] == $RevTime)
           {
             print "<option selected value=\"{$Row['dtTimeStamp']}\">$TimeStamp</option>\n";
@@ -190,7 +190,7 @@
       print "</select>\n";
       print "<input type=\"Submit\" value=\"Change\" name=\"btnSubmit\" >";
       print "</form>\n";
-      
+
       $strQuery = "SELECT * FROM tblContent WHERE iMenuID = '$iPageID' and dtTimeStamp = $QueryAdd;";
 
       $QueryData = QuerySQL($strQuery);
@@ -295,7 +295,7 @@
               }
             }
           }
-          else 
+          else
           {
             exit(1);
           }
@@ -442,7 +442,7 @@
     print "<input type=\"hidden\" value=\"$FileName\" name=\"FileName\">\n";
     print "</form>\n";
 
-    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";  
+    print "<div class=\"MainTextCenter\"><form method=\"POST\">\n<input type=\"Submit\" value=\"Go Back\" name=\"btnSubmit\"></form></div>";
   }
 
   if($btnSubmit == "Yes I am very sure")
@@ -458,7 +458,7 @@
       UpdateSQL($strQuery,"Delete");
       $strQuery = "DELETE FROM tblContent WHERE iMenuID = '$iPageID';";
       UpdateSQL($strQuery,"Delete");
-      $strQuery = "DELETE FROM tblPageTable WHERE iMenuID = '$iPageID';";     
+      $strQuery = "DELETE FROM tblPageTable WHERE iMenuID = '$iPageID';";
     }
     else
     {

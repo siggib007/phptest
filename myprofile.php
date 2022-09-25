@@ -1,7 +1,7 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
   Main profile page that gives an overview over your profile
@@ -83,10 +83,10 @@
   }
 
   print "Authorization level is set to $PrivName<br>\n";
-  
+
   if($strLastLogin)
   {
-    $LastLogin = "on " . date("l F jS Y \a\t G:i",strtotime($strLastLogin));
+    $LastLogin = "on " . date('l F jS Y \a\t G:i',strtotime($strLastLogin));
   }
   else
   {

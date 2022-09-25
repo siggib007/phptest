@@ -1,7 +1,7 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
   Page to Manage the links available on the Links page
@@ -60,7 +60,7 @@
     {
       $iLinkCat = intval(substr(trim($_POST["cmbCategory"]),0,49));
     }
-    else 
+    else
     {
       $iLinkCat = 0;
     }
@@ -83,7 +83,7 @@
 	print "<tr>\n<td align = right class = lbl>Link Category: </td>\n";
 	$strQuery = "select iCatID, vcCategory from tbllinkcategory order by vcCategory;";
   $QueryData2 = QuerySQL($strQuery);
-  
+
   if($QueryData2[0] > 0)
   {
     print "<td>\n<select size=\"1\" name=\"cmbCategory\">\n";
@@ -102,7 +102,7 @@
       printPg($ErrMsg,"error");
     }
   }
-	
+
 	print "<tr>\n<td align = right class = lbl>Link: </td>\n";
 	print "<td><input type=\"text\" name=\"txtLink\" size=\"60\" ></td>\n</tr>\n";
 	print "<tr>\n<td align = right class = lbl>Name: </td>\n";
@@ -134,7 +134,14 @@
           print "<td>\n<select size=\"1\" name=\"cmbCategory\">\n";
           foreach($QueryData2[1] as $Row2)
           {
-            print "<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n";
+            if($Row2["iCatID"] == $Row["iCategory"])
+            {
+              print "<option selected value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n";
+            }
+            else
+            {
+              print "<option value=\"{$Row2['iCatID']}\">{$Row2['vcCategory']}</option>\n";
+            }
           }
           print "</select>\n</td>";
         }

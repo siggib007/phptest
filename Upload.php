@@ -1,7 +1,7 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
   Page to allow for upload of files to the system
@@ -44,7 +44,7 @@
       $_POST["btnSubmit"] = "Go Back";
     }
   }
-  $dtNow = date("Y-m-d H:i:s");
+  $dtNow = date('Y-m-d H:i:s');
   $PostVarCount = count($_POST);
   if(!is_dir($DocRoot))
   {
@@ -67,7 +67,7 @@
             "If you exceed either of those limits you'll be returned to this screen without anything uploaded.<br>\n" .
             "In this case try uploading fewer smaller files.<br>\n" .
             "If you try to upload more than $MaxFileCount files, only $MaxFileCount of them will be uploaded.</p>\n","note");
-    
+
     print "<form enctype=\"multipart/form-data\" method=\"POST\">\n";
     print "<div class=\"MainTextCenter\">File name: \n";
     print "<input type=\"file\" name=\"Docfile[]\" size=\"50\" multiple><br><br>\n";
