@@ -1,11 +1,11 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
   Dynamic Text page
-  
+
   */
 
   require("header.php");
@@ -24,7 +24,7 @@
   else
   {
     $strMsg = Array2String($QueryData[1]);
-    error_log("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
+    trigger_error("Query of $strQuery did not return data. Rowcount: $QueryData[0] Msg:$strMsg");
     $PageHeader = "Error occured";
     $PageText = "Failed to fetch the pagetext from the database";
     $bCRLF = "";

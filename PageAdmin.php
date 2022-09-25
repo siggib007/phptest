@@ -144,6 +144,8 @@
 
     printPg("It is advised that the Page body is composed off-line and pasted here to " .
             "avoid data loss in case of network error, etc.","note");
+    printPg("Also please only use A-Z and 0-9 in the filename, and be sure to end with .php","note");
+    printPg("Filename will be automatically adjusted to match these rules if nessisary.","note");
     if($iPageID > 0)
     {
       if(isset($_POST["cmbRevTime"]))
@@ -261,12 +263,13 @@
       $FileName = CleanReg(substr(trim($_POST["txtFile"]),0,49));
       $PageName = CleanReg(substr(trim($_POST["txtName"]),0,49));
       $MenuTitle = CleanReg(substr(trim($_POST["txtTitle"]),0,49));
+      $FileName = preg_replace("/[^a-z0-9]*/i", "", $FileName);
 
       if(substr($FileName,-4)!=".php")
       {
         $FileName .= ".php";
-        printPg("The filename you specified was missing the php extension so I added it. New filename: $FileName.","error");
       }
+      printPg("Page will be saved as $FileName","note");
       if(file_exists($FileName))
       {
         printPg("The filename you specified already exists, please choose another","error");
