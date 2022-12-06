@@ -1,7 +1,7 @@
 <?php
   /*
   Copyright © 2009,2015,2022  Siggi Bjarnason.
-  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details   
+  Licensed under GNU GPL v3 and later. Check out LICENSE.TXT for details
   or see <https://www.gnu.org/licenses/gpl-3.0-standalone.html>
 
   Central collection of various functions
@@ -46,7 +46,7 @@
         print "<p class=\"MainText\">$strMsg</p>\n";
     }
   }
-  
+
   function ShowErrHead()
   {
     $ROOTPATH = $GLOBALS["ROOTPATH"];
@@ -133,13 +133,13 @@
       {
         return 0;
       }
-      else 
+      else
       {
         $strMsg = Array2String($QueryData[1]);
         error_log("GetSQL Expected one row, that's not what I got. $strQuery Rowcount: $QueryData[0] Msg:$strMsg");
         return -15;
       }
-    }  
+    }
   }
 
   function UpdateSQL($strQuery,$type="call")
@@ -541,15 +541,28 @@
 
     $Service = "/auth";
     $url = $APIEndpoint.$Service;
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonPostData);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json","Content-Type: application/json"));
-    $response = curl_exec($curl);
-    curl_close($curl);
-    $arrResponse = json_decode($response, TRUE);
+    try
+    {
+      $curl = curl_init();
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonPostData);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($curl, CURLOPT_POST, true);
+      curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json","Content-Type: application/json"));
+      $response = curl_exec($curl);
+      curl_close($curl);
+      $arrResponse = json_decode($response, TRUE);
+    }
+    catch(Throwable $e)
+    {
+      $eLine = $e->getLine();
+      $eFile = $e->getFile();
+      $eCode = $e->getCode();
+      $errMsg = "Fatal error #$eCode when attempting to initialize curl on line $eLine in $eFile. ";
+      error_log($errMsg. $e->getMessage());
+      $errMsg = "Fatal error when attempting to initialize curl. " . $e->getMessage();
+      return $errMsg;
+    }
     if(array_key_exists("error",$arrResponse))
     {
       error_log("Failed to authenticate to the AKEYLESS system. ".$arrResponse["error"]);
@@ -565,15 +578,29 @@
 
     $Service = "/get-secret-value";
     $url = $APIEndpoint.$Service;
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonPostData);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json","Content-Type: application/json"));
-    $response = curl_exec($curl);
-    curl_close($curl);
-    return json_decode($response, TRUE);
+    try
+    {
+      $curl = curl_init();
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonPostData);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($curl, CURLOPT_POST, true);
+      curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json","Content-Type: application/json"));
+      $response = curl_exec($curl);
+      curl_close($curl);
+      return json_decode($response, TRUE);
+    }
+    catch(Throwable $e)
+    {
+      $eLine = $e->getLine();
+      $eFile = $e->getFile();
+      $eCode = $e->getCode();
+      $errMsg = "Fatal error #$eCode when attempting to initialize curl on line $eLine in $eFile. ";
+      error_log($errMsg. $e->getMessage());
+      $errMsg = "Fatal error when attempting to initialize curl. " . $e->getMessage();
+      return $errMsg;
+    }
+
   }
 
   function FetchDopplerStatic($strProject,$strConfig)
@@ -595,17 +622,30 @@
     $Param["config"] = $strConfig;
 
     $url = $APIEndpoint.$Service . "?" . http_build_query($Param);
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_USERPWD, "$AccessKey:");
-    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json"));
-    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    $arrResponse = json_decode($response, TRUE);
-    return json_decode($response, TRUE);
+    try
+    {
+      $curl = curl_init();
+      curl_setopt($curl, CURLOPT_USERPWD, "$AccessKey:");
+      curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($curl, CURLOPT_HTTPHEADER, array("accept: application/json"));
+      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+      $response = curl_exec($curl);
+      curl_close($curl);
+      $arrResponse = json_decode($response, TRUE);
+      return json_decode($response, TRUE);
+    }
+    catch(Throwable $e)
+    {
+      $eLine = $e->getLine();
+      $eFile = $e->getFile();
+      $eCode = $e->getCode();
+      $errMsg = "Fatal error #$eCode when attempting to initialize curl on line $eLine in $eFile. ";
+      error_log($errMsg. $e->getMessage());
+      $errMsg = "Fatal error when attempting to initialize curl. " . $e->getMessage();
+      return $errMsg;
+    }
   }
 
   function SendUserSMS($msg,$iUserID)
