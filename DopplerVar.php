@@ -45,7 +45,7 @@
     }
     else
     {
-      Log_Array($arrSecretValues,"Error reponse from FetchDopplerStatic");
+      Log_Array($arrSecretValues,"Reponse from FetchDopplerStatic was an error: ");
       ShowErrHead();
     }
   }
