@@ -45,5 +45,5 @@
 
   $DopplerProj = "phpdev";
   $DopplerConf = "prod";
-  require("secrets.php");
+  require("DopplerVar.php");
 ?>
